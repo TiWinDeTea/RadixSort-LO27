@@ -37,6 +37,7 @@ void PrintList(BaseNIntegerList l)
 
 	while (elem != NULL && user_input != 'q')
 	{
+		// if we have some space in the terminal to display yet another list
 		if (j < term_height)
 		{
 			++j;
@@ -103,14 +104,18 @@ void PrintList(BaseNIntegerList l)
 			}
 
 			// Clearing line
-			printf("                                                     \r");
+			if (user_input != 'q')
+				printf("                                                     \r");
 
 		}
 	}
-	SetTextAttributes("+invert");
-	printf("-- END --");
-	SetTextAttributes("-invert");
-	InstantGetChar();
+	if (user_input != 'q')
+	{
+		SetTextAttributes("+invert");
+		printf("-- END --");
+		SetTextAttributes("-invert");
+		InstantGetChar();
+	}
 	printf("\n");
 	SetEcho( TRUE );
 }
