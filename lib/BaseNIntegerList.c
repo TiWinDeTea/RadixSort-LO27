@@ -242,18 +242,6 @@ char* ConvertBinaryToBase(char* v, unsigned char base)
 	return ConvertBaseToBase(v,2,base);
 }
 
-char* SumIntegerList(BaseNIntegerList l)
-{
-	ListElem* element = l.head;
-	unsigned int s = 0;
-	while(element != NULL)
-	{
-		s += BaseToInt(element->value,l.base);
-		element = element->next;
-	}
-	return IntToBase(s,l.base);
-}
-
 char* SumBinary(char* a, char* b)
 {
 	char* s = NULL;
@@ -267,7 +255,7 @@ char* SumBinary(char* a, char* b)
 	{
 		++k;
 		s = realloc(s, k * sizeof(char));
-		remainder = (a[i] == '1') + (b[j] == '1') + remainder;
+		remainder += (a[i] == '1') + (b[j] == '1');
 		s[k-1] = binary_digits[remainder % 2];
 		remainder /= 2;
 		--i;
@@ -278,7 +266,7 @@ char* SumBinary(char* a, char* b)
 	{
 		++k;
 		s = realloc(s, k * sizeof(char));
-		remainder = (a[i] == '1') + remainder;
+		remainder += (a[i] == '1');
 		s[k-1] = binary_digits[remainder % 2];
 		remainder /= 2;
 		--i;
@@ -288,7 +276,7 @@ char* SumBinary(char* a, char* b)
 	{
 		++k;
 		s = realloc(s, k * sizeof(char));
-		remainder = (b[j] == '1') + remainder;
+		remainder += (b[j] == '1');
 		s[k-1] = binary_digits[remainder % 2];
 		remainder /= 2;
 		--j;
@@ -316,4 +304,86 @@ char* SumBinary(char* a, char* b)
 	}
 
 	return s;
+}
+
+char* SumBase(char* a, char* b, unsigned char base)
+{
+	char* s = NULL;
+	int i = strlen(a) - 1;
+	int j = strlen(b) - 1;
+	unsigned char k = 0;
+	unsigned char remainder = 0;
+	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+	while(i >= 0 && j >= 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		remainder += GetValue(a[i]) + GetValue(b[j]);
+		s[k-1] = base_digits[remainder % base];
+		remainder /= base;
+		--i;
+		--j;
+	}
+
+	while(i >= 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		remainder += GetValue(a[i]);
+		s[k-1] = base_digits[remainder % base];
+		remainder /= base;
+		--i;
+	}
+
+	while(j >= 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		remainder += GetValue(b[j]);
+		s[k-1] = base_digits[remainder % base];
+		remainder /= base;
+		--j;
+	}
+
+	if(remainder != 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		s[k-1] = base_digits[remainder];
+	}
+
+	s = realloc(s, (k + 1) * sizeof(char));
+	s[k] = '\0';
+	printf("%s\n",s);
+
+	unsigned int size = k;
+	char ctemp;
+	k /= 2;
+	for(i = 0; i < k; ++i) // invert s (strongest weight at right -> strongest weight at left)
+	{
+		ctemp = s[i];
+		s[i] = s[size - i - 1];
+		s[size - i - 1] = ctemp;
+	}
+
+	return s;
+}
+
+char* SumIntegerList(BaseNIntegerList l)
+{
+	if(!IsEmpty(l))
+	{
+		ListElem* element = l.head;
+		char* s = element->value;
+		element = element->next;
+
+		while(element != NULL)
+		{
+			s = SumBase(s, element->value, l.base);
+			element = element->next;
+		}
+		return s;
+	}
+	return NULL;
 }
