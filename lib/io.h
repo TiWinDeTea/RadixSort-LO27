@@ -3,6 +3,8 @@
  * Written by Lucas LAZARE, lucas.lazare@utbm.fr, December 2015                *
  *******************************************************************************/
 
+#include "BaseNIntegerList.h"
+
 #ifndef BOOL_DEFINED
 #define BOOL_DEFINED
 typedef enum{
@@ -14,6 +16,16 @@ typedef enum{
 #ifndef SPECIAL_DEFINED
 #define SPECIAL '['
 #endif
+
+#ifndef ARRAYOFLIST_DEFINED
+#define ARRAYOFLIST_DEFINED
+
+typedef struct{
+	unsigned char size;
+	BaseNIntegerList* list_array;
+}ArrayOfList;
+#endif
+
 
 #ifndef IO_H_INCLUDED
 #define IO_H_INCLUDED
@@ -54,7 +66,7 @@ void CPrint(char* text, unsigned short y_pos);
 /* Prints a BaseNIntegerList in a nice way
  * @param l List to be printed
  */
-//void PrintList(BaseNIntegerList l);
+void PrintList(BaseNIntegerList l);
 
 // input & output
 
@@ -104,6 +116,10 @@ void CursorHorizontalMove(int x);
  * @param y number of characters to move. Negative values to go top, positive values to go down
  */
 void CursorVerticalMove(int y);
+
+/* Sets the output echo of user inputs
+ * @param on True to display, false to hide
+ */
 void SetEcho(BOOL on);
 
 #endif // IO_H_INCLUDED

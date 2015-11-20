@@ -20,6 +20,100 @@ void CPrint(char* text, unsigned short y_pos)
 	}
 }
 
+void PrintList(BaseNIntegerList l)
+{
+	SetEcho( FALSE );
+	Clear();
+	ListElem* elem = l.head;
+	unsigned short term_height = ConsoleHeight();
+	unsigned short j=0;
+	unsigned short val_size = (unsigned short)strlen(elem->value); // all values should have the same size
+	unsigned char nb_displayed = 0;
+	char user_input = 0;
+	BOOL digit_was_displayed;
+
+	//keeping space for percentage display
+	--term_height;
+
+	while (elem != NULL && user_input != 'q')
+	{
+		if (j < term_height)
+		{
+			++j;
+			++nb_displayed;
+			digit_was_displayed = FALSE;
+
+			// Printing the value of the pointed element
+			printf("[");
+			for (unsigned short i = 0; i < val_size; ++i)
+			{
+				// We don't want to display left 0, but we want to display 0 if its value is 0
+				if (digit_was_displayed == FALSE && elem->value[i] == '0' && i+1 < val_size)
+					printf(" ");
+				else
+				{
+					printf("%c", elem->value[i]);
+					digit_was_displayed = TRUE;
+				}
+			}
+			printf("]\n");
+			
+			elem = elem->next;
+		}
+		else
+		{
+			// Percentage of element displayed
+			SetTextAttributes("+invert");
+			printf("-- %d%% -- [inputs : ' ', '\\n', 's', 'q']\r", 100 * nb_displayed / l.size);
+			SetTextAttributes("-invert");
+
+			user_input = InstantGetChar();
+
+			// Clearing line
+			switch (user_input)
+			{
+				case ' ':
+					// Printing a whole screen or all what's left
+					if (term_height >= (l.size - nb_displayed))
+						j = (unsigned short)( term_height - l.size + nb_displayed );
+					else
+						j = 0;
+					break;
+
+				case '\n':
+					// Printing only the next value
+					--j;
+					break;
+
+				case 's':
+					//Printing a whole screen minus one, so you are sure to read all or all what's left
+					if (term_height > (l.size - nb_displayed))
+						j = (unsigned short)( term_height - l.size + nb_displayed );
+					else j=1;
+
+					//Adding a marker for readability purposes
+					CursorVerticalMove( -1 );
+					CursorHorizontalMove( val_size + 3);
+					printf("<-- Last line was here\r");
+					CursorVerticalMove( 1 );
+
+					break;
+				default:
+					break;
+			}
+
+			// Clearing line
+			printf("                                                     \r");
+
+		}
+	}
+	SetTextAttributes("+invert");
+	printf("-- END --");
+	SetTextAttributes("-invert");
+	InstantGetChar();
+	printf("\n");
+	SetEcho( TRUE );
+}
 void SetTextAttributes(char* attribute)
 {
 	switch (attribute[0])
