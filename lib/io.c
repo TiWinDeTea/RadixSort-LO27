@@ -26,11 +26,21 @@ void PrintList(BaseNIntegerList l)
 	Clear();
 	ListElem* elem = l.head;
 	unsigned short term_height = ConsoleHeight();
+	unsigned short term_width = ConsoleWidth();
 	unsigned short j=0;
 	unsigned short val_size = (unsigned short)strlen(elem->value); // all values should have the same size
 	unsigned char nb_displayed = 0;
 	char user_input = 0;
 	BOOL digit_was_displayed;
+
+	if (term_width < (val_size + 2))
+	{
+		printf("This screen is too small to display this list properly.\n");
+		printf("Press Enter if you still want to do it.");
+		if (InstantGetChar() != '\n')
+			return;
+		Clear();
+	}
 
 	//keeping space for percentage display
 	--term_height;
@@ -43,6 +53,9 @@ void PrintList(BaseNIntegerList l)
 			++j;
 			++nb_displayed;
 			digit_was_displayed = FALSE;
+
+			// Align : right
+			CursorHorizontalMove( (unsigned short)( term_width - 2 - val_size) );
 
 			// Printing the value of the pointed element
 			printf("[");
@@ -65,7 +78,10 @@ void PrintList(BaseNIntegerList l)
 		{
 			// Percentage of element displayed
 			SetTextAttributes("+invert");
-			printf("-- %d%% -- [inputs : ' ', '\\n', 's', 'q']\r", 100 * nb_displayed / l.size);
+			if (term_width >= 40)
+				printf("-- %d%% -- [inputs : ' ', '\\n', 's', 'q']\r", 100 * nb_displayed / l.size);
+			else
+				printf("-- %d%% --\r", 100 * nb_displayed / l.size);
 			SetTextAttributes("-invert");
 
 			user_input = InstantGetChar();
@@ -93,19 +109,35 @@ void PrintList(BaseNIntegerList l)
 					else j=1;
 
 					//Adding a marker for readability purposes
-					CursorVerticalMove( -1 );
-					CursorHorizontalMove( val_size + 3);
-					printf("<-- Last line was here\r");
-					CursorVerticalMove( 1 );
+					if (term_width > (val_size + 5))
+					{
+						CursorVerticalMove( -1 );
+						if (term_width > (25 + val_size))
+						{
+							CursorHorizontalMove( (unsigned short)(term_width - 25 - val_size) );
+							printf("Last line was here -->\r");
+						}
+						else
+						{
+							CursorHorizontalMove( (unsigned short)(term_width - 5 - val_size) );
+							printf("-->\r");
+						}
+						CursorVerticalMove( 1 );
+					}
 
 					break;
 				default:
+					--j;
 					break;
 			}
 
 			// Clearing line
 			if (user_input != 'q')
-				printf("                                                     \r");
+			{
+				for( unsigned short i=0; i<term_width; ++i)
+					printf(" ");
+				printf("\r");
+			}
 
 		}
 	}
@@ -282,6 +314,7 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 
 			switch (key_pressed)
 			{
+
 				case 'A':
 					if (j == 0)
 						j=(unsigned short)(nb_choices - 1);
