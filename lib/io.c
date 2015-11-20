@@ -4,7 +4,7 @@
 // pure output
 void Clear()
 {
-	printf("\033[2J");
+	printf("\033[2J");	// ANSI escape for clearing the screen
 	SetCursorPos( 0, 0);
 }
 
@@ -15,7 +15,7 @@ void CPrint(char* text, unsigned short y_pos)
 
 	if (char_length <= console_width)
 	{
-		SetCursorPos((unsigned short)((console_width-char_length)/2), y_pos);
+		SetCursorPos((unsigned short)((console_width-char_length)/2), y_pos); // sets the x cursor's coordinate at the center minus half of the char length.
 		printf("%s", text);
 	}
 }
@@ -88,20 +88,20 @@ void SetTextColor(char* color)
 // input & output
 unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, char* bg_color)
 {
-	char** text = malloc(nb_choices*sizeof(char*));
+	char** text = malloc(nb_choices*sizeof(char*)); // text is an array of pointers that will point on each choice
 
-	unsigned short j=0;
-	unsigned short max_length=0;
-	unsigned short length[nb_choices];
-	for (unsigned char i=0; i<nb_choices; ++i)
+	unsigned short j=0; // generic iterator
+	unsigned short max_length=0; // maximum size of a choice
+	unsigned short length[nb_choices]; // length is an array containing each text's length.
+	for (unsigned char i = 0; i < nb_choices; ++i)
 	{
-		text[i] = choices+j;
+		text[i] = choices+j; // points right after the last '\0' encountered
 		length[i] = (unsigned short)strlen(text[i]);
 		if (length[i] > max_length)
 		{
 			max_length = length[i];
 		}
-		for (; choices[j] != '\0'; ++j );
+		for (; choices[j] != '\0'; ++j ); // increment until reaching a '\0'
 		++j;
 	}
 
@@ -114,11 +114,12 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 		return 255;
 	}//else
 
-	unsigned short x_text[nb_choices];
-	unsigned short y_text[nb_choices];
-	unsigned short x_box = (unsigned short)(term_width - max_length - 2) / 2;
-	unsigned short y_box = (unsigned short)((term_height - nb_choices - 2) / 2);
+	unsigned short x_text[nb_choices]; // x coordinate of each text to print
+	unsigned short y_text[nb_choices]; // same with y coo
+	unsigned short x_box = (unsigned short)(term_width - max_length - 2) / 2; // x coordinate of the menu's box
+	unsigned short y_box = (unsigned short)((term_height - nb_choices - 2) / 2); // same with y coo
 
+	// External grey layout
 	SetCursorPos( x_box, (unsigned short)(y_box-1));
 	SetBgColor("light grey");
 	for (unsigned short i=0; i<max_length + 3; ++i)
@@ -131,6 +132,7 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 	SetBgColor(bg_color);
 	SetTextColor(text_color);
 
+	// The inside of the box
 	for (unsigned short i=0; i < nb_choices + 2; ++i)
 	{
 		SetCursorPos( x_box, (unsigned short)(y_box + i));
@@ -140,6 +142,7 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 		}
 	}
 
+	// Computation of each text coordinate and display
 	for (unsigned short i=0; i < nb_choices; ++i)
 	{
 		x_text[i] = (unsigned short) ((max_length + 2 - length[i]) / 2 + x_box);
@@ -148,14 +151,17 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 		printf("%s", text[i]);
 	}
 
+	// Default selection : text[0]
 	SetTextAttributes("+invert");
 	SetCursorPos(x_text[0], y_text[0]);
 	printf("%s", text[0]);
 	SetTextAttributes("-invert");
 	SetCursorPos(x_text[0], y_text[0]);
 
+	// We don't want arrow keys to display their weird stuff on the screen
 	SetEcho( FALSE );
 
+	// j is used to store the current selected text
 	j=0;
 	char key_pressed;
 
@@ -168,8 +174,9 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 		}
 
 		key_pressed = InstantGetChar();
-		if (key_pressed == SPECIAL)
+		if (key_pressed == SPECIAL) // pressing an arrow inputs both SPECIAL and a normal letter
 		{
+			// deselecting text
 			key_pressed = InstantGetChar();
 			SetCursorPos(x_text[j], y_text[j]);
 			printf("%s", text[j]);
@@ -192,14 +199,17 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 					break;
 			}
 
+			// selecting text
 			SetCursorPos(x_text[j], y_text[j]);
 			SetTextAttributes("+invert");
 			printf("%s", text[j]);
 			SetTextAttributes("-invert");
 			SetCursorPos(x_text[j], y_text[j]);
 		}
+	// loop until the user press Enter
 	}while( key_pressed != '\n' );
 
+	// echo back to normal
 	SetEcho( TRUE );
 	free(text);
 	return (unsigned char)j;
@@ -231,14 +241,14 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 char InstantGetChar()
 {
 	struct termios original_settings;
-	tcgetattr(0, &original_settings);	//retrieve the terminal settings
+	tcgetattr(0, &original_settings);       //retrieve the terminal settings
 
 	struct termios new_settings = original_settings;
 	
-	new_settings.c_lflag &= ~ICANON;	// Allow getchar() to return without waiting '\n'
-	new_settings.c_cc[VMIN] = 1;		// getchar() should read only 1 character
-	new_settings.c_cc[VTIME] = 0;		// getchar() should wait for an input, forever.
-	tcsetattr(0, TCSANOW, &new_settings);	// applies the new settings
+	new_settings.c_lflag &= ~ICANON;        // Allow getchar() to return without waiting '\n'
+	new_settings.c_cc[VMIN] = 1;            // getchar() should read only 1 character
+	new_settings.c_cc[VTIME] = 0;           // getchar() should wait for an input, forever.
+	tcsetattr(0, TCSANOW, &new_settings);   // applies the new settings
 	
 	char key = (char)getchar();
 	
@@ -251,7 +261,6 @@ char InstantGetChar()
 unsigned short ConsoleHeight()
 {
 	struct winsize ws = { 0, 0, 0, 0 };
-
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1)
 		return 0;
 
@@ -261,7 +270,6 @@ unsigned short ConsoleHeight()
 unsigned short ConsoleWidth()
 {
 	struct winsize ws = { 0, 0, 0, 0 };
-
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1)
 		return 0;
 
@@ -270,7 +278,7 @@ unsigned short ConsoleWidth()
 
 void SetCursorPos(unsigned short x, unsigned short y)
 {
-	printf("\033[%d;%dH", (int)(y+1), (int)(x+1));
+	printf("\033[%d;%dH", (int)(y+1), (int)(x+1)); // Quite a barbarian stuff…
 }
 
 void CursorHorizontalMove(int x)
