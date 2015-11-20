@@ -253,3 +253,67 @@ char* SumIntegerList(BaseNIntegerList l)
 	}
 	return IntToBase(s,l.base);
 }
+
+char* SumBinary(char* a, char* b)
+{
+	char* s = NULL;
+	int i = strlen(a) - 1;
+	int j = strlen(b) - 1;
+	unsigned char k = 0;
+	unsigned char remainder = 0;
+	char binary_digits[2] = {'0', '1'};
+
+	while(i >= 0 && j >= 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		remainder = (a[i] == '1') + (b[j] == '1') + remainder;
+		s[k-1] = binary_digits[remainder % 2];
+		remainder /= 2;
+		--i;
+		--j;
+	}
+
+	while(i >= 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		remainder = (a[i] == '1') + remainder;
+		s[k-1] = binary_digits[remainder % 2];
+		remainder /= 2;
+		--i;
+	}
+
+	while(j >= 0)
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		remainder = (b[j] == '1') + remainder;
+		s[k-1] = binary_digits[remainder % 2];
+		remainder /= 2;
+		--j;
+	}
+
+	if(remainder != 0) // remainder == 1
+	{
+		++k;
+		s = realloc(s, k * sizeof(char));
+		s[k-1] = '1';
+	}
+
+	s = realloc(s, (k + 1) * sizeof(char));
+	s[k] = '\0';
+	printf("%s\n",s);
+
+	unsigned int size = k;
+	char ctemp;
+	k /= 2;
+	for(i = 0; i < k; ++i) // invert s (strongest weight at right -> strongest weight at left)
+	{
+		ctemp = s[i];
+		s[i] = s[size - i - 1];
+		s[size - i - 1] = ctemp;
+	}
+
+	return s;
+}

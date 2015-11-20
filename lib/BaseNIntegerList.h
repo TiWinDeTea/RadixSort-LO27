@@ -12,6 +12,7 @@ typedef enum{
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <conio.h> // temporary, for tests with getch()
 
 typedef struct elem{
 	char* value;
@@ -40,6 +41,8 @@ char* IntToBase(unsigned int v, unsigned char base);
 char* ConvertBaseToBase(char* v, unsigned char old_base, unsigned char new_base);
 char* ConvertBaseToBinary(char* v, unsigned char base);
 char* ConvertBinaryToBase(char* v, unsigned char base);
+char* SumBinary(char* a, char* b); // faster than use SumBase with base = 2
+char* SumBase(char* a, char* b, unsigned char base); // not implemented yet
 char* SumIntegerList(BaseNIntegerList l);
 
 #endif
