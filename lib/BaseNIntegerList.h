@@ -19,7 +19,6 @@ typedef enum{
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <conio.h> // temporary, for tests with getch()
 
 typedef struct elem{
 	char* value;
