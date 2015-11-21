@@ -103,6 +103,7 @@ void DeleteIntegerList(BaseNIntegerList l)
 {
 	while(!IsEmpty(l))
 	{
+		free(l.head->value);
 		RemoveHead(l);
 	}
 }
@@ -386,4 +387,23 @@ char* SumIntegerList(BaseNIntegerList l)
 		return s;
 	}
 	return NULL;
+}
+
+BaseNIntegerList ConvertListBase(BaseNIntegerList l, unsigned char base)
+{
+	if(!IsEmpty(l))
+	{
+		ListElem* element = l.head;
+		element->value = ConvertBaseToBase(element->value, l.base, base);
+		element = element->next;
+
+		while(element != NULL)
+		{
+			element->value = ConvertBaseToBase(element->value, l.base, base);
+			element = element->next;
+		}
+	}
+	l.base = base;
+	
+	return l;
 }
