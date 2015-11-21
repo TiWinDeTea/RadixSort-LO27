@@ -30,7 +30,7 @@ typedef struct{
 	ListElem* head;
 	ListElem* tail;
 	unsigned char base;
-	unsigned char size;
+	unsigned short size;
 }BaseNIntegerList;
 
 /**
