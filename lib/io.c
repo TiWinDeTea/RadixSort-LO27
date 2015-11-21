@@ -88,7 +88,7 @@ void PrintList(BaseNIntegerList l)
 			if (term_width >= 40)
 				sprintf(percentage, "-- %d%% -- [inputs : ' ', '\\n', 's', 'q']\r", 100 * nb_displayed / l.size);
 			else
-				printf(percentage, "-- %d%% --\r", 100 * nb_displayed / l.size);
+				sprintf(percentage, "-- %d%% --\r", 100 * nb_displayed / l.size);
 			CPrint(percentage, term_height);
 			SetTextAttributes("-invert");
 
