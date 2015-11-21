@@ -117,17 +117,15 @@ unsigned int BaseToInt(char* v, unsigned char base)
 {
 	unsigned int n = 0; // value of v
 	unsigned int temp;
-	unsigned int size = 0;
+	unsigned int size = strlen(v);
 	unsigned int k = 0;
 	int i = 0;
 
-	size = strlen(v);
 	i = size - 1; // now i is the index of the last element of v
 
 	while(i >= 0) // from the before last element of v to the first
 	{
 		temp = 1;
-
 		for(k = 0; k < (size - i - 1); ++k)
 			temp *= base;
 		// temp = base^(size - i - 1)
@@ -142,14 +140,13 @@ unsigned int BaseToInt(char* v, unsigned char base)
 
 char* IntToBase(unsigned int v, unsigned char base)
 {
-	unsigned int size = 0;
+	unsigned int size;
 	unsigned int k = 0;
 	char ctemp;
 	int i = 0;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
 	char* w = NULL;
-	k = 0;
+
 	while(v > 0)
 	{
 		++k;
@@ -158,6 +155,7 @@ char* IntToBase(unsigned int v, unsigned char base)
 		v /= base;
 	}
 
+	// Add '\0' at the end of w
 	++k;
 	w = realloc(w, k * sizeof(char));
 	w[k-1] = '\0';
@@ -173,60 +171,6 @@ char* IntToBase(unsigned int v, unsigned char base)
 
 	return w;
 }
-
-/*char* ConvertBaseToBinary(char* v, unsigned char base) // old version
-{
-	unsigned int n; // value of v
-	unsigned int temp;
-	unsigned int size = 0;
-	unsigned int k = 0;
-	char ctemp;
-	int i = 0;
-	char binary_digits[2] = {'0', '1'};
-
-	// compute n, value of v
-	size = strlen(v);
-	i = size - 1; // now i is the index of the last element of v
-
-	while(i >= 0) // from the before last element of v to the first
-	{
-		temp = 1;
-
-		for(k = 0; k < (size - i - 1); ++k)
-			temp *= base;
-		// temp = base^(size - i - 1)
-
-		n += GetValue(v[i]) * temp;
-
-		--i;
-	}
-
-	// compute w, binary value of n *
-	char* w = NULL;	// = (char*)malloc(sizeof(char));
-	k = 0;
-	while(n > 0)
-	{
-		++k;
-		w = realloc(w, k * sizeof(char));
-		w[k-1] = binary_digits[n%2];
-		n /= 2;
-	}
-
-	++k;
-	w = realloc(w, k * sizeof(char));
-	w[k-1] = '\0';
-
-	size = k - 1; // now size is the size of w
-	k = size / 2;
-	for(i = 0; i < k; ++i) // invert w (strongest weight at right -> strongest weight at left)
-	{
-		ctemp = w[i];
-		w[i] = w[size - i - 1];
-		w[size - i - 1] = ctemp;
-	}
-
-	return w;
-}*/
 
 char* ConvertBaseToBase(char* v, unsigned char old_base, unsigned char new_base)
 {
@@ -245,13 +189,14 @@ char* ConvertBinaryToBase(char* v, unsigned char base)
 
 char* SumBinary(char* a, char* b)
 {
-	char* s = NULL;
-	int i = strlen(a) - 1;
-	int j = strlen(b) - 1;
+	char* s = NULL; // the sum
+	int i = strlen(a) - 1; // iteration variable for a
+	int j = strlen(b) - 1; // iteration variable for b
 	unsigned char k = 0;
 	unsigned char remainder = 0;
 	char binary_digits[2] = {'0', '1'};
 
+	// sum each digit of a and b from right to left
 	while(i >= 0 && j >= 0)
 	{
 		++k;
@@ -263,6 +208,7 @@ char* SumBinary(char* a, char* b)
 		--j;
 	}
 
+	// if j reached the end (in invert order so the begenning) of b
 	while(i >= 0)
 	{
 		++k;
@@ -273,6 +219,7 @@ char* SumBinary(char* a, char* b)
 		--i;
 	}
 
+	// if i reached the end (in invert order so the begenning) of a
 	while(j >= 0)
 	{
 		++k;
@@ -283,6 +230,7 @@ char* SumBinary(char* a, char* b)
 		--j;
 	}
 
+	// if there is a reminder at the end of the sum
 	if(remainder != 0) // remainder == 1
 	{
 		++k;
@@ -290,14 +238,16 @@ char* SumBinary(char* a, char* b)
 		s[k-1] = '1';
 	}
 
+	// Add '\0' at the end of s
 	s = realloc(s, (k + 1) * sizeof(char));
 	s[k] = '\0';
 	printf("%s\n",s);
 
+	// invert s (strongest weight at right -> strongest weight at left)
 	unsigned int size = k;
 	char ctemp;
 	k /= 2;
-	for(i = 0; i < k; ++i) // invert s (strongest weight at right -> strongest weight at left)
+	for(i = 0; i < k; ++i)
 	{
 		ctemp = s[i];
 		s[i] = s[size - i - 1];
@@ -309,13 +259,14 @@ char* SumBinary(char* a, char* b)
 
 char* SumBase(char* a, char* b, unsigned char base)
 {
-	char* s = NULL;
-	int i = strlen(a) - 1;
-	int j = strlen(b) - 1;
+	char* s = NULL; // the sum
+	int i = strlen(a) - 1; // iteration variable for a
+	int j = strlen(b) - 1; // iteration variable for b
 	unsigned char k = 0;
 	unsigned char remainder = 0;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
+	// sum each digit of a and b from right to left
 	while(i >= 0 && j >= 0)
 	{
 		++k;
@@ -327,6 +278,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		--j;
 	}
 
+	// if j reached the end (in invert order so the begenning) of b
 	while(i >= 0)
 	{
 		++k;
@@ -337,6 +289,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		--i;
 	}
 
+	// if i reached the end (in invert order so the begenning) of a
 	while(j >= 0)
 	{
 		++k;
@@ -347,6 +300,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		--j;
 	}
 
+	// if there is a reminder at the end of the sum
 	if(remainder != 0)
 	{
 		++k;
@@ -354,14 +308,16 @@ char* SumBase(char* a, char* b, unsigned char base)
 		s[k-1] = base_digits[remainder];
 	}
 
+	// Add '\0' at the end of s
 	s = realloc(s, (k + 1) * sizeof(char));
 	s[k] = '\0';
 	printf("%s\n",s);
 
+	// invert s (strongest weight at right -> strongest weight at left)
 	unsigned int size = k;
 	char ctemp;
 	k /= 2;
-	for(i = 0; i < k; ++i) // invert s (strongest weight at right -> strongest weight at left)
+	for(i = 0; i < k; ++i)
 	{
 		ctemp = s[i];
 		s[i] = s[size - i - 1];
@@ -404,6 +360,6 @@ BaseNIntegerList ConvertListBase(BaseNIntegerList l, unsigned char base)
 		}
 	}
 	l.base = base;
-	
+
 	return l;
 }
