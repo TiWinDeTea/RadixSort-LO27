@@ -15,7 +15,7 @@ typedef enum{
 
 #ifndef SPECIAL_DEFINED
 #define SPECIAL '['
-#endif
+#endif // SPECIAL_DEFINED
 
 #ifndef ARRAYOFLIST_DEFINED
 #define ARRAYOFLIST_DEFINED
@@ -24,7 +24,7 @@ typedef struct{
 	unsigned char size;
 	BaseNIntegerList* lists;
 }ArrayOfList;
-#endif // SPECIAL_DEFINED
+#endif // ARRAYOFLIST_DEFINED
 
 
 #ifndef IO_H_INCLUDED
