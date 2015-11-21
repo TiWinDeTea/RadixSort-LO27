@@ -22,14 +22,19 @@ void CPrint(char* text, unsigned short y_pos)
 
 void PrintList(BaseNIntegerList l)
 {
-	SetEcho( FALSE );
 	Clear();
+	if (IsEmpty(l))
+	{
+		printf("The list is empty.\nNothing to display.\n");
+		return;
+	}
+	SetEcho( FALSE );
 	ListElem* elem = l.head;
 	unsigned short term_height = ConsoleHeight();
 	unsigned short term_width = ConsoleWidth();
 	unsigned short j=0;
 	unsigned short val_size = (unsigned short)strlen(elem->value); // all values should have the same size
-	unsigned char nb_displayed = 0;
+	unsigned short nb_displayed = 0;
 	char user_input = 0;
 	BOOL digit_was_displayed;
 
@@ -42,8 +47,10 @@ void PrintList(BaseNIntegerList l)
 		Clear();
 	}
 
-	//keeping space for percentage display
+	// keeping space for percentage display
 	--term_height;
+
+	char percentage[40];
 
 	while (elem != NULL && user_input != 'q')
 	{
@@ -79,14 +86,14 @@ void PrintList(BaseNIntegerList l)
 			// Percentage of element displayed
 			SetTextAttributes("+invert");
 			if (term_width >= 40)
-				printf("-- %d%% -- [inputs : ' ', '\\n', 's', 'q']\r", 100 * nb_displayed / l.size);
+				sprintf(percentage, "-- %d%% -- [inputs : ' ', '\\n', 's', 'q']\r", 100 * nb_displayed / l.size);
 			else
-				printf("-- %d%% --\r", 100 * nb_displayed / l.size);
+				printf(percentage, "-- %d%% --\r", 100 * nb_displayed / l.size);
+			CPrint(percentage, term_height);
 			SetTextAttributes("-invert");
 
 			user_input = InstantGetChar();
 
-			// Clearing line
 			switch (user_input)
 			{
 				case ' ':
@@ -127,11 +134,12 @@ void PrintList(BaseNIntegerList l)
 
 					break;
 				default:
+					// Printing only the next value
 					--j;
 					break;
 			}
 
-			// Clearing line
+			// Clearing last line
 			if (user_input != 'q')
 			{
 				for( unsigned short i=0; i<term_width; ++i)
@@ -144,7 +152,7 @@ void PrintList(BaseNIntegerList l)
 	if (user_input != 'q')
 	{
 		SetTextAttributes("+invert");
-		printf("-- END --");
+		CPrint("-- END --", term_height);
 		SetTextAttributes("-invert");
 		InstantGetChar();
 	}
@@ -156,20 +164,24 @@ void SetTextAttributes(char* attribute)
 	switch (attribute[0])
 	{
 		case '+':
-			if (!strcmp(attribute, "+bold"))               printf("\033[1m");/**ifbreak**/
-			else if (!strcmp(attribute, "+dim"))           printf("\033[2m");/**ifbreak**/
-			else if (!strcmp(attribute, "+underline"))     printf("\033[4m");/**ifbreak**/
-			else if (!strcmp(attribute, "+blink"))         printf("\033[5m");/**ifbreak**/
-			else if (!strcmp(attribute, "+invert"))        printf("\033[7m");/**ifbreak**/
-			else if (!strcmp(attribute, "+strike"))        printf("\033[8m");/**ifbreak**/
+			++attribute;
+			if (!strcmp(attribute, "bold"))               printf("\033[1m");/**ifbreak**/
+			else if (!strcmp(attribute, "dim"))           printf("\033[2m");/**ifbreak**/
+			else if (!strcmp(attribute, "underline"))     printf("\033[4m");/**ifbreak**/
+			else if (!strcmp(attribute, "blink"))         printf("\033[5m");/**ifbreak**/
+			else if (!strcmp(attribute, "invert"))        printf("\033[7m");/**ifbreak**/
+			else if (!strcmp(attribute, "strike"))        printf("\033[8m");/**ifbreak**/
+			--attribute;
 			break;
 		case '-':
-			if (!strcmp(attribute, "-bold"))               printf("\033[21m");/**ifbreak**/
-			else if (!strcmp(attribute, "-dim"))           printf("\033[22m");/**ifbreak**/
-			else if (!strcmp(attribute, "-underline"))     printf("\033[24m");/**ifbreak**/
-			else if (!strcmp(attribute, "-blink"))         printf("\033[25m");/**ifbreak**/
-			else if (!strcmp(attribute, "-invert"))        printf("\033[27m");/**ifbreak**/
-			else if (!strcmp(attribute, "-strike"))        printf("\033[29m");/**ifbreak**/
+			++attribute;
+			if (!strcmp(attribute, "bold"))               printf("\033[21m");/**ifbreak**/
+			else if (!strcmp(attribute, "dim"))           printf("\033[22m");/**ifbreak**/
+			else if (!strcmp(attribute, "underline"))     printf("\033[24m");/**ifbreak**/
+			else if (!strcmp(attribute, "blink"))         printf("\033[25m");/**ifbreak**/
+			else if (!strcmp(attribute, "invert"))        printf("\033[27m");/**ifbreak**/
+			else if (!strcmp(attribute, "strike"))        printf("\033[29m");/**ifbreak**/
+			--attribute;
 			break;
 		default:
 			if (!strcmp(attribute, "reset"))               printf("\033[0m");/**ifbreak**/
@@ -217,9 +229,9 @@ void SetTextColor(char* color)
 }
 
 // input & output
-unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, char* bg_color)
+unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color)
 {
-	char** text = malloc(nb_choices*sizeof(char*)); // text is an array of pointers that will point on each choice
+	const char** text = malloc(nb_choices*sizeof(char*)); // text is an array of pointers that will point on each choice
 
 	unsigned short j=0; // generic iterator
 	unsigned short max_length=0; // maximum size of a choice
@@ -346,29 +358,178 @@ unsigned char Menu(char* choices, unsigned char nb_choices, char* text_color, ch
 	free(text);
 	return (unsigned char)j;
 }
+
 // pure input
-/*void GetList(ArrayOfList list_array, unsigned char base)
+
+int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_pos, unsigned char i_base, BOOL with_brackets)
 {
-	char user_input;
-	printf("Generate a random list ? [Y/n]");
-	user_input = getchar();
-
-	while(getchar() != '\n'); // clears the buffer
-
-	if (user_input == 'y' || user_input == 'Y')
+	SetEcho( FALSE );
+	SetCursorPos(0, y_cursor_pos);
+	int controled_input = 0;
+	unsigned short x_cursor_pos = 0;
+	if (with_brackets == TRUE)
 	{
-		GenerateRandomList();
-		return;
-	}//else;
-
-	unsigned short x_pos, y_pos;
-	GetCursorPos(&x_pos, &y_pos);
+		++x_cursor_pos;
+		printf("[ ]");
+		CursorHorizontalMove( -2 );
+	}
+	char user_input;
 	do
 	{
-		printf("[ ]");
+		user_input = InstantGetChar();
+		user_input = (char)toupper(user_input);
 
-	}while (user_input != '\n');
-}*/
+		// Clearing any error message
+		printf("\n                              ");
+		SetCursorPos((unsigned short)(x_cursor_pos), y_cursor_pos);
+
+		if (user_input != '\n' && (user_input < '0' || (user_input > '9' && user_input < 'A') || user_input > 'F'))
+		{
+			// input : backspace
+			if (user_input == 127)
+			{
+				if ( (x_cursor_pos > 1) || (with_brackets == FALSE && x_cursor_pos > 0))
+				{
+					if (with_brackets == TRUE)
+						printf("\b ] \b\b\b");
+					else
+						printf("\b \b");
+					--x_cursor_pos;
+					controled_input/=i_base;
+				}
+			}
+			else
+				printf("\n/!\\ %c : Not a Number", user_input);
+			SetCursorPos(x_cursor_pos, y_cursor_pos);
+		}
+		else if (user_input == '\n')
+		{
+			if (controled_input < min_value)
+			{
+				printf("\n/!\\ %d is less than %d", controled_input, min_value);
+				SetCursorPos(x_cursor_pos, y_cursor_pos);
+				user_input = 0;
+			}
+		}
+		else
+		{
+			if (user_input <= '9')
+				user_input = (char)(user_input - '0');
+			else
+				user_input = (char)(user_input - 'A' + 10);
+			if (user_input >= i_base)
+			{
+				printf("\n/!\\ %x : NaN in base %d", user_input, i_base);
+				SetCursorPos(x_cursor_pos, y_cursor_pos);
+			}
+			else if ((controled_input * i_base + user_input) > max_value)
+			{
+				printf("\n/!\\ %d is over %d", controled_input * i_base + user_input, max_value);
+				SetCursorPos(x_cursor_pos, y_cursor_pos);
+			}
+			else
+			{
+				if (with_brackets == TRUE)
+					printf("%X ]\b\b", user_input);
+				else
+					printf("%X", user_input);
+				++x_cursor_pos;
+				controled_input = controled_input * i_base + user_input;
+			}
+			user_input = 0;
+		}
+	}while( user_input != '\n' );
+	if (with_brackets == TRUE)
+		printf("] ");
+	printf("\n");
+
+	SetEcho( TRUE );
+
+	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && with_brackets == FALSE))
+		return controled_input;
+	else
+		return -1;
+}
+BaseNIntegerList GetList(ArrayOfList list_array)
+{
+	Clear();
+	char user_input;
+	unsigned short y_cursor_pos = 1;
+	unsigned char base=0;
+
+	printf("What is the base of your new list (input in decimal) ?\n");
+	base = (unsigned char)GetNumberWithinRange( 2, 16, y_cursor_pos, 10, FALSE);
+	++y_cursor_pos;
+
+	BaseNIntegerList l = CreateIntegerList( base );
+	list_array.lists = (BaseNIntegerList*)realloc(list_array.lists, (unsigned)list_array.size+1);
+	list_array.lists[list_array.size] = l;
+	++list_array.size;
+
+	printf("Generate a random list ? [Y/n]");
+	++y_cursor_pos;
+	user_input = InstantGetChar();
+	
+	if (user_input != 'n' && user_input != 'N')
+	{
+		unsigned short nb_element;
+		if (user_input != '\n')
+			printf("\n");
+
+		printf("Number of elements in the list ? (max 65025)\n");
+		++y_cursor_pos;
+		int tmp = GetNumberWithinRange( 0, 65025, y_cursor_pos, 10, FALSE);
+		if (tmp < 0)
+			nb_element = 0;
+		else nb_element = (unsigned short)tmp;
+		++y_cursor_pos;
+
+		printf("Generating list\n");
+		++y_cursor_pos;
+		srand((unsigned int)time(0));
+
+		for (unsigned short i = 0; i<nb_element; ++i)
+		{
+			char* number = (char*)malloc(7*sizeof(char));
+			number[6] = '\0';
+			number = IntToChar( (unsigned) (rand()%power(base,6)), 6, base, number);
+			l = InsertTail( l, number); 
+		}
+		printf("List Generated and saved as list %d.\nWould you like to display it ?[Y/n]", list_array.size-1);
+
+		user_input = InstantGetChar();
+		if (user_input != '\n')
+			printf("\n");
+		if (user_input != 'n' && user_input != 'N')
+			PrintList(l);
+		return l;
+	}//else
+
+	int max_val = power(base, 6) - 1;
+	printf("\nEnter values from 0 to %d (input in base %x)", max_val, base);
+	++y_cursor_pos;
+	printf("\nPress enter on an empty value to end the input\n");
+	++y_cursor_pos;
+
+	int value = 0;
+	do
+	{
+		value = GetNumberWithinRange( 0, max_val, y_cursor_pos, base, TRUE);
+		++y_cursor_pos;
+		if (value >= 0)
+		{
+			char* number = (char*)malloc(11*sizeof(char));
+			number[10] = '\0';
+			number = IntToChar( (unsigned)value, 10, base, number);
+			l = InsertTail( l, number);
+		}
+
+	}while (value != -1);
+
+	printf("List saved as list %d.\n", list_array.size-1);
+
+	return l;
+}
 
 char InstantGetChar()
 {
@@ -440,4 +601,32 @@ void SetEcho(BOOL on)
 		tty.c_lflag &= ~ECHO;
 
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+
+char* IntToChar(unsigned int number, unsigned short digit_number, unsigned char base, char* original_char)
+{
+	char digit;
+	for (unsigned int i=digit_number; i>0; --i)
+	{
+		digit = (char)(number%base);
+		if (digit > 9)
+		{
+			digit += 'A' - 10;
+		}
+		else
+		{
+			digit += '0';
+		}
+		original_char[i-1]=digit;
+		number/=base;
+	}
+	return original_char;
+}
+
+int power( int number, unsigned int power )
+{
+	int res=1;
+	for (unsigned int i=0; i<power; ++i)
+		res*=number;
+	return res;
 }
