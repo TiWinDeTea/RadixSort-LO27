@@ -165,3 +165,4 @@ char* IntToChar(unsigned int number, unsigned short digit_number, unsigned char 
  */
 int power(int number, unsigned int power);
 #endif // IO_H_INCLUDED
+

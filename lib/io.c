@@ -4,7 +4,7 @@
 // pure output
 void Clear()
 {
-	printf("\033[2J");	// ANSI escape for clearing the screen
+	printf("\033[2J");	// ANSI escape for clearing the screen
 	SetCursorPos( 0, 0);
 }
 
@@ -419,7 +419,7 @@ int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_p
 				user_input = (char)(user_input - 'A' + 10);
 			if (user_input >= i_base)
 			{
-				printf("\n/!\\ %x : NaN in base %d", user_input, i_base);
+				printf("\n/!\\ %X : NaN in base %d", user_input, i_base);
 				SetCursorPos(x_cursor_pos, y_cursor_pos);
 			}
 			else if ((controled_input * i_base + user_input) > max_value)
@@ -495,19 +495,22 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 			number = IntToChar( (unsigned) (rand()%power(base,6)), 6, base, number);
 			l = InsertTail( l, number); 
 		}
-		printf("List Generated and saved as list %d.\nWould you like to display it ?[Y/n]", list_array.size-1);
-
-		user_input = InstantGetChar();
-		if (user_input != '\n')
+		printf("List Generated and saved as list %d.", list_array.size-1);
+		if (InstantGetChar() != '\n')
 			printf("\n");
-		if (user_input != 'n' && user_input != 'N')
-			PrintList(l);
 		return l;
 	}//else
 
 	int max_val = power(base, 6) - 1;
-	printf("\nEnter values from 0 to %d (input in base %x)", max_val, base);
+
+	printf("\nEnter values from 0 to ");
+	for (unsigned char i=0; i<6; ++i)
+	{
+		printf("%X", base);
+	}
+	printf(" (input in base %X)", base);
 	++y_cursor_pos;
+
 	printf("\nPress enter on an empty value to end the input\n");
 	++y_cursor_pos;
 
@@ -518,15 +521,17 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 		++y_cursor_pos;
 		if (value >= 0)
 		{
-			char* number = (char*)malloc(11*sizeof(char));
-			number[10] = '\0';
-			number = IntToChar( (unsigned)value, 10, base, number);
+			char* number = (char*)malloc(6*sizeof(char));
+			number[6] = '\0';
+			number = IntToChar( (unsigned)value, 6, base, number);
 			l = InsertTail( l, number);
 		}
 
 	}while (value != -1);
 
 	printf("List saved as list %d.\n", list_array.size-1);
+	if (InstantGetChar() != '\n')
+		printf("\n");
 
 	return l;
 }
