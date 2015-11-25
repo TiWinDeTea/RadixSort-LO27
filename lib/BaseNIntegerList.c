@@ -141,26 +141,32 @@ unsigned int BaseToInt(char* v, unsigned char base)
 char* IntToBase(unsigned int v, unsigned char base)
 {
 	unsigned int size;
-	unsigned int k = 0;
+	unsigned int k = 2; // size of the number in the new base: at least '0' and '\0'
 	char ctemp;
-	int i = 0;
+	int i = base;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	char* w = NULL;
 
+	while(v > k){
+
+		++k;
+		i *= base; // i = base^(k-1)
+	}
+
+	w = (char*)calloc(k, sizeof(char));
+
+	k = 0;
 	while(v > 0)
 	{
+		w[k] = base_digits[v%base];
 		++k;
-		w = realloc(w, k * sizeof(char));
-		w[k-1] = base_digits[v%base];
 		v /= base;
 	}
 
 	// Add '\0' at the end of w
-	++k;
-	w = realloc(w, k * sizeof(char));
-	w[k-1] = '\0';
+	w[k] = '\0';
 
-	size = k - 1; // now size is the size of w
+	size = k; // now size is the size of w
 	k = size / 2;
 	for(i = 0; i < k; ++i) // invert w (strongest weight at right -> strongest weight at left)
 	{

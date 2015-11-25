@@ -3,6 +3,13 @@
  * Written by Maxime PINARD, maxime.pinard@utbm.fr, November 2015                              *
  ***********************************************************************************************/
 
+/*
+ * This lib can be used for bases from 2 to 35 but be aware that some function description specify:
+ * "/!\ Max value: 4 294 967 295"
+ * It is the case if the function need to stock the number value or a part of the value in a unsigned int variable.
+ * For bigger numbers don't use base-conversion functions, or modify the lib to use double or long double variable type.
+ */
+
 #ifndef BOOL_DEFINED
 #define BOOL_DEFINED
 
@@ -19,6 +26,7 @@ typedef enum{
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <conio.h>
 
 typedef struct elem{
 	char* value;
@@ -107,7 +115,8 @@ unsigned char GetValue(unsigned char c);
 
 /**
  * @brief Compute the value of the number in the given base
- * @details There is no verification that v is in the given base in the function
+ * @details There is no verification that v is in the given base in the function,
+ * /!\ Max value: 4 294 967 295
  * 
  * @param v: Number to convert
  * @param base: Base of v
@@ -126,6 +135,7 @@ char* IntToBase(unsigned int v, unsigned char base);
 
 /**
  * @brief Convert the number from a base to an other
+ * @details /!\ Max value: 4 294 967 295
  * 
  * @param v: Number to convert
  * @param old_base: The base of v
@@ -136,6 +146,7 @@ char* ConvertBaseToBase(char* v, unsigned char old_base, unsigned char new_base)
 
 /**
  * @brief Convert the number from the given base to binary base
+ * @details /!\ Max value: 4 294 967 295
  * 
  * @param v: Number to convert
  * @param base: Base of v
@@ -145,6 +156,7 @@ char* ConvertBaseToBinary(char* v, unsigned char base);
 
 /**
  * @brief Convert the number from binary base to the given base
+ * @details /!\ Max value: 4 294 967 295
  * 
  * @param v: Number to convert
  * @param base: Base to convert
@@ -181,7 +193,8 @@ char* SumIntegerList(BaseNIntegerList l);
 
 /**
  * @brief Convert the list from it base to the given base
- * @details Convert all values of the list and change the base field of the list
+ * @details Convert all values of the list and change the base field of the list,
+ * /!\ Max value: 4 294 967 295
  * 
  * @param l: The list to convert
  * @param base: Base to convert the list
