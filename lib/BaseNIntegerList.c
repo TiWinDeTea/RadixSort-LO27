@@ -247,7 +247,6 @@ char* SumBinary(char* a, char* b)
 	// Add '\0' at the end of s
 	s = realloc(s, (k + 1) * sizeof(char));
 	s[k] = '\0';
-	printf("%s\n",s);
 
 	// invert s (strongest weight at right -> strongest weight at left)
 	unsigned int size = k;
@@ -317,7 +316,6 @@ char* SumBase(char* a, char* b, unsigned char base)
 	// Add '\0' at the end of s
 	s = realloc(s, (k + 1) * sizeof(char));
 	s[k] = '\0';
-	printf("%s\n",s);
 
 	// invert s (strongest weight at right -> strongest weight at left)
 	unsigned int size = k;
