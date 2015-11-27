@@ -26,7 +26,6 @@ typedef enum{
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <conio.h>
 
 typedef struct elem{
 	char* value;
