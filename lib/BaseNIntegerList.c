@@ -198,18 +198,26 @@ char* SumBinary(char* a, char* b)
 	char* s = NULL; // the sum
 	int i = strlen(a) - 1; // iteration variable for a
 	int j = strlen(b) - 1; // iteration variable for b
-	unsigned char k = 0;
+	unsigned int k = 0;
+	unsigned int sum_len;
 	unsigned char remainder = 0;
 	char binary_digits[2] = {'0', '1'};
+
+	//sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0')
+	if(i > j)
+		sum_len = i + 2;
+	else
+		sum_len = j + 2;
+
+	s = (char*)calloc(sum_len + 1, sizeof(char));
 
 	// sum each digit of a and b from right to left
 	while(i >= 0 && j >= 0)
 	{
-		++k;
-		s = realloc(s, k * sizeof(char));
 		remainder += (a[i] == '1') + (b[j] == '1');
-		s[k-1] = binary_digits[remainder % 2];
+		s[k] = binary_digits[remainder % 2];
 		remainder /= 2;
+		++k;
 		--i;
 		--j;
 	}
@@ -217,35 +225,32 @@ char* SumBinary(char* a, char* b)
 	// if j reached the end (in invert order so the begenning) of b
 	while(i >= 0)
 	{
-		++k;
-		s = realloc(s, k * sizeof(char));
 		remainder += (a[i] == '1');
-		s[k-1] = binary_digits[remainder % 2];
+		s[k] = binary_digits[remainder % 2];
 		remainder /= 2;
+		++k;
 		--i;
 	}
 
 	// if i reached the end (in invert order so the begenning) of a
 	while(j >= 0)
 	{
-		++k;
-		s = realloc(s, k * sizeof(char));
 		remainder += (b[j] == '1');
-		s[k-1] = binary_digits[remainder % 2];
+		s[k] = binary_digits[remainder % 2];
 		remainder /= 2;
+		++k;
 		--j;
 	}
 
 	// if there is a reminder at the end of the sum
 	if(remainder != 0) // remainder == 1
 	{
+		s = realloc(s, (sum_len + 1) * sizeof(char));
+		s[k] = '1';
 		++k;
-		s = realloc(s, k * sizeof(char));
-		s[k-1] = '1';
 	}
 
 	// Add '\0' at the end of s
-	s = realloc(s, (k + 1) * sizeof(char));
 	s[k] = '\0';
 
 	// invert s (strongest weight at right -> strongest weight at left)
@@ -267,18 +272,26 @@ char* SumBase(char* a, char* b, unsigned char base)
 	char* s = NULL; // the sum
 	int i = strlen(a) - 1; // iteration variable for a
 	int j = strlen(b) - 1; // iteration variable for b
-	unsigned char k = 0;
+	unsigned int k = 0;
+	unsigned int sum_len;
 	unsigned char remainder = 0;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+	//sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0')
+	if(i > j)
+		sum_len = i + 2;
+	else
+		sum_len = j + 2;
+
+	s = (char*)calloc(sum_len + 1, sizeof(char));
 
 	// sum each digit of a and b from right to left
 	while(i >= 0 && j >= 0)
 	{
-		++k;
-		s = realloc(s, k * sizeof(char));
 		remainder += GetValue(a[i]) + GetValue(b[j]);
-		s[k-1] = base_digits[remainder % base];
+		s[k] = base_digits[remainder % base];
 		remainder /= base;
+		++k;
 		--i;
 		--j;
 	}
@@ -286,35 +299,32 @@ char* SumBase(char* a, char* b, unsigned char base)
 	// if j reached the end (in invert order so the begenning) of b
 	while(i >= 0)
 	{
-		++k;
-		s = realloc(s, k * sizeof(char));
 		remainder += GetValue(a[i]);
-		s[k-1] = base_digits[remainder % base];
+		s[k] = base_digits[remainder % base];
 		remainder /= base;
+		++k;
 		--i;
 	}
 
 	// if i reached the end (in invert order so the begenning) of a
 	while(j >= 0)
 	{
-		++k;
-		s = realloc(s, k * sizeof(char));
 		remainder += GetValue(b[j]);
-		s[k-1] = base_digits[remainder % base];
+		s[k] = base_digits[remainder % base];
 		remainder /= base;
+		++k;
 		--j;
 	}
 
 	// if there is a reminder at the end of the sum
 	if(remainder != 0)
 	{
+		s = realloc(s, (sum_len + 1) * sizeof(char));
+		s[k] = base_digits[remainder];
 		++k;
-		s = realloc(s, k * sizeof(char));
-		s[k-1] = base_digits[remainder];
 	}
 
 	// Add '\0' at the end of s
-	s = realloc(s, (k + 1) * sizeof(char));
 	s[k] = '\0';
 
 	// invert s (strongest weight at right -> strongest weight at left)
