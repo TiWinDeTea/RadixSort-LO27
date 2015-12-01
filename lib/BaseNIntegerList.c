@@ -147,7 +147,7 @@ char* IntToBase(unsigned int v, unsigned char base)
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	char* w = NULL;
 
-	while(v > k){
+	while(v >= i){
 
 		++k;
 		i *= base; // i = base^(k-1)
