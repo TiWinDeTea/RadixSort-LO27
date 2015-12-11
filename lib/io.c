@@ -32,7 +32,7 @@ void PrintList(BaseNIntegerList l)
 	ListElem* elem = l.head;
 	unsigned short term_height = ConsoleHeight();
 	unsigned short term_width = ConsoleWidth();
-	unsigned short j=0;
+	unsigned short j = 0;
 	unsigned short val_size = (unsigned short)strlen(elem->value); // all values should have the same size
 	unsigned short nb_displayed = 0;
 	char user_input = 0;
@@ -66,10 +66,10 @@ void PrintList(BaseNIntegerList l)
 
 			// Printing the value of the pointed element
 			printf("[");
-			for (unsigned short i = 0; i < val_size; ++i)
+			for (unsigned short i = val_size; i-- ;)	// Little Endian
 			{
 				// We don't want to display left 0, but we want to display 0 if its value is 0
-				if (digit_was_displayed == FALSE && elem->value[i] == '0' && i+1 < val_size)
+				if (digit_was_displayed == FALSE && elem->value[i] == '0' && i != 0)
 					printf(" ");
 				else
 				{
@@ -402,7 +402,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 					else
 						printf("\b \b");
 					--x_cursor_pos;
-					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0)));
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
 				}
 			}
 			else
@@ -430,7 +430,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 					else
 						printf("%c", user_input);
 					++x_cursor_pos;
-					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0)));
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
 					output[x_cursor_pos - 1 - (with_brackets == TRUE ? 1 : 0)] = user_input;
 				}
 				user_input = 0;
@@ -445,7 +445,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 
 	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && with_brackets == FALSE))
 	{
-		output = (char*) realloc(output, (unsigned)(x_cursor_pos + 1 - (with_brackets == TRUE ? 1 : 0)));
+		output = (char*) realloc(output, (unsigned)(x_cursor_pos + 1 - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
 		output[x_cursor_pos - (with_brackets == TRUE ? 1 : 0)] = '\0';
 		return output;
 	}
@@ -467,14 +467,11 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 		if (isWithinRange(input_as_str, 2, 16, 10) == TRUE)
 			base = (unsigned char)strtol(input_as_str, NULL, 10);
 		else
-		{
-			CursorVerticalMove(-1);
 			printf("\r                                                      \r");
-		}
 	}while(base >= 128);	//nb : 129 is 1000 0001 [little and big endian] so >= 1000 0000 needs 1 bit check
 
 	BaseNIntegerList l = CreateIntegerList( base );
-	list_array.lists = (BaseNIntegerList*)realloc(list_array.lists, (unsigned)list_array.size+1);
+	list_array.lists = (BaseNIntegerList*)realloc(list_array.lists, (unsigned)(list_array.size+1)*sizeof(BaseNIntegerList));
 	list_array.lists[list_array.size] = l;
 	++list_array.size;
 
@@ -504,8 +501,8 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 			number[7] = '\0';
 			for (unsigned char j = 0 ; j<7 ; ++j)
 			{
-				number[j] = rand()%base;
-				number[j] += number[j] > 9 ? 'A' : '0';
+				number[j] = (char)(rand()%base);
+				number[j] += number[j] > 9 ? 'A' - 10 : '0';
 			}
 
 			l = InsertTail( l, number); 
@@ -524,13 +521,44 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 	printf(" (input in base %d)", base);
 	printf("\nPress enter on an empty value to end the input\n");
 
+	unsigned int max_length = 0;
+	unsigned int length;
+	char** array_of_values = NULL;
+	unsigned int nb_of_values = 0;
 	do
 	{
-		input_as_str = GetNumber( (signed char)base, TRUE );
-		if (input_as_str != NULL)
-			l = InsertTail( l, input_as_str);
-	}while (input_as_str != NULL);
+		++nb_of_values;
+		array_of_values = (char**) realloc(array_of_values, nb_of_values * sizeof(char*));
+		array_of_values[nb_of_values-1] = GetNumber( (signed char)base, TRUE );
+		if (array_of_values[nb_of_values-1] != NULL)
+		{
+			length=(unsigned int)strlen(array_of_values[nb_of_values - 1]);
 
+			while(array_of_values[nb_of_values - 1][0] == '0' && array_of_values[nb_of_values - 1][1] != '\0')
+			{
+				for (unsigned int j = 0 ; j < length - 1 ; ++j)
+					array_of_values[nb_of_values][j] = array_of_values[nb_of_values][j+1];
+				array_of_values[nb_of_values] = (char*) realloc( array_of_values[nb_of_values], length - 1 * sizeof(char));
+				--length;
+			}
+
+			if (length > max_length)
+				max_length = length;
+			Reverse(array_of_values[nb_of_values - 1], length);
+		}
+	}while (array_of_values[nb_of_values - 1] != NULL);
+	--nb_of_values;
+
+	for (unsigned int i = 0 ; i<nb_of_values ; ++i)
+	{
+		array_of_values[i] = (char*) realloc(array_of_values[i], max_length * sizeof(char));
+		for (unsigned int j = (unsigned int)strlen(array_of_values[i]) ; j < max_length ; ++j)
+			array_of_values[i][j] = '0';
+
+		l = InsertTail( l, array_of_values[i]);
+	}
+
+	free (array_of_values);
 	printf("List saved as list %d.\n", list_array.size-1);
 	if (InstantGetChar() != '\n')
 		printf("\n");
@@ -658,4 +686,17 @@ BOOL isWithinRange(char* val, unsigned long long int min, unsigned long long int
 	}
 
 	return TRUE;
+}
+
+void Reverse(char array[], unsigned int size)
+{
+	char tmp;
+	unsigned int max = size/2;
+	--size;
+	for (unsigned int i = 0 ; i < max ; ++i)
+	{
+		tmp = array[i];
+		array[i] = array[size - i];
+		array[size - i] = tmp;
+	}
 }

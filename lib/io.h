@@ -162,5 +162,11 @@ int power(int number, unsigned int power);
  */
 BOOL isWithinRange(char* val,unsigned long long int min, unsigned long long int max, unsigned char base);
 
+/*
+ * reverses an array
+ * @param array Pointer to the array to reverse
+ * @param size  Number of chars to reverse.
+ */
+void Reverse(char array[], unsigned int size);
 #endif // IO_H_INCLUDED
 
