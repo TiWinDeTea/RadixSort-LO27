@@ -22,21 +22,21 @@ void CPrint(char* text, unsigned short y_pos)
 
 void PrintList(BaseNIntegerList l)
 {
-	Clear();
 	if (IsEmpty(l))
 	{
 		printf("The list is empty.\nNothing to display.\n");
 		return;
 	}
+
 	SetEcho( FALSE );
-	ListElem* elem = l.head;
+	ListElem* elem = l.head; // Value to display
 	unsigned short term_height = ConsoleHeight();
 	unsigned short term_width = ConsoleWidth();
-	unsigned short j = 0;
+	unsigned short j = 0;	// Counter for the number of elements currently on the screen
 	unsigned short val_size = (unsigned short)strlen(elem->value); // all values should have the same size
-	unsigned short nb_displayed = 0;
+	unsigned short nb_displayed = 0; // Counter for the total amount of elements displayed
 	char user_input = 0;
-	BOOL digit_was_displayed;
+	BOOL digit_was_displayed; // Used to remove the left '0' (on display)
 
 	if (term_width < (val_size + 2))
 	{
@@ -44,13 +44,14 @@ void PrintList(BaseNIntegerList l)
 		printf("Press Enter if you still want to do it.");
 		if (InstantGetChar() != '\n')
 			return;
-		Clear();
 	}
+
+	Clear();
 
 	// keeping space for percentage display
 	--term_height;
 
-	char percentage[40];
+	char percentage[40]; // Contains percentage and usable inputs (for display purposes)
 
 	while (elem != NULL && user_input != 'q')
 	{
@@ -66,9 +67,9 @@ void PrintList(BaseNIntegerList l)
 
 			// Printing the value of the pointed element
 			printf("[");
-			for (unsigned short i = val_size; i-- ;)	// Little Endian
+			for (unsigned short i = val_size; i-- ;)	// We are in Little Endian
 			{
-				// We don't want to display left 0, but we want to display 0 if its value is 0
+				// We don't want to display the 0 on the left, but we want to display 0 if the actual value is 0
 				if (digit_was_displayed == FALSE && elem->value[i] == '0' && i != 0)
 					printf(" ");
 				else
@@ -121,6 +122,7 @@ void PrintList(BaseNIntegerList l)
 						CursorVerticalMove( -1 );
 						if (term_width > (25 + val_size))
 						{
+							// Align : right
 							CursorHorizontalMove( (unsigned short)(term_width - 25 - val_size) );
 							printf("Last line was here -->\r");
 						}
@@ -139,7 +141,7 @@ void PrintList(BaseNIntegerList l)
 					break;
 			}
 
-			// Clearing last line
+			// Clearing last line (percentage)
 			if (user_input != 'q')
 			{
 				for( unsigned short i=0; i<term_width; ++i)
@@ -231,21 +233,25 @@ void SetTextColor(char* color)
 // input & output
 unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color)
 {
-	const char** text = malloc(nb_choices*sizeof(char*)); // text is an array of pointers that will point on each choice
+	const char** text = malloc(nb_choices*sizeof(char*)); // Array of pointers that will point on each choice
 
-	unsigned short j=0; // generic iterator
-	unsigned short max_length=0; // maximum size of a choice
-	unsigned short length[nb_choices]; // length is an array containing each text's length.
+	unsigned char choice = 0; // Selected choice ; You may change the prototype to input your own default selection
+	unsigned short max_length=0; // Maximum size of a choice
+	unsigned short length[nb_choices]; // Array containing each text's length.
+
+	unsigned short j = 0;
 	for (unsigned char i = 0; i < nb_choices; ++i)
 	{
-		text[i] = choices+j; // points right after the last '\0' encountered
+		text[i] = choices+j; // Points right after the last '\0' encountered
+
 		length[i] = (unsigned short)strlen(text[i]);
 		if (length[i] > max_length)
 		{
 			max_length = length[i];
 		}
-		for (; choices[j] != '\0'; ++j ); // increment until reaching a '\0'
-		++j;
+
+		for (; choices[++j] != '\0';); // increment until reaching a '\0'
+		++j; // the next string starts right after that
 	}
 
 	unsigned short term_width = ConsoleWidth();
@@ -257,7 +263,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 		return 255;
 	}//else
 
-	unsigned short x_text[nb_choices]; // x coordinate of each text to print
+	unsigned short x_text[nb_choices]; // x coordinate of each choice to print
 	unsigned short y_text[nb_choices]; // same with y coo
 	unsigned short x_box = (unsigned short)(term_width - max_length - 2) / 2; // x coordinate of the menu's box
 	unsigned short y_box = (unsigned short)((term_height - nb_choices - 2) / 2); // same with y coo
@@ -267,6 +273,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 	SetBgColor("light grey");
 	for (unsigned short i=0; i<max_length + 3; ++i)
 		printf(" ");
+
 	for (unsigned short i=0; i<nb_choices + 2; ++i)
 	{
 		SetCursorPos( (unsigned short)(x_box + max_length + 2) , (unsigned short)(i + y_box) );
@@ -288,25 +295,25 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 	// Computation of each text coordinate and display
 	for (unsigned short i=0; i < nb_choices; ++i)
 	{
-		//x_text[i] = (unsigned short) ((max_length + 2 - length[i]) / 2 + x_box);
-		x_text[i] = (unsigned short) (x_box + 1);
+		//x_text[i] = (unsigned short) ((max_length + 2 - length[i]) / 2 + x_box); //For a centered display
+		//x_text[i] = (unsigned short) (x_box + max_length + 1 - length[i]); // For a right aligned display
+		x_text[i] = (unsigned short) (x_box + 1); //For a left aligned display
 		y_text[i] = (unsigned short) (y_box + i + 1);
 		SetCursorPos(x_text[i], y_text[i]);
 		printf("%s", text[i]);
 	}
 
-	// Default selection : text[0]
+	// Printing default selection
 	SetTextAttributes("+invert");
-	SetCursorPos(x_text[0], y_text[0]);
-	printf("%s", text[0]);
+	SetCursorPos(x_text[choice], y_text[choice]);
+	printf("%s", text[choice]);
 	SetTextAttributes("-invert");
-	SetCursorPos(x_text[0], y_text[0]);
+	SetCursorPos(x_text[choice], y_text[choice]);
 
 	// We don't want arrow keys to display their weird stuff on the screen
 	SetEcho( FALSE );
 
 	// j is used to store the current selected text
-	j=0;
 	char key_pressed;
 
 	do
@@ -322,22 +329,21 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 		{
 			// deselecting text
 			key_pressed = InstantGetChar();
-			SetCursorPos(x_text[j], y_text[j]);
-			printf("%s", text[j]);
+			SetCursorPos(x_text[choice], y_text[choice]);
+			printf("%s", text[choice]);
 
 			switch (key_pressed)
 			{
-
-				case 'A':
-					if (j == 0)
-						j=(unsigned short)(nb_choices - 1);
-					else --j;
+				case 'A':	//Key up
+					if (choice == 0)
+						choice = (unsigned char)(nb_choices - 1);
+					else --choice;
 					break;
 
-				case 'B':
-					if (j == nb_choices - 1)
-						j=0;
-					else ++j;
+				case 'B':	//Key down
+					if (choice == nb_choices - 1)
+						choice = 0;
+					else ++choice;
 					break;
 
 				default:
@@ -345,11 +351,11 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 			}
 
 			// selecting text
-			SetCursorPos(x_text[j], y_text[j]);
+			SetCursorPos(x_text[choice], y_text[choice]);
 			SetTextAttributes("+invert");
-			printf("%s", text[j]);
+			printf("%s", text[choice]);
 			SetTextAttributes("-invert");
-			SetCursorPos(x_text[j], y_text[j]);
+			SetCursorPos(x_text[choice], y_text[choice]);
 		}
 	// loop until the user press Enter
 	}while( key_pressed != '\n' );
@@ -357,7 +363,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 	// echo back to normal
 	SetEcho( TRUE );
 	free(text);
-	return (unsigned char)j;
+	return choice;
 }
 
 // pure input
@@ -365,7 +371,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 char* GetNumber(char i_base, BOOL with_brackets)
 {
 	if (i_base > 10)
-		i_base = (char)(i_base + 'A' - 10);	//i_base is now the max char you may input
+		i_base = (char)(i_base + 'A' - 10); //i_base is now the max char you may input
 	i_base = (char)(i_base + '0');
 
 	SetEcho( FALSE );
@@ -378,15 +384,17 @@ char* GetNumber(char i_base, BOOL with_brackets)
 	}
 
 	char user_input;
-	char* output = NULL;
+	char* output = NULL; // char* to be returned by this function
 
 	do
 	{
 		user_input = InstantGetChar();
 		user_input = (char)toupper(user_input);
 
-		// Clearing any error message
+		// Clearing any error message from the previous loop
 		printf("\n                              \r");
+
+		// Back to printing position
 		CursorVerticalMove( -1 );
 		CursorHorizontalMove(x_cursor_pos);
 
@@ -395,14 +403,15 @@ char* GetNumber(char i_base, BOOL with_brackets)
 			//if input == backspace
 			if (user_input == 127)
 			{
-				if ( (x_cursor_pos > 1) || (with_brackets == FALSE && x_cursor_pos > 0))
+				if ( (x_cursor_pos > 1) || (with_brackets == FALSE && x_cursor_pos > 0)) // If there is something to delete
 				{
 					if (with_brackets == TRUE)
-						printf("\b ] \b\b\b");
+						printf("\b ] \b\b\b"); // '\b' has a similar effect to Cursorhorizontalmove( -1 )
 					else
 						printf("\b \b");
 					--x_cursor_pos;
-					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
+
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char)); // Desallocating 1 char
 				}
 			}
 			else
@@ -419,7 +428,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 			{
 				if (user_input >= i_base)
 				{
-					printf("\n/!\\ %c : NaN in base %d\r", user_input, i_base > '9' ? i_base - ('A' - '9') - '0'  : i_base - '0'); // Display 16 if i_base == F
+					printf("\n/!\\ %c : NaN in base %d\r", user_input, i_base > '9' ? i_base - ('A' - '9') - '0'  : i_base - '0'); // Display the base in decimal
 					CursorVerticalMove( -1 );
 					CursorHorizontalMove(x_cursor_pos);
 				}
@@ -430,8 +439,8 @@ char* GetNumber(char i_base, BOOL with_brackets)
 					else
 						printf("%c", user_input);
 					++x_cursor_pos;
-					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
-					output[x_cursor_pos - 1 - (with_brackets == TRUE ? 1 : 0)] = user_input;
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char)); // Allocating 1 extra char
+					output[x_cursor_pos - 1 - (with_brackets == TRUE ? 1 : 0)] = user_input; // Adding 'user_input' at the end of the array
 				}
 				user_input = 0;
 			}
@@ -443,14 +452,17 @@ char* GetNumber(char i_base, BOOL with_brackets)
 
 	SetEcho( TRUE );
 
-	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && with_brackets == FALSE))
+	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && with_brackets == FALSE)) // if the char* is not empty
 	{
 		output = (char*) realloc(output, (unsigned)(x_cursor_pos + 1 - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
 		output[x_cursor_pos - (with_brackets == TRUE ? 1 : 0)] = '\0';
 		return output;
 	}
 	else
+	{
+	//	free (output); // Probably useless
 		return NULL;
+	}
 }
 
 BaseNIntegerList GetList(ArrayOfList list_array)
@@ -468,8 +480,9 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 			base = (unsigned char)strtol(input_as_str, NULL, 10);
 		else
 			printf("\r                                                      \r");
-	}while(base >= 128);	//nb : 129 is 1000 0001 [little and big endian] so >= 1000 0000 needs 1 bit check
+	}while(base >= 128);
 
+	// putting a new list in the array list
 	BaseNIntegerList l = CreateIntegerList( base );
 	list_array.lists = (BaseNIntegerList*)realloc(list_array.lists, (unsigned)(list_array.size+1)*sizeof(BaseNIntegerList));
 	list_array.lists[list_array.size] = l;
@@ -484,71 +497,77 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 		if (user_input != '\n')
 			printf("\n");
 
-		printf("Number of elements in the list ? (max 65025)\n");	//65025 : ushort
+		printf("Number of elements in the list ? (min 1, max 65025)\n");	//65025 : ushort
 
 		do{
 			input_as_str = GetNumber( 10, FALSE);
 			if (isWithinRange(input_as_str, 1, 65025, 10) == TRUE)
 				nb_element = (unsigned short)strtol(input_as_str, NULL, 10);
+			else
+				printf("\r                                                \r");
 		}while (nb_element == 0);
 
 		printf("Generating list\n");
 		srand((unsigned int)time(0));
 
+		// Generating numbers in base 'base' with 10 digits
 		for (unsigned short i = 0; i<nb_element; ++i)
 		{
-			char* number = (char*)malloc(8*sizeof(char));
-			number[7] = '\0';
-			for (unsigned char j = 0 ; j<7 ; ++j)
+			char* number = (char*)malloc(11*sizeof(char));
+			number[10] = '\0';
+			for (unsigned char j = 0 ; j<10 ; ++j)
 			{
 				number[j] = (char)(rand()%base);
 				number[j] += number[j] > 9 ? 'A' - 10 : '0';
 			}
-
 			l = InsertTail( l, number); 
 		}
 		printf("List Generated and saved as list %d.", list_array.size-1);
+
 		if (InstantGetChar() != '\n')
 			printf("\n");
 		return l;
 	}//else
 
-	printf("\nEnter values from 0 to ");
-	for (unsigned char i=0; i<6; ++i)
-	{
-		printf("%X", base - 1);
-	}
-	printf(" (input in base %d)", base);
-	printf("\nPress enter on an empty value to end the input\n");
+	printf("\nEnter your values in base %d", base);
+	printf("\nPress 'enter' on an empty value to end the input\n");
 
-	unsigned int max_length = 0;
-	unsigned int length;
-	char** array_of_values = NULL;
-	unsigned int nb_of_values = 0;
+	unsigned int max_length = 0; // maximum number of digits encountered
+	unsigned int length; // number of digit of the last inputed number
+	char** array_of_values = NULL; // array of char* pointing on the inputed numbers
+	unsigned int nb_of_values = 0; // number of numbers inputed
+
 	do
 	{
 		++nb_of_values;
-		array_of_values = (char**) realloc(array_of_values, nb_of_values * sizeof(char*));
+		array_of_values = (char**) realloc(array_of_values, nb_of_values * sizeof(char*)); // allocating an extra char*
 		array_of_values[nb_of_values-1] = GetNumber( (signed char)base, TRUE );
+
 		if (array_of_values[nb_of_values-1] != NULL)
 		{
 			length=(unsigned int)strlen(array_of_values[nb_of_values - 1]);
 
+			// deleting eventual left 0 (big endian)
+			// note : to be optimised
 			while(array_of_values[nb_of_values - 1][0] == '0' && array_of_values[nb_of_values - 1][1] != '\0')
 			{
 				for (unsigned int j = 0 ; j < length - 1 ; ++j)
-					array_of_values[nb_of_values][j] = array_of_values[nb_of_values][j+1];
-				array_of_values[nb_of_values] = (char*) realloc( array_of_values[nb_of_values], length - 1 * sizeof(char));
+					array_of_values[nb_of_values - 1][j] = array_of_values[nb_of_values - 1][j+1]; // shifting to the left
+				array_of_values[nb_of_values - 1] = (char*) realloc( array_of_values[nb_of_values - 1], (length - 1)* sizeof(char)); // desallocating a char
 				--length;
 			}
 
 			if (length > max_length)
 				max_length = length;
+
+			// we are using little endian
 			Reverse(array_of_values[nb_of_values - 1], length);
 		}
 	}while (array_of_values[nb_of_values - 1] != NULL);
+	// last input was a nullptr
 	--nb_of_values;
 
+	// adding right 0 (little endian) so that all chars* have the same size and adding them to the list
 	for (unsigned int i = 0 ; i<nb_of_values ; ++i)
 	{
 		array_of_values[i] = (char*) realloc(array_of_values[i], max_length * sizeof(char));
@@ -606,7 +625,7 @@ unsigned short ConsoleWidth()
 
 void SetCursorPos(unsigned short x, unsigned short y)
 {
-	printf("\033[%d;%dH", (int)(y+1), (int)(x+1)); // Quite a barbarian stuff…
+	printf("\033[%d;%dH", (int)(y+1), (int)(x+1));
 }
 
 void CursorHorizontalMove(int x)

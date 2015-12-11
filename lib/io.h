@@ -1,7 +1,7 @@
-/*******************************************************************************
- * C Library implementing io functions, in particular for the BaseNIntegerList *
- * Written by Lucas LAZARE, lucas.lazare@utbm.fr, December 2015                *
- *******************************************************************************/
+/*****************************************************************************************
+ * C Library implementing io functions, in particular for the BaseNIntegerList data type *
+ * Written by Lucas LAZARE, lucas.lazare@utbm.fr, December 2015                          *
+ *****************************************************************************************/
 
 #include "BaseNIntegerList.h"
 
@@ -78,7 +78,10 @@ void PrintList(BaseNIntegerList l);
 // input & output
 
 /*
- * Prints a nice menu where you can navigate using arrow keys, and select with Enter
+ * Prints a nice menu where you can navigate using arrow keys, and select with Enter. Some args could be easily added, such as :
+ *       default_choice (unsigned char)[move a variable declaration to prototype]
+ *       border_color(const char*)[one function call to modify]
+ *       alignement(enum)[uncommenting + adding if]
  * @param choices    char pointer to a list of the selectable choices. Each choice should end with the '\0' character
  * @param nb_choices number of choices to display. Should not be more than the number of '\0' in 'choices'
  * @param text_color font color of the unselected text
