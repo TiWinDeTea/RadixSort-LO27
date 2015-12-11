@@ -460,7 +460,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 	}
 	else
 	{
-	//	free (output); // Probably useless
+		free (output); // Probably useless
 		return NULL;
 	}
 }
