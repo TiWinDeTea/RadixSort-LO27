@@ -288,7 +288,8 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 	// Computation of each text coordinate and display
 	for (unsigned short i=0; i < nb_choices; ++i)
 	{
-		x_text[i] = (unsigned short) ((max_length + 2 - length[i]) / 2 + x_box);
+		//x_text[i] = (unsigned short) ((max_length + 2 - length[i]) / 2 + x_box);
+		x_text[i] = (unsigned short) (x_box + 1);
 		y_text[i] = (unsigned short) (y_box + i + 1);
 		SetCursorPos(x_text[i], y_text[i]);
 		printf("%s", text[i]);
@@ -361,11 +362,13 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 
 // pure input
 
-int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_pos, unsigned char i_base, BOOL with_brackets)
+char* GetNumber(char i_base, BOOL with_brackets)
 {
+	if (i_base > 10)
+		i_base = (char)(i_base + 'A' - 10);	//i_base is now the max char you may input
+	i_base = (char)(i_base + '0');
+
 	SetEcho( FALSE );
-	SetCursorPos(0, y_cursor_pos);
-	int controled_input = 0;
 	unsigned short x_cursor_pos = 0;
 	if (with_brackets == TRUE)
 	{
@@ -373,19 +376,23 @@ int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_p
 		printf("[ ]");
 		CursorHorizontalMove( -2 );
 	}
+
 	char user_input;
+	char* output = NULL;
+
 	do
 	{
 		user_input = InstantGetChar();
 		user_input = (char)toupper(user_input);
 
 		// Clearing any error message
-		printf("\n                              ");
-		SetCursorPos((unsigned short)(x_cursor_pos), y_cursor_pos);
+		printf("\n                              \r");
+		CursorVerticalMove( -1 );
+		CursorHorizontalMove(x_cursor_pos);
 
-		if (user_input != '\n' && (user_input < '0' || (user_input > '9' && user_input < 'A') || user_input > 'F'))
+		if (user_input != '\n' && (user_input < '0' || (user_input > '9' && user_input < 'A') || user_input > 'Z'))
 		{
-			// input : backspace
+			//if input == backspace
 			if (user_input == 127)
 			{
 				if ( (x_cursor_pos > 1) || (with_brackets == FALSE && x_cursor_pos > 0))
@@ -395,48 +402,39 @@ int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_p
 					else
 						printf("\b \b");
 					--x_cursor_pos;
-					controled_input/=i_base;
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0)));
 				}
 			}
 			else
-				printf("\n/!\\ %c : Not a Number", user_input);
-			SetCursorPos(x_cursor_pos, y_cursor_pos);
-		}
-		else if (user_input == '\n')
-		{
-			if (controled_input < min_value)
 			{
-				printf("\n/!\\ %d is less than %d", controled_input, min_value);
-				SetCursorPos(x_cursor_pos, y_cursor_pos);
-				user_input = 0;
+				printf("\n/!\\ %c : Not a Number\r", user_input);
+				CursorVerticalMove( -1 );
+				CursorHorizontalMove(x_cursor_pos);
 			}
+
 		}
 		else
 		{
-			if (user_input <= '9')
-				user_input = (char)(user_input - '0');
-			else
-				user_input = (char)(user_input - 'A' + 10);
-			if (user_input >= i_base)
+			if (user_input != '\n')
 			{
-				printf("\n/!\\ %X : NaN in base %d", user_input, i_base);
-				SetCursorPos(x_cursor_pos, y_cursor_pos);
-			}
-			else if ((controled_input * i_base + user_input) > max_value)
-			{
-				printf("\n/!\\ %d is over %d", controled_input * i_base + user_input, max_value);
-				SetCursorPos(x_cursor_pos, y_cursor_pos);
-			}
-			else
-			{
-				if (with_brackets == TRUE)
-					printf("%X ]\b\b", user_input);
+				if (user_input >= i_base)
+				{
+					printf("\n/!\\ %c : NaN in base %d\r", user_input, i_base > '9' ? i_base - ('A' - '9') - '0'  : i_base - '0'); // Display 16 if i_base == F
+					CursorVerticalMove( -1 );
+					CursorHorizontalMove(x_cursor_pos);
+				}
 				else
-					printf("%X", user_input);
-				++x_cursor_pos;
-				controled_input = controled_input * i_base + user_input;
+				{
+					if (with_brackets == TRUE)
+						printf("%c ]\b\b", user_input);
+					else
+						printf("%c", user_input);
+					++x_cursor_pos;
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0)));
+					output[x_cursor_pos - 1 - (with_brackets == TRUE ? 1 : 0)] = user_input;
+				}
+				user_input = 0;
 			}
-			user_input = 0;
 		}
 	}while( user_input != '\n' );
 	if (with_brackets == TRUE)
@@ -446,20 +444,34 @@ int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_p
 	SetEcho( TRUE );
 
 	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && with_brackets == FALSE))
-		return controled_input;
+	{
+		output = (char*) realloc(output, (unsigned)(x_cursor_pos + 1 - (with_brackets == TRUE ? 1 : 0)));
+		output[x_cursor_pos - (with_brackets == TRUE ? 1 : 0)] = '\0';
+		return output;
+	}
 	else
-		return -1;
+		return NULL;
 }
+
 BaseNIntegerList GetList(ArrayOfList list_array)
 {
 	Clear();
 	char user_input;
-	unsigned short y_cursor_pos = 1;
-	unsigned char base=0;
+	unsigned char base=129;
+	char* input_as_str;
 
 	printf("What is the base of your new list (input in decimal) ?\n");
-	base = (unsigned char)GetNumberWithinRange( 2, 16, y_cursor_pos, 10, FALSE);
-	++y_cursor_pos;
+	do
+	{
+		input_as_str = GetNumber(10, FALSE);
+		if (isWithinRange(input_as_str, 2, 16, 10) == TRUE)
+			base = (unsigned char)strtol(input_as_str, NULL, 10);
+		else
+		{
+			CursorVerticalMove(-1);
+			printf("\r                                                      \r");
+		}
+	}while(base >= 128);	//nb : 129 is 1000 0001 [little and big endian] so >= 1000 0000 needs 1 bit check
 
 	BaseNIntegerList l = CreateIntegerList( base );
 	list_array.lists = (BaseNIntegerList*)realloc(list_array.lists, (unsigned)list_array.size+1);
@@ -467,32 +479,35 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 	++list_array.size;
 
 	printf("Generate a random list ? [Y/n]");
-	++y_cursor_pos;
 	user_input = InstantGetChar();
 	
 	if (user_input != 'n' && user_input != 'N')
 	{
-		unsigned short nb_element;
+		unsigned short nb_element = 0;
 		if (user_input != '\n')
 			printf("\n");
 
-		printf("Number of elements in the list ? (max 65025)\n");
-		++y_cursor_pos;
-		int tmp = GetNumberWithinRange( 0, 65025, y_cursor_pos, 10, FALSE);
-		if (tmp < 0)
-			nb_element = 0;
-		else nb_element = (unsigned short)tmp;
-		++y_cursor_pos;
+		printf("Number of elements in the list ? (max 65025)\n");	//65025 : ushort
+
+		do{
+			input_as_str = GetNumber( 10, FALSE);
+			if (isWithinRange(input_as_str, 1, 65025, 10) == TRUE)
+				nb_element = (unsigned short)strtol(input_as_str, NULL, 10);
+		}while (nb_element == 0);
 
 		printf("Generating list\n");
-		++y_cursor_pos;
 		srand((unsigned int)time(0));
 
 		for (unsigned short i = 0; i<nb_element; ++i)
 		{
-			char* number = (char*)malloc(7*sizeof(char));
-			number[6] = '\0';
-			number = IntToChar( (unsigned) (rand()%power(base,6)), 6, base, number);
+			char* number = (char*)malloc(8*sizeof(char));
+			number[7] = '\0';
+			for (unsigned char j = 0 ; j<7 ; ++j)
+			{
+				number[j] = rand()%base;
+				number[j] += number[j] > 9 ? 'A' : '0';
+			}
+
 			l = InsertTail( l, number); 
 		}
 		printf("List Generated and saved as list %d.", list_array.size-1);
@@ -501,33 +516,20 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 		return l;
 	}//else
 
-	int max_val = power(base, 6) - 1;
-
 	printf("\nEnter values from 0 to ");
 	for (unsigned char i=0; i<6; ++i)
 	{
-		printf("%X", base);
+		printf("%X", base - 1);
 	}
-	printf(" (input in base %X)", base);
-	++y_cursor_pos;
-
+	printf(" (input in base %d)", base);
 	printf("\nPress enter on an empty value to end the input\n");
-	++y_cursor_pos;
 
-	int value = 0;
 	do
 	{
-		value = GetNumberWithinRange( 0, max_val, y_cursor_pos, base, TRUE);
-		++y_cursor_pos;
-		if (value >= 0)
-		{
-			char* number = (char*)malloc(6*sizeof(char));
-			number[6] = '\0';
-			number = IntToChar( (unsigned)value, 6, base, number);
-			l = InsertTail( l, number);
-		}
-
-	}while (value != -1);
+		input_as_str = GetNumber( (signed char)base, TRUE );
+		if (input_as_str != NULL)
+			l = InsertTail( l, input_as_str);
+	}while (input_as_str != NULL);
 
 	printf("List saved as list %d.\n", list_array.size-1);
 	if (InstantGetChar() != '\n')
@@ -585,6 +587,8 @@ void CursorHorizontalMove(int x)
 		printf("\033[%dD", -x);
 	else
 		printf("\033[%dC", x);
+	if (x == 0)
+		printf("\b");
 
 }
 
@@ -608,30 +612,50 @@ void SetEcho(BOOL on)
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
-char* IntToChar(unsigned int number, unsigned short digit_number, unsigned char base, char* original_char)
-{
-	char digit;
-	for (unsigned int i=digit_number; i>0; --i)
-	{
-		digit = (char)(number%base);
-		if (digit > 9)
-		{
-			digit += 'A' - 10;
-		}
-		else
-		{
-			digit += '0';
-		}
-		original_char[i-1]=digit;
-		number/=base;
-	}
-	return original_char;
-}
-
 int power( int number, unsigned int power )
 {
 	int res=1;
 	for (unsigned int i=0; i<power; ++i)
 		res*=number;
 	return res;
+}
+
+BOOL isWithinRange(char* val, unsigned long long int min, unsigned long long int max, unsigned char base)
+{
+	if (val == NULL)
+	{
+		printf("You should input a number");
+		SetEcho(FALSE);
+		InstantGetChar();
+		SetEcho(TRUE);
+		printf("\r                         \r");
+		CursorVerticalMove( -1 );
+		return FALSE;
+	}
+
+	unsigned long long int value = strtoull( val, NULL, base );
+
+	if (value < min)
+	{
+		printf("/!\\ Should be at least %llu", min);
+		SetEcho(FALSE);
+		InstantGetChar();
+		SetEcho(TRUE);
+		printf("\r                             \r");
+		CursorVerticalMove( -1 );
+		return FALSE;
+	}
+
+	if (value > max)
+	{
+		printf("/!\\ Should be at most %llu", max);
+		SetEcho(FALSE);
+		InstantGetChar();
+		SetEcho(TRUE);
+		printf("\r                             \r");
+		CursorVerticalMove( -1 );
+		return FALSE;
+	}
+
+	return TRUE;
 }

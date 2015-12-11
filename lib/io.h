@@ -90,14 +90,11 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 // pure input
 
 /*
- * Retrieves a number inputed in base i_base, <= min_value, >= max_value
- * @param min_value    minimum value to return
- * @param max_value    maximum value to return
- * @param y_cursor_pos y_line of the inputs
+ * Retrieves a number inputed in base i_base
  * @param i_base       input base
  * @return             the inputed number
  */
-int GetNumberWithinRange(int min_value, int max_value, unsigned short y_cursor_pos, unsigned char i_base, BOOL with_brackets);
+char* GetNumber(char i_base, BOOL with_brackets);
 
 /*
  * Retrieve a BaseNIntegerArray using user inputs
@@ -148,21 +145,22 @@ void CursorVerticalMove(int y);
 void SetEcho(BOOL on);
 
 /*
- * Converts an int to a char table.
- * @param number       number to convert
- * @param digit_number number of digits to store in the char table
- * @base               base of the number
- * @original_char      pointer to a char having enough memory
- * @return             pointer to the converted number
- */
-char* IntToChar(unsigned int number, unsigned short digit_number, unsigned char base, char* original_char);
-
-/*
  * Computes number elevated to the power 'power'
  * @param number number that will be elevated
  * @param power  power of the number
  * @return       number ^ power
  */
 int power(int number, unsigned int power);
+
+/*
+ * Checks if a number stored as a char* is between two given values
+ * @param val  Value to check
+ * @param min  Lower bound (included)
+ * @param max  Upper bound (included)
+ * @param base Base in which val is stored
+ * @return     TRUE if val is between min and max, FALSE otherwise
+ */
+BOOL isWithinRange(char* val,unsigned long long int min, unsigned long long int max, unsigned char base);
+
 #endif // IO_H_INCLUDED
 
