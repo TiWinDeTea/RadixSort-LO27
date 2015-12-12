@@ -63,6 +63,7 @@ BaseNIntegerList RemoveHead(BaseNIntegerList l)
 	{
 		if(l.size == 1)
 		{
+			free(l.heah->value);
 			free(l.head);
 			l.head = l.tail = NULL;
 			l.size = 0;
@@ -70,6 +71,7 @@ BaseNIntegerList RemoveHead(BaseNIntegerList l)
 		else
 		{
 			l.head = l.head->next;
+			free(l.head->previous->value);
 			free(l.head->previous);
 			l.head->previous = NULL;
 			--(l.size);
@@ -84,6 +86,7 @@ BaseNIntegerList RemoveTail(BaseNIntegerList l)
 	{		
 		if(l.size == 1)
 		{			
+			free(l.heah->value);
 			free(l.head);
 			l.head = l.tail = NULL;
 			l.size = 0;
@@ -91,6 +94,7 @@ BaseNIntegerList RemoveTail(BaseNIntegerList l)
 		else
 		{			
 			l.tail = l.tail->previous;
+			free(l.tail->next->value);
 			free(l.tail->next);
 			l.tail->next = NULL;
 			--(l.size);
@@ -103,8 +107,7 @@ void DeleteIntegerList(BaseNIntegerList l)
 {
 	while(!IsEmpty(l))
 	{
-		free(l.head->value);
-		RemoveHead(l);
+		l = RemoveHead(l);
 	}
 }
 

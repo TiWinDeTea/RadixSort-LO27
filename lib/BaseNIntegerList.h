@@ -75,7 +75,7 @@ BaseNIntegerList InsertHead(BaseNIntegerList l, char* v);
 BaseNIntegerList InsertTail(BaseNIntegerList l, char* v);
 
 /**
- * @brief Remove the first element of the list
+ * @brief Remove the first element of the list and it values
  * @details If the list is empty do nothing
  * 
  * @param l: List to delete the first element
@@ -84,7 +84,7 @@ BaseNIntegerList InsertTail(BaseNIntegerList l, char* v);
 BaseNIntegerList RemoveHead(BaseNIntegerList l);
 
 /**
- * @brief Remove the last element of the list
+ * @brief Remove the last element of the list and it values
  * @details If the list is empty do nothing
  * 
  * @param l: List to delete the last element
@@ -94,9 +94,9 @@ BaseNIntegerList RemoveTail(BaseNIntegerList l);
 
 /**
  * @brief Delete the list
- * @details Free all elements and return an empty list
+ * @details Delete all elements and values of the list
  * 
- * @param l: The new (empty) list
+ * @param l: The list to delete
  */
 void DeleteIntegerList(BaseNIntegerList l);
 
