@@ -3,7 +3,9 @@
  * Written by Maxime PINARD, maxime.pinard@utbm.fr, November 2015                              *
  ***********************************************************************************************/
 
-/*
+/* 
+ * Values(char*) are stored in reversed order (strongest weight at right)
+ * 
  * This lib can be used for bases from 2 to 35 but be aware that some function description specify:
  * "/!\ Max value: 4 294 967 295"
  * It is the case if the function need to stock the number value or a part of the value in a unsigned int variable.
