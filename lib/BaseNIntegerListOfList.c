@@ -70,3 +70,17 @@ BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList l)
 
 	return output;
 }
+
+void DeleteBucketList(BaseNIntegerListOfList list_of_list)
+{
+	unsigned char i;
+	for (i = 0; i < list_of_list.base; ++i)
+		DeleteIntegerList(list_of_list.list[i]);
+	free (list_of_list.list);
+}
+
+BaseNIntegerList RadixSort(BaseNIntegerList list)
+{
+	BaseNIntegerList output;
+	return output;
+}
