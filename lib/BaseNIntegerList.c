@@ -156,7 +156,7 @@ char* IntToBase(unsigned int v, unsigned char base)
 		i *= base; // i = base^(k-1)
 	}
 
-	w = (char*)calloc(k, sizeof(char));
+	w = (char*)calloc(k, sizeof(char)); // [0,0] if v = 0
 
 	k = 0;
 	while(v > 0)
@@ -167,7 +167,7 @@ char* IntToBase(unsigned int v, unsigned char base)
 	}
 
 	// Add '\0' at the end of w
-	w[k] = '\0';
+	w[k] = '\0'; // [0,'\0'] if v = 0
 
 	return w;
 }
