@@ -70,7 +70,7 @@ void PrintList(BaseNIntegerList l)
 			for (unsigned short i = val_size; i-- ;)	// We are in Little Endian
 			{
 				// We don't want to display the 0 on the left, but we want to display 0 if the actual value is 0
-				if (digit_was_displayed == FALSE && elem->value[i] == '0' && i != 0)
+				if (!digit_was_displayed && elem->value[i] == '0' && i != 0)
 					printf(" ");
 				else
 				{
@@ -376,7 +376,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 
 	SetEcho( FALSE );
 	unsigned short x_cursor_pos = 0;
-	if (with_brackets == TRUE)
+	if (with_brackets)
 	{
 		++x_cursor_pos;
 		printf("[ ]");
@@ -403,15 +403,15 @@ char* GetNumber(char i_base, BOOL with_brackets)
 			//if input == backspace
 			if (user_input == 127)
 			{
-				if ( (x_cursor_pos > 1) || (with_brackets == FALSE && x_cursor_pos > 0)) // If there is something to delete
+				if ((x_cursor_pos > 1) || (!with_brackets && x_cursor_pos > 0)) // If there is something to delete
 				{
-					if (with_brackets == TRUE)
+					if (with_brackets)
 						printf("\b ] \b\b\b"); // '\b' has a similar effect to Cursorhorizontalmove( -1 )
 					else
 						printf("\b \b");
 					--x_cursor_pos;
 
-					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char)); // Desallocating 1 char
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets ? 1 : 0))*sizeof(char)); // Desallocating 1 char
 				}
 			}
 			else
@@ -434,28 +434,28 @@ char* GetNumber(char i_base, BOOL with_brackets)
 				}
 				else
 				{
-					if (with_brackets == TRUE)
+					if (with_brackets)
 						printf("%c ]\b\b", user_input);
 					else
 						printf("%c", user_input);
 					++x_cursor_pos;
-					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets == TRUE ? 1 : 0))*sizeof(char)); // Allocating 1 extra char
-					output[x_cursor_pos - 1 - (with_brackets == TRUE ? 1 : 0)] = user_input; // Adding 'user_input' at the end of the array
+					output = (char*) realloc(output, (unsigned)(x_cursor_pos - (with_brackets ? 1 : 0))*sizeof(char)); // Allocating 1 extra char
+					output[x_cursor_pos - 1 - (with_brackets ? 1 : 0)] = user_input; // Adding 'user_input' at the end of the array
 				}
 				user_input = 0;
 			}
 		}
 	}while( user_input != '\n' );
-	if (with_brackets == TRUE)
+	if (with_brackets)
 		printf("] ");
 	printf("\n");
 
 	SetEcho( TRUE );
 
-	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && with_brackets == FALSE)) // if the char* is not empty
+	if (x_cursor_pos > 1 || (x_cursor_pos > 0 && !with_brackets)) // if the char* is not empty
 	{
-		output = (char*) realloc(output, (unsigned)(x_cursor_pos + 1 - (with_brackets == TRUE ? 1 : 0))*sizeof(char));
-		output[x_cursor_pos - (with_brackets == TRUE ? 1 : 0)] = '\0';
+		output = (char*) realloc(output, (unsigned)(x_cursor_pos + 1 - (with_brackets ? 1 : 0))*sizeof(char));
+		output[x_cursor_pos - (with_brackets ? 1 : 0)] = '\0';
 		return output;
 	}
 	else
@@ -476,7 +476,7 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 	do
 	{
 		input_as_str = GetNumber(10, FALSE);
-		if (isWithinRange(input_as_str, 2, 16, 10) == TRUE)
+		if (isWithinRange(input_as_str, 2, 16, 10))
 			base = (unsigned char)strtol(input_as_str, NULL, 10);
 		else
 			printf("\r                                                      \r");
@@ -501,7 +501,7 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 
 		do{
 			input_as_str = GetNumber( 10, FALSE);
-			if (isWithinRange(input_as_str, 1, 65025, 10) == TRUE)
+			if (isWithinRange(input_as_str, 1, 65025, 10))
 				nb_element = (unsigned short)strtol(input_as_str, NULL, 10);
 			else
 				printf("\r                                                \r");
@@ -651,7 +651,7 @@ void SetEcho(BOOL on)
 {
 	struct termios tty;
 	tcgetattr(STDIN_FILENO, &tty);
-	if( on == TRUE )
+	if (on)
 		tty.c_lflag |= ECHO;
 	else
 		tty.c_lflag &= ~ECHO;
