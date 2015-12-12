@@ -111,28 +111,28 @@ void DeleteIntegerList(BaseNIntegerList l)
 	}
 }
 
-unsigned char GetValue(unsigned char c) // make this inline
+unsigned char GetValue(unsigned char c) /* make this inline */
 {
 	return (c - (c > '9') * ('A' - '9') - '0');
 }
 
 unsigned int BaseToInt(char* v, unsigned char base)
 {
-	unsigned int n = 0; // value of v
+	unsigned int n = 0; /* value of v */
 	unsigned int temp = 1;
 	unsigned int size = strlen(v);
 	int i = 0;
 
 	if(size > 0)
 	{
-		// temp = base^0
+		/* temp = base^0 */
 		n += GetValue(v[i]) * temp;
 		++i;
 
 		while(i < size)
 		{
 			temp *= base;
-			// temp = base^i
+			/* temp = base^i */
 
 			n += GetValue(v[i]) * temp;
 
@@ -145,7 +145,7 @@ unsigned int BaseToInt(char* v, unsigned char base)
 
 char* IntToBase(unsigned int v, unsigned char base)
 {
-	unsigned int k = 2; // size of the number in the new base: at least '0' and '\0'
+	unsigned int k = 2; /* size of the number in the new base: at least '0' and '\0' */
 	int i = base;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	char* w = NULL;
@@ -153,10 +153,10 @@ char* IntToBase(unsigned int v, unsigned char base)
 	while(v >= i){
 
 		++k;
-		i *= base; // i = base^(k-1)
+		i *= base; /* i = base^(k-1) */
 	}
 
-	w = (char*)calloc(k, sizeof(char)); // [0,0] if v = 0
+	w = (char*)calloc(k, sizeof(char)); /* [0,0] if v = 0 */
 
 	k = 0;
 	while(v > 0)
@@ -166,8 +166,8 @@ char* IntToBase(unsigned int v, unsigned char base)
 		v /= base;
 	}
 
-	// Add '\0' at the end of w
-	w[k] = '\0'; // [0,'\0'] if v = 0
+	/* Add '\0' at the end of w */
+	w[k] = '\0'; /* [0,'\0'] if v = 0 */
 
 	return w;
 }
@@ -189,17 +189,17 @@ char* ConvertBinaryToBase(char* v, unsigned char base)
 
 char* SumBinary(char* a, char* b)
 {
-	char* s = NULL; // the sum
-	unsigned int i = 0; // iteration variable for a
+	char* s = NULL; /* the sum */
+	unsigned int i = 0; /* iteration variable for a */
 	unsigned int a_len = strlen(a);
-	unsigned int j = 0; // iteration variable for b
+	unsigned int j = 0; /* iteration variable for b */
 	unsigned int b_len = strlen(b);
-	unsigned int k = 0; // iteration variable for s
+	unsigned int k = 0; /* iteration variable for s */
 	unsigned int sum_len;
 	unsigned char remainder = 0;
 	char binary_digits[2] = {'0', '1'};
 
-	//sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0')
+	/* sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0') */
 	if(i > j)
 		sum_len = strlen(a) + 1;
 	else
@@ -207,7 +207,7 @@ char* SumBinary(char* a, char* b)
 
 	s = (char*)calloc(sum_len, sizeof(char));
 
-	// sum each digit of a and b from left to right
+	/* sum each digit of a and b from left to right */
 	while(i < a_len && j < b_len)
 	{
 		remainder += (a[i] == '1') + (b[j] == '1');
@@ -218,7 +218,7 @@ char* SumBinary(char* a, char* b)
 		++j;
 	}
 
-	// if j reached the end of b
+	/* if j reached the end of b */
 	while(i < a_len)
 	{
 		remainder += (a[i] == '1');
@@ -228,7 +228,7 @@ char* SumBinary(char* a, char* b)
 		++i;
 	}
 
-	// if i reached the end of a
+	/* if i reached the end of a */
 	while(j < b_len)
 	{
 		remainder += (b[j] == '1');
@@ -238,15 +238,15 @@ char* SumBinary(char* a, char* b)
 		++j;
 	}
 
-	// if there is a reminder at the end of the sum
-	if(remainder != 0) // remainder == 1
+	/* if there is a reminder at the end of the sum */
+	if(remainder != 0) /* remainder == 1 */
 	{
 		s = realloc(s, (sum_len + 1) * sizeof(char));
 		s[k] = '1';
 		++k;
 	}
 
-	// Add '\0' at the end of s
+	/* Add '\0' at the end of s */
 	s[k] = '\0';
 
 	return s;
@@ -254,25 +254,25 @@ char* SumBinary(char* a, char* b)
 
 char* SumBase(char* a, char* b, unsigned char base)
 {
-	char* s = NULL; // the sum
-	unsigned int i = 0; // iteration variable for a
-	unsigned int a_len = strlen(a);
-	unsigned int j = 0; // iteration variable for b
-	unsigned int b_len = strlen(b);
-	unsigned int k = 0; // iteration variable for s
+	char* s = NULL; /* the sum */
+	unsigned int i = 0; /* iteration variable for a */
+	unsigned int a_len = (unsigned int)(strlen(a));
+	unsigned int j = 0; /* iteration variable for b */
+	unsigned int b_len = (unsigned int)(strlen(b));
+	unsigned int k = 0; /* iteration variable for s */
 	unsigned int sum_len;
 	unsigned char remainder = 0;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-	//sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0')
+	/* sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0') */
 	if(i > j)
-		sum_len = strlen(a) + 1;
+		sum_len = (unsigned int)(strlen(a) + 1);
 	else
-		sum_len = strlen(b) + 1;
+		sum_len = (unsigned int)(strlen(b) + 1);
 
 	s = (char*)calloc(sum_len, sizeof(char));
 
-	// sum each digit of a and b from left to right
+	/* sum each digit of a and b from left to right */
 	while(i < a_len && j < b_len)
 	{
 		remainder += GetValue(a[i]) + GetValue(b[j]);
@@ -283,7 +283,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		++j;
 	}
 
-	// if j reached the end of b
+	/* if j reached the end of b */
 	while(i < a_len)
 	{
 		remainder += GetValue(a[i]);
@@ -293,7 +293,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		++i;
 	}
 
-	// if i reached the end of a
+	/* if i reached the end of a */
 	while(j < b_len)
 	{
 		remainder += GetValue(b[j]);
@@ -303,7 +303,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		++j;
 	}
 
-	// if there is a reminder at the end of the sum
+	/* if there is a reminder at the end of the sum */
 	if(remainder != 0)
 	{
 		s = realloc(s, (sum_len + 1) * sizeof(char));
@@ -311,7 +311,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 		++k;
 	}
 
-	// Add '\0' at the end of s
+	/* Add '\0' at the end of s */
 	s[k] = '\0';
 
 	return s;

@@ -47,10 +47,11 @@ BaseNIntegerListOfList BuildBucketList(BaseNIntegerList list, unsigned int digit
 
 BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList l)
 {
-	BaseNIntegerList output = CreateIntegerList( l.base ); // Will be returned
+	BaseNIntegerList output = CreateIntegerList( l.base ); /* Will be returned */
 	unsigned short size;
 
-	for (unsigned char i = 0; i < l.base; ++i) {
+	unsigned char i, j;
+	for (i = 0; i < l.base; ++i) {
 
 		ListElem* inserted_elem = l.list[i].head;
 		if (inserted_elem != NULL) {
@@ -60,7 +61,7 @@ BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList l)
 		while (inserted_elem != NULL) {
 
 			char* number = (char*) malloc((unsigned)(size + 1)*sizeof(char));
-			for (unsigned int j = 0; j < size; ++j)
+			for (j = 0; j < size; ++j)
 				number[j] = inserted_elem->value[j];
 			output = InsertTail(output, number);
 			inserted_elem = inserted_elem->next;

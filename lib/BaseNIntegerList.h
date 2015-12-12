@@ -172,7 +172,7 @@ char* ConvertBinaryToBase(char* v, unsigned char base);
  * @param b: Second number
  * @return Sum of a and b in binary base
  */
-char* SumBinary(char* a, char* b); // infinitesimally faster than use SumBase with base = 2... ok this is useless
+char* SumBinary(char* a, char* b); /* infinitesimally faster than use SumBase with base = 2... ok this is useless */
 
 /**
  * @brief Summation of 2 numbers in the given base
@@ -203,4 +203,4 @@ char* SumIntegerList(BaseNIntegerList l);
  */
 BaseNIntegerList ConvertListBase(BaseNIntegerList l, unsigned char base);
 
-#endif /*BASENINTERGERLIST_H_INCLUDED*/
+#endif /* BASENINTERGERLIST_H_INCLUDED */
