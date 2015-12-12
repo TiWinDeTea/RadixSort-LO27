@@ -161,7 +161,7 @@ void PrintList(BaseNIntegerList l)
 	printf("\n");
 	SetEcho( TRUE );
 }
-void SetTextAttributes(char* attribute)
+void SetTextAttributes(const char* attribute)
 {
 	switch (attribute[0])
 	{
@@ -190,7 +190,7 @@ void SetTextAttributes(char* attribute)
 			break;
 	}
 }
-void SetBgColor(char* color)
+void SetBgColor(const char* color)
 {
 	if (!strcmp(color, "black"))                                  printf("\033[40m");/**break**/
 	else if (!strcmp(color, "red"))                               printf("\033[41m");/**break**/
@@ -210,7 +210,7 @@ void SetBgColor(char* color)
 	else if (!strcmp(color, "white"))                             printf("\033[107m");/**break**/
 }
 
-void SetTextColor(char* color)
+void SetTextColor(const char* color)
 {
 	if (!strcmp(color, "black"))                                  printf("\033[8m");/**break**/
 	else if (!strcmp(color, "grey"))                              printf("\033[30m");/**break**/
@@ -465,7 +465,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 	}
 }
 
-BaseNIntegerList GetList(ArrayOfList list_array)
+BaseNIntegerList GetList()
 {
 	Clear();
 	char user_input;
@@ -484,9 +484,6 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 
 	// putting a new list in the array list
 	BaseNIntegerList l = CreateIntegerList( base );
-	list_array.lists = (BaseNIntegerList*)realloc(list_array.lists, (unsigned)(list_array.size+1)*sizeof(BaseNIntegerList));
-	list_array.lists[list_array.size] = l;
-	++list_array.size;
 
 	printf("Generate a random list ? [Y/n]");
 	user_input = InstantGetChar();
@@ -518,11 +515,10 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 			for (unsigned char j = 0 ; j<10 ; ++j)
 			{
 				number[j] = (char)(rand()%base);
-				number[j] += number[j] > 9 ? 'A' - 10 : '0';
+				number[j] = (char)(number[j] + (number[j] > 9 ? 'A' - 10 : '0'));
 			}
 			l = InsertTail( l, number); 
 		}
-		printf("List Generated and saved as list %d.", list_array.size-1);
 
 		if (InstantGetChar() != '\n')
 			printf("\n");
@@ -578,7 +574,6 @@ BaseNIntegerList GetList(ArrayOfList list_array)
 	}
 
 	free (array_of_values);
-	printf("List saved as list %d.\n", list_array.size-1);
 	if (InstantGetChar() != '\n')
 		printf("\n");
 

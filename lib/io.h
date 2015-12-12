@@ -17,16 +17,6 @@ typedef enum{
 #define SPECIAL '['
 #endif // SPECIAL
 
-#ifndef ARRAYOFLIST_DEFINED
-#define ARRAYOFLIST_DEFINED
-
-typedef struct{
-	unsigned char size;
-	BaseNIntegerList* lists;
-}ArrayOfList;
-#endif // ARRAYOFLIST_DEFINED
-
-
 #ifndef IO_H_INCLUDED
 #define IO_H_INCLUDED
 
@@ -48,19 +38,19 @@ void Clear(void);
  * Adds/Removes an attribute to the output text
  * @param attribute Attribute to set to the text. Blink may not be available on all terminals
  */
-void SetTextAttributes(char* attribute);
+void SetTextAttributes(const char* attribute);
 
 /*
  * Sets a background color for the output text
  * @param color Color choosen as a background color, without any capital letter.
  */
-void SetBgColor(char* color);
+void SetBgColor(const char* color);
 
 /*
  * Sets a font color for the output text
  * @param color Color choosen as a font color, without any capital letter.
  */
-void SetTextColor(char* color);
+void SetTextColor(const char* color);
 
 /*
  * Prints a text at the center of the screen, given its height. Will output nothing if the screen's width is smaller than the text to print
@@ -103,7 +93,7 @@ char* GetNumber(char i_base, BOOL with_brackets);
  * Retrieve a BaseNIntegerArray using user inputs
  * @param list_array Structure containing an array where to store the inputed list
  */
-BaseNIntegerList GetList(ArrayOfList list_array);
+BaseNIntegerList GetList(void);
 
 /* Gets a char without waiting for the user to input '\n' */
 char InstantGetChar(void);
