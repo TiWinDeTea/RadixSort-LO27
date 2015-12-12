@@ -18,10 +18,13 @@ int main(int argc, char *argv[])
 	ArrayOfList list_array;
 	list_array.size = 0;
 	list_array.lists = NULL;
-	unsigned char user_choice;
+	unsigned char user_choice = 0;
 
 	do {
-		user_choice = Menu("- Input a list\0- Lists related functions\0- Conversion functions\0- List of lists related functions\0- Extra functions\0- Exit\0", 6, "white", "blue");
+		Clear();
+		SetTextAttributes("+bold");
+		user_choice = Menu("- Input a list\0- Lists related functions\0- Conversion functions\0- List of lists related functions\0- Extra functions\0- Exit\0", 6, "white", "blue", user_choice);
+		SetTextAttributes("reset");
 
 		switch (user_choice) {
 		case 0:
@@ -48,25 +51,30 @@ int main(int argc, char *argv[])
 		}
 	}while (user_choice != 5);
 
+	Clear();
 	return EXIT_SUCCESS;
 }
 
 void listsMenu(ArrayOfList list_array)
 {
 	
+	Clear();
 }
 
 void conversionsMenu()
 {
 
+	Clear();
 }
 
 void listOfListsMenu(ArrayOfList list_array)
 {
 
+	Clear();
 }
 
 void extraMenu(ArrayOfList list_array)
 {
 	
+	Clear();
 }

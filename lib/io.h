@@ -69,16 +69,16 @@ void PrintList(BaseNIntegerList l);
 
 /*
  * Prints a nice menu where you can navigate using arrow keys, and select with Enter. Some args could be easily added, such as :
- *       default_choice (unsigned char)[move a variable declaration to prototype]
  *       border_color(const char*)[one function call to modify]
  *       alignement(enum)[uncommenting + adding if]
  * @param choices    char pointer to a list of the selectable choices. Each choice should end with the '\0' character
  * @param nb_choices number of choices to display. Should not be more than the number of '\0' in 'choices'
  * @param text_color font color of the unselected text
  * @param bg_color   background color of the unselected text
+ * @param choice     the default selected choice
  * @return           the index of the choice selected, starting with index 0. 255 if the display was no possible.
  */
-unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color);
+unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color, unsigned char choice);
 
 // pure input
 

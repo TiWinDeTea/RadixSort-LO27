@@ -231,11 +231,10 @@ void SetTextColor(const char* color)
 }
 
 // input & output
-unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color)
+unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color, unsigned char choice)
 {
 	const char** text = malloc(nb_choices*sizeof(char*)); // Array of pointers that will point on each choice
 
-	unsigned char choice = 0; // Selected choice ; You may change the prototype to input your own default selection
 	unsigned short max_length=0; // Maximum size of a choice
 	unsigned short length[nb_choices]; // Array containing each text's length.
 
@@ -520,8 +519,6 @@ BaseNIntegerList GetList()
 			l = InsertTail( l, number); 
 		}
 
-		if (InstantGetChar() != '\n')
-			printf("\n");
 		return l;
 	}//else
 
@@ -574,9 +571,6 @@ BaseNIntegerList GetList()
 	}
 
 	free (array_of_values);
-	if (InstantGetChar() != '\n')
-		printf("\n");
-
 	return l;
 }
 
