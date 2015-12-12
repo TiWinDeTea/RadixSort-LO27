@@ -30,7 +30,7 @@ typedef struct{
  * @param N base of the list
  * @return  Returns the created list
  */
-BaseNIntegerListOfList CreateBucketList(unsigned int N);
+BaseNIntegerListOfList CreateBucketList(unsigned char N);
 
 /*
  * Adds a new integer (inputted as char*) at the end a BaseNIntegerListOfList in the given bucket

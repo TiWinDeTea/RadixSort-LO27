@@ -193,7 +193,7 @@ char* SumBase(char* a, char* b, unsigned char base);
 char* SumIntegerList(BaseNIntegerList l);
 
 /**
- * @brief Convert the list from it base to the given base
+ * @brief Convert the list from its base to the given base
  * @details Convert all values of the list and change the base field of the list,
  * /!\ Max value: 4 294 967 295
  * 
