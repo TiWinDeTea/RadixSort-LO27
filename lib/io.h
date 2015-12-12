@@ -13,9 +13,9 @@ typedef enum{
 }BOOL;
 #endif // BOOL_DEFINED
 
-#ifndef SPECIAL_DEFINED
+#ifndef SPECIAL
 #define SPECIAL '['
-#endif // SPECIAL_DEFINED
+#endif // SPECIAL
 
 #ifndef ARRAYOFLIST_DEFINED
 #define ARRAYOFLIST_DEFINED
