@@ -36,7 +36,7 @@ BaseNIntegerListOfList CreateBucketList(unsigned char N);
  * Adds a new integer (inputted as char*) at the end a BaseNIntegerListOfList in the given bucket
  * @param list_of_list  BaseNIntegerListOfList where to add the number
  * @param v             Integer to add, given as a string
- * @param bucket_number Bucket where to insert the number, between 0 and 16 (included)
+ * @param bucket_number Bucket where to insert the number, between 0 and the base of the list base (excluded)
  * @return              BaseNIntegerListOfList with the added integer
  */
 BaseNIntegerListOfList AddIntegerIntoBucket(BaseNIntegerListOfList list_of_list, char* v, unsigned char bucket_number);
