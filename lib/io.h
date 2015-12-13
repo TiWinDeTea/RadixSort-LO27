@@ -11,11 +11,11 @@ typedef enum{
 	FALSE = 0,
 	TRUE = 1
 }BOOL;
-#endif // BOOL_DEFINED
+#endif /* BOOL_DEFINED */
 
 #ifndef SPECIAL
 #define SPECIAL '['
-#endif // SPECIAL
+#endif /* SPECIAL */
 
 #ifndef IO_H_INCLUDED
 #define IO_H_INCLUDED
@@ -29,7 +29,7 @@ typedef enum{
 #include <ctype.h>
 #include <time.h>
 
-// pure output
+/* pure output */
 
 /* Clears the screen */
 void Clear(void);
@@ -65,7 +65,7 @@ void CPrint(char* text, unsigned short y_pos);
  */
 void PrintList(BaseNIntegerList l);
 
-// input & output
+/* input & output */
 
 /*
  * Prints a nice menu where you can navigate using arrow keys, and select with Enter. Some args could be easily added, such as :
@@ -80,7 +80,7 @@ void PrintList(BaseNIntegerList l);
  */
 unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_color, char* bg_color, unsigned char choice);
 
-// pure input
+/* pure input */
 
 /*
  * Retrieves a number inputed in base i_base
@@ -98,7 +98,7 @@ BaseNIntegerList GetList(void);
 /* Gets a char without waiting for the user to input '\n' */
 char InstantGetChar(void);
 
-// inner functions
+/* inner functions */
 
 /*
  * Retrieve the height of the terminal
@@ -153,7 +153,7 @@ int power(int number, unsigned int power);
  * @param base Base in which val is stored
  * @return     TRUE if val is between min and max, FALSE otherwise
  */
-BOOL isWithinRange(char* val,unsigned long long int min, unsigned long long int max, unsigned char base);
+BOOL isWithinRange(char* val,unsigned long int min, unsigned long int max, unsigned char base);
 
 /*
  * reverses an array
@@ -161,5 +161,5 @@ BOOL isWithinRange(char* val,unsigned long long int min, unsigned long long int 
  * @param size  Number of chars to reverse.
  */
 void Reverse(char array[], unsigned int size);
-#endif // IO_H_INCLUDED
+#endif /* IO_H_INCLUDED */
 

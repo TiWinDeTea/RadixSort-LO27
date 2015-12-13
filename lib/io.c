@@ -656,7 +656,7 @@ int power( int number, unsigned int power )
 	return res;
 }
 
-BOOL isWithinRange(char* val, unsigned long long int min, unsigned long long int max, unsigned char base)
+BOOL isWithinRange(char* val, unsigned long int min, unsigned long int max, unsigned char base)
 {
 	if (val == NULL)
 	{
@@ -673,7 +673,7 @@ BOOL isWithinRange(char* val, unsigned long long int min, unsigned long long int
 
 	if (value < min)
 	{
-		printf("/!\\ Should be at least %llu", min);
+		printf("/!\\ Should be at least %lu", min);
 		SetEcho(FALSE);
 		InstantGetChar();
 		SetEcho(TRUE);
@@ -684,7 +684,7 @@ BOOL isWithinRange(char* val, unsigned long long int min, unsigned long long int
 
 	if (value > max)
 	{
-		printf("/!\\ Should be at most %llu", max);
+		printf("/!\\ Should be at most %lu", max);
 		SetEcho(FALSE);
 		InstantGetChar();
 		SetEcho(TRUE);

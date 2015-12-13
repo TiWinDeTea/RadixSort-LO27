@@ -121,7 +121,7 @@ unsigned int BaseToInt(char* v, unsigned char base)
 	unsigned int n = 0; /* value of v */
 	unsigned int temp = 1;
 	unsigned int size = strlen(v);
-	int i = 0;
+	unsigned int i = 0;
 
 	if(size > 0)
 	{
@@ -146,7 +146,7 @@ unsigned int BaseToInt(char* v, unsigned char base)
 char* IntToBase(unsigned int v, unsigned char base)
 {
 	unsigned int k = 2; /* size of the number in the new base: at least '0' and '\0' */
-	int i = base;
+	unsigned int i = base;
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	char* w = NULL;
 
