@@ -367,11 +367,12 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 
 // pure input
 
-char* GetNumber(char i_base, BOOL with_brackets)
+char* GetNumber(unsigned char i_base, BOOL with_brackets)
 {
 	if (i_base > 10)
-		i_base = (char)(i_base + 'A' - 10); //i_base is now the max char you may input
-	i_base = (char)(i_base + '0');
+		i_base = (unsigned char)(i_base + 'A' - 10); //i_base is now the min char you may not input
+	else
+		i_base = (unsigned char)(i_base + '0');
 
 	SetEcho( FALSE );
 	unsigned short x_cursor_pos = 0;
@@ -427,7 +428,7 @@ char* GetNumber(char i_base, BOOL with_brackets)
 			{
 				if (user_input >= i_base)
 				{
-					printf("\n/!\\ %c : NaN in base %d\r", user_input, i_base > '9' ? i_base - ('A' - '9') - '0'  : i_base - '0'); // Display the base in decimal
+					printf("\n/!\\ %c : NaN in base %d\r", user_input, i_base >= 'A' ? i_base - 'A' + 10  : i_base - '0'); // Display the base in decimal
 					CursorVerticalMove( -1 );
 					CursorHorizontalMove(x_cursor_pos);
 				}
@@ -490,28 +491,39 @@ BaseNIntegerList GetList()
 	if (user_input != 'n' && user_input != 'N')
 	{
 		unsigned short nb_element = 0;
+		unsigned char element_size = 0;
 		if (user_input != '\n')
 			printf("\n");
 
 		printf("Number of elements in the list ? (min 1, max 65025)\n");	//65025 : ushort
 
 		do{
-			input_as_str = GetNumber( 10, FALSE);
+			input_as_str = GetNumber(10, FALSE);
 			if (isWithinRange(input_as_str, 1, 65025, 10))
 				nb_element = (unsigned short)strtol(input_as_str, NULL, 10);
 			else
 				printf("\r                                                \r");
 		}while (nb_element == 0);
 
+		printf("Number of maximum digits for each element of the list ? (1 to 15)\n");
+
+		do {
+			input_as_str = GetNumber(10, FALSE);
+			if (isWithinRange(input_as_str, 1, 15, 10))
+				element_size = (unsigned char)strtol(input_as_str, NULL, 10);
+			else
+				printf("\r                                                 \r");
+		}while (element_size == 0);
+		
 		printf("Generating list\n");
 		srand((unsigned int)time(0));
 
 		// Generating numbers in base 'base' with 10 digits
 		for (unsigned short i = 0; i<nb_element; ++i)
 		{
-			char* number = (char*)malloc(11*sizeof(char));
-			number[10] = '\0';
-			for (unsigned char j = 0 ; j<10 ; ++j)
+			char* number = (char*)malloc((unsigned)(element_size + 1)*sizeof(char));
+			number[element_size] = '\0';
+			for (unsigned char j = 0 ; j<element_size ; ++j)
 			{
 				number[j] = (char)(rand()%base);
 				number[j] = (char)(number[j] + (number[j] > 9 ? 'A' - 10 : '0'));
@@ -534,7 +546,7 @@ BaseNIntegerList GetList()
 	{
 		++nb_of_values;
 		array_of_values = (char**) realloc(array_of_values, nb_of_values * sizeof(char*)); // allocating an extra char*
-		array_of_values[nb_of_values-1] = GetNumber( (signed char)base, TRUE );
+		array_of_values[nb_of_values-1] = GetNumber( base, TRUE );
 
 		if (array_of_values[nb_of_values-1] != NULL)
 		{

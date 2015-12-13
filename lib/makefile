@@ -24,7 +24,7 @@ all: $(EXECUTABLE)
 run: $(EXECUTABLE)
 	@echo ""
 	@echo "Executing "$(EXECUTABLE)
-	sh exportLD.sh ./$(EXECUTABLE)
+	@sh exportLD.sh ./$(EXECUTABLE)
 
 $(EXECUTABLE): $(LIBS) $(IO) $(EXEOBJECT)
 	@echo -e "\nBuilding the executable..."

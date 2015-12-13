@@ -265,10 +265,10 @@ char* SumBase(char* a, char* b, unsigned char base)
 	char base_digits[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 	/* sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0') */
-	if(i > j)
-		sum_len = (unsigned int)(strlen(a) + 1);
+	if(a_len > b_len)
+		sum_len = (unsigned int)(a_len);
 	else
-		sum_len = (unsigned int)(strlen(b) + 1);
+		sum_len = (unsigned int)(b_len);
 
 	s = (char*)calloc(sum_len, sizeof(char));
 
@@ -323,11 +323,14 @@ char* SumIntegerList(BaseNIntegerList l)
 	{
 		ListElem* element = l.head;
 		char* s = element->value;
+		char* tmp = NULL;
 		element = element->next;
 
 		while(element != NULL)
 		{
 			s = SumBase(s, element->value, l.base);
+			free(tmp);
+			tmp = s;
 			element = element->next;
 		}
 		return s;

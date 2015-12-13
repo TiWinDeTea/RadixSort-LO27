@@ -87,7 +87,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
  * @param i_base       input base
  * @return             the inputed number
  */
-char* GetNumber(char i_base, BOOL with_brackets);
+char* GetNumber(unsigned char i_base, BOOL with_brackets);
 
 /*
  * Retrieve a BaseNIntegerArray using user inputs
