@@ -508,11 +508,11 @@ BaseNIntegerList GetList()
 			free(input_as_str);
 		}while (nb_element == 0);
 
-		printf("Number of maximum digits for each element of the list ? (1 to 15)\n");
+		printf("Number of maximum digits for each element of the list ? (3 to 15 adviced ; [1~189])\n");
 
 		do {
 			input_as_str = GetNumber(10, FALSE);
-			if (isWithinRange(input_as_str, 1, 15, 10))
+			if (isWithinRange(input_as_str, 1, 189, 10))
 				element_size = (unsigned char)strtol(input_as_str, NULL, 10);
 			else
 				printf("\r                                                 \r");

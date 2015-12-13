@@ -94,13 +94,41 @@ void listsMenu(ArrayOfList list_array)
 
 				printf("Enter the value you want to add below : (base %d)\n", list_array.lists[selected_list].base);
 				val = GetNumber(list_array.lists[selected_list].base, FALSE);
+				
+				Reverse(val, (unsigned int)strlen(val));
+
+				if (!IsEmpty(list_array.lists[selected_list]))
+				{
+					size_t val_size = strlen(val);
+					size_t list_vals_size = strlen(list_array.lists[selected_list].head->value);
+					size_t i;
+
+					if (val_size <= list_vals_size) {
+						val = realloc(val, list_vals_size*sizeof(char));
+						for (i = val_size ; i < list_vals_size ; ++i) {
+							val[i] = '0';	
+						}
+						val[list_vals_size] = '\0';
+
+					}
+					else {
+						ListElem* elem = list_array.lists[selected_list].head;
+						while(elem != NULL) {
+							elem->value = realloc(elem->value, val_size*sizeof(char));
+							for (i = list_vals_size ; i < val_size ; ++i) {
+								elem->value[i] = '0';
+							}
+							elem->value[val_size] = '\0';
+							elem = elem->next;
+						}
+					}
+				}
 				if (val != NULL) {
 					if (user_choice == 1)
 						list_array.lists[selected_list] = InsertHead(list_array.lists[selected_list], val);
 					else
 						list_array.lists[selected_list] = InsertTail(list_array.lists[selected_list], val);
 					printf("Value added to list%u\n", list_array.size - 1);
-					free(val);
 				}
 				else {
 					printf("Nothing to be done...\n");
@@ -137,7 +165,7 @@ void listsMenu(ArrayOfList list_array)
 				selected_list = listSelector(list_array.size);
 				s = SumIntegerList(list_array.lists[selected_list]);
 				Reverse(s, (unsigned int)strlen(s));
-				printf("All what's in list%u makes %s (result given in base %u)", selected_list, s, list_array.lists[selected_list].base);
+				printf("All what's in list%u makes %s (result given in base %u)\n", selected_list, s, list_array.lists[selected_list].base);
 				free (s);
 				waitForUser();
 			}
@@ -187,7 +215,10 @@ void conversionsMenu()
 				user_input = GetNumber(user_choice, FALSE);
 			}while (!isWithinRange(user_input, 0, 4294967295, user_choice));
 			
+			Reverse(user_input, (unsigned int)strlen(user_input));
 			conv_result = ConvertBaseToBinary(user_input, user_choice);
+			Reverse(user_input, (unsigned int)strlen(user_input));
+			Reverse(conv_result, (unsigned int)strlen(conv_result));
 			printf("%s in base %u is %s in binary\n", user_input, user_choice, conv_result );
 			free(conv_result);
 			free(user_input);
@@ -215,7 +246,10 @@ void conversionsMenu()
 				user_input = GetNumber(2, FALSE);
 			}while (!isWithinRange(user_input, 0, 4294967295, 2));
 
+			Reverse(user_input, (unsigned int)strlen(user_input));
 			conv_result = ConvertBinaryToBase(user_input, user_choice);
+			Reverse(user_input, (unsigned int)strlen(user_input));
+			Reverse(conv_result, (unsigned int)strlen(conv_result));
 			printf("%s in binary is %s in base %u\n", user_input, conv_result, user_choice);
 			free(conv_result);
 			free(user_input);
@@ -336,6 +370,7 @@ unsigned char listSelector(unsigned char arraySize)
 			else {
 				printf("\r                                          \r");
 				free(user_in);
+				user_in = NULL;
 			}
 		}while (user_in == NULL);
 		printf("\n");
