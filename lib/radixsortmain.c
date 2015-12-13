@@ -208,12 +208,12 @@ void conversionsMenu()
 
 			user_input = NULL;
 
-			printf("Number to convert ? (max 4 294 967 295)\n");
+			printf("Number to convert ? (max 2 147 483 647)\n");
 			do{
 				printf("\r                                                           \r");
 				free(user_input);
 				user_input = GetNumber(user_choice, FALSE);
-			}while (!isWithinRange(user_input, 0, 4294967295, user_choice));
+			}while (!isWithinRange(user_input, 0, 2147483647, user_choice));
 			
 			Reverse(user_input, (unsigned int)strlen(user_input));
 			conv_result = ConvertBaseToBinary(user_input, user_choice);
@@ -239,12 +239,12 @@ void conversionsMenu()
 			
 			user_input = NULL;
 
-			printf("Number to convert ? (max 4 294 967 295)\n");
+			printf("Number to convert ? (max 2 147 483 647)\n");
 			do{
 				printf("\r                                                            \r");
 				free(user_input);
 				user_input = GetNumber(2, FALSE);
-			}while (!isWithinRange(user_input, 0, 4294967295, 2));
+			}while (!isWithinRange(user_input, 0, 2147483647, 2));
 
 			Reverse(user_input, (unsigned int)strlen(user_input));
 			conv_result = ConvertBinaryToBase(user_input, user_choice);
@@ -271,27 +271,70 @@ void listOfListsMenu(/*ArrayOfList list_array*/)
 		SetTextAttributes("+bold");
 		user_choice = Menu("- CreateBucketList()\0- BuildBucketList()\0- BuildIntegerList()\0- AddIntegerToBucket()\0- DeleteBucketList()\0- RadixSort()\0PrintList()\0Back", 8, "white", "blue", user_choice);
 		SetTextAttributes("reset");
+		Clear();
 
 		switch (user_choice) {
 		case 0:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO Createbucketlist */
 			break;
 		case 1:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO Buildbucketlist */
 			break;
 		case 2:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO Buildintegerlist */
 			break;
 		case 3:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO Addintegerlisttobucket */
 			break;
 		case 4:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO Deletebucketlist */
 			break;
 		case 5:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO RadixSort */
 			break;
 		case 6:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO PrintList */
 			break;
 		default:
@@ -308,15 +351,34 @@ void extraMenu(/*ArrayOfList list_array*/)
 		SetTextAttributes("+bold");
 		user_choice = Menu("- ConvertBaseToBase()\0- ConvertListBase()\0- Sumbase()\0Back\0", 4, "white", "blue", user_choice);
 		SetTextAttributes("reset");
+		Clear();
 
 		switch (user_choice) {
 		case 0:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO ConvertBaseToBase */
 			break;
 		case 1:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO ConvertListBase */
 			break;
 		case 2:
+			SetTextAttributes("+bold");
+			SetTextColor("red");
+			SetTextAttributes("+underline");
+			printf("Not Yet Implemented\n");
+			SetTextAttributes("reset");
+			waitForUser();
 			/* TODO SumBase */
 			break;
 		default:
