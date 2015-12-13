@@ -6,7 +6,7 @@
 /* 
  * Values(char*) are stored in reversed order (strongest weight at right)
  * 
- * This lib can be used for bases from 2 to 35 but be aware that some function description specify:
+ * This lib can be used for bases from 2 to 36 but be aware that some function description specify:
  * "/!\ Max value: 2 147 483 647"
  * It is the case if the function need to stock the number value or a part of the value in a unsigned int variable.
  * For bigger numbers don't use base-conversion functions, or modify the lib to use double or long double variable type.

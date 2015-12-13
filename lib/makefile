@@ -18,8 +18,6 @@ LIBSOBJECTS=$(LIBSOURCE:.c=.o)
 IOOBJECT=$(IOSOURCE:.c=.o)
 EXENAME=$(EXESOURCE:.c=.exe)
 
-export LD_LIBRARY_PATH="."
-
 run: $(EXECUTABLE)
 	@echo ""
 	@echo "Executing "$(EXECUTABLE)

@@ -473,11 +473,11 @@ BaseNIntegerList GetList()
 	unsigned char base=129;
 	char* input_as_str;
 
-	printf("What is the base of your new list (input in decimal) ?\n");
+	printf("What is the base of your new list [2~35] ?\n");
 	do
 	{
 		input_as_str = GetNumber(10, FALSE);
-		if (isWithinRange(input_as_str, 2, 16, 10))
+		if (isWithinRange(input_as_str, 2, 35, 10))
 			base = (unsigned char)strtol(input_as_str, NULL, 10);
 		else
 			printf("\r                                                      \r");

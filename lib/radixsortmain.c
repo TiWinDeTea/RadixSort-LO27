@@ -197,10 +197,10 @@ void conversionsMenu()
 
 		switch (user_choice) {
 		case 0:
-			printf("Input base ? [2~16]\n");
+			printf("Input base ? [2~35]\n");
 			do {
 				user_input = GetNumber(10, FALSE);
-				if (isWithinRange(user_input, 2, 16, 10)) {
+				if (isWithinRange(user_input, 2, 35, 10)) {
 					user_choice = (unsigned char)strtol(user_input, NULL, 10);
 				}
 				free(user_input);
@@ -228,10 +228,10 @@ void conversionsMenu()
 			break;
 
 		case 1:
-			printf("Output base ? [2~16]\n");
+			printf("Output base ? [2~35]\n");
 			do {
 				user_input = GetNumber(10, FALSE);
-				if (isWithinRange(user_input, 2, 16, 10)) {
+				if (isWithinRange(user_input, 2, 35, 10)) {
 					user_choice = (unsigned char)strtol(user_input, NULL, 10);
 				}
 				free(user_input);
