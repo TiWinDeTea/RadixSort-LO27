@@ -266,9 +266,9 @@ char* SumBase(char* a, char* b, unsigned char base)
 
 	/* sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0') */
 	if(a_len > b_len)
-		sum_len = (unsigned int)(a_len);
+		sum_len = (unsigned int)(a_len + 1);
 	else
-		sum_len = (unsigned int)(b_len);
+		sum_len = (unsigned int)(b_len + 1);
 
 	s = (char*)calloc(sum_len, sizeof(char));
 
