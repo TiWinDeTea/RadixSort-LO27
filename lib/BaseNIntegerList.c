@@ -147,11 +147,8 @@ char* IntToBase(unsigned int v, unsigned char base)
 {
 	unsigned int k = 2; /* size of the number in the new base: at least '0' and '\0' */
 	unsigned int i = base, j;
-	char base_digits[36] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	char base_digits[36] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-	for (j = 'A' ; j <= 'Z' ; ++j) {
-		base_digits[i-'A'+10] = (char)j;
-	}
 	char* w = NULL;
 
 	while(v >= i){
@@ -266,12 +263,7 @@ char* SumBase(char* a, char* b, unsigned char base)
 	unsigned int k = 0; /* iteration variable for s */
 	unsigned int sum_len;
 	unsigned char remainder = 0;
-	char base_digits[36] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-	for (i = 'A' ; i =< 'Z' ; ++i) {
-		base_digits[i-'A'+10] = (char)i;
-	}
-	i=0;
+	char base_digits[36] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
 	/* sum_len = Max(strlen(a), strlen(b)) + 1 (for '\0') */
 	if(a_len > b_len)
