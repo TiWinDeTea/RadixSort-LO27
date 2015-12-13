@@ -16,6 +16,7 @@ void extraMenu(/*ArrayOfList list_array*/void);
 ArrayOfList IAIEAFI(ArrayOfList list_array);
 ArrayOfList addList(ArrayOfList list_array);
 unsigned char listSelector(unsigned char arraySize);
+void waitForUser(void);
 
 int main()
 {
@@ -80,7 +81,7 @@ void listsMenu(ArrayOfList list_array)
 				else {
 					printf("List%u isn't empty.\n", selected_list);
 				}
-				(void)InstantGetChar();
+				waitForUser();
 			}
 			break;
 
@@ -99,11 +100,12 @@ void listsMenu(ArrayOfList list_array)
 					else
 						list_array.lists[selected_list] = InsertTail(list_array.lists[selected_list], val);
 					printf("Value added to list%u\n", list_array.size - 1);
+					free(val);
 				}
 				else {
 					printf("Nothing to be done...\n");
 				}
-				(void)InstantGetChar();
+				waitForUser();
 			}
 			break;
 		case 3:
@@ -116,7 +118,7 @@ void listsMenu(ArrayOfList list_array)
 				else
 					list_array.lists[selected_list] = RemoveTail(list_array.lists[selected_list]);
 				printf("Done\n");
-				(void)InstantGetChar();
+				waitForUser();
 			}
 			break;
 		case 5:
@@ -125,7 +127,7 @@ void listsMenu(ArrayOfList list_array)
 				selected_list = listSelector(list_array.size);
 				DeleteIntegerList(list_array.lists[selected_list]);
 				printf("Done.\nList%u will remain as an empty list.\n", selected_list);
-				(void)InstantGetChar();
+				waitForUser();
 			}
 			break;
 		case 6:
@@ -137,16 +139,14 @@ void listsMenu(ArrayOfList list_array)
 				Reverse(s, (unsigned int)strlen(s));
 				printf("All what's in list%u makes %s (result given in base %u)", selected_list, s, list_array.lists[selected_list].base);
 				free (s);
-				(void)InstantGetChar();
+				waitForUser();
 			}
 			break;
 		case 7:
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				selected_list = listSelector(list_array.size);
-				(void)InstantGetChar();
 				PrintList(list_array.lists[selected_list]);
-				(void)InstantGetChar();
 			}
 			break;
 		default:
@@ -159,17 +159,69 @@ void conversionsMenu()
 {
 	unsigned char user_choice = 0;
 	do {
+		char* user_input = NULL;
+		char* conv_result;
 		Clear();
 		SetTextAttributes("+bold");
 		user_choice = Menu("- ConvertBaseToBinary()\0- ConvertBinaryToBase()\0Back\0", 3, "white", "blue", user_choice);
 		SetTextAttributes("reset");
+		Clear();
 
 		switch (user_choice) {
 		case 0:
-			/* TODO Convertbasetobinary */
+			printf("Input base ? [2~16]\n");
+			do {
+				user_input = GetNumber(10, FALSE);
+				if (isWithinRange(user_input, 2, 16, 10)) {
+					user_choice = (unsigned char)strtol(user_input, NULL, 10);
+				}
+				free(user_input);
+			}while (user_choice == 0);
+
+			user_input = NULL;
+
+			printf("Number to convert ? (max 4 294 967 295)\n");
+			do{
+				printf("\r                                                           \r");
+				free(user_input);
+				user_input = GetNumber(user_choice, FALSE);
+			}while (!isWithinRange(user_input, 0, 4294967295, user_choice));
+			
+			conv_result = ConvertBaseToBinary(user_input, user_choice);
+			printf("%s in base %u is %s in binary\n", user_input, user_choice, conv_result );
+			free(conv_result);
+			free(user_input);
+
+			user_choice = 0;
+			waitForUser();
 			break;
+
 		case 1:
-			/* TODO Convertbinarytobase */
+			printf("Output base ? [2~16]\n");
+			do {
+				user_input = GetNumber(10, FALSE);
+				if (isWithinRange(user_input, 2, 16, 10)) {
+					user_choice = (unsigned char)strtol(user_input, NULL, 10);
+				}
+				free(user_input);
+			}while (user_choice == 0);
+			
+			user_input = NULL;
+
+			printf("Number to convert ? (max 4 294 967 295)\n");
+			do{
+				printf("\r                                                            \r");
+				free(user_input);
+				user_input = GetNumber(2, FALSE);
+			}while (!isWithinRange(user_input, 0, 4294967295, 2));
+
+			conv_result = ConvertBinaryToBase(user_input, user_choice);
+			printf("%s in binary is %s in base %u\n", user_input, conv_result, user_choice);
+			free(conv_result);
+			free(user_input);
+
+			user_choice = 0;
+			waitForUser();
 			break;
 		default:
 			break;
@@ -244,7 +296,11 @@ ArrayOfList addList(ArrayOfList list_array)
 	++list_array.size;
 	list_array.lists = (BaseNIntegerList*) realloc(list_array.lists, list_array.size*sizeof(BaseNIntegerList));
 	list_array.lists[list_array.size - 1] = GetList();
-	printf("List saved as list %d\n", list_array.size - 1);
+	printf("List saved as ");
+	SetTextAttributes("+bold");
+       	printf("list%d\n", list_array.size - 1);
+	SetTextAttributes("reset");
+	waitForUser();
 	return list_array;
 }
 
@@ -256,7 +312,6 @@ ArrayOfList IAIEAFI(ArrayOfList list_array)
 		ui = InstantGetChar();
 		if (ui != 'n' && ui != 'N') {
 			list_array = addList(list_array);
-			InstantGetChar();
 		}
 	}	
 	return list_array;
@@ -267,8 +322,9 @@ unsigned char listSelector(unsigned char arraySize)
 	char* user_in;
 	unsigned char selected_list;
 	if (arraySize == 1) {
-		printf("Using list0 [this is the only one you have]\n\n");
+		printf("Using list0 [this is the only one you have]\n");
 		selected_list = 0;
+		waitForUser();
 	}
 	else {
 		printf("Which list do you want to use ? [list0 to list%u]\n", arraySize - 1);
@@ -279,10 +335,20 @@ unsigned char listSelector(unsigned char arraySize)
 			}
 			else {
 				printf("\r                                          \r");
-				user_in = NULL;
+				free(user_in);
 			}
 		}while (user_in == NULL);
 		printf("\n");
+		free(user_in);
 	}
 	return selected_list;
+}
+
+void waitForUser()
+{
+	printf("(press any key)");
+	SetEcho(FALSE);
+	(void)InstantGetChar();
+	SetEcho(TRUE);
+	printf("\r               \r");
 }

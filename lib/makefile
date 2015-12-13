@@ -20,11 +20,12 @@ EXENAME=$(EXESOURCE:.c=.exe)
 
 export LD_LIBRARY_PATH="."
 
-all: $(EXECUTABLE)
 run: $(EXECUTABLE)
 	@echo ""
 	@echo "Executing "$(EXECUTABLE)
-	@sh exportLD.sh ./$(EXECUTABLE)
+	@sh run.sh ./$(EXECUTABLE)
+
+all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(LIBS) $(IO) $(EXEOBJECT)
 	@echo -e "\nBuilding the executable..."
