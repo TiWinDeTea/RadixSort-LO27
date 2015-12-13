@@ -113,7 +113,7 @@ void DeleteIntegerList(BaseNIntegerList l)
 
 unsigned char GetValue(unsigned char c) /* make this inline */
 {
-	return (c - (c > '9') * ('A' - '9') - '0');
+	return (c - (c > '9') * ('A' - '9' - 1) - '0');
 }
 
 unsigned int BaseToInt(char* v, unsigned char base)
