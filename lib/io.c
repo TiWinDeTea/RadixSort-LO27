@@ -25,6 +25,7 @@ void PrintList(BaseNIntegerList l)
 	if (IsEmpty(l))
 	{
 		printf("The list is empty.\nNothing to display.\n");
+		(void)InstantGetChar();
 		return;
 	}
 
@@ -480,6 +481,7 @@ BaseNIntegerList GetList()
 			base = (unsigned char)strtol(input_as_str, NULL, 10);
 		else
 			printf("\r                                                      \r");
+		free(input_as_str);
 	}while(base >= 128);
 
 	// putting a new list in the array list
@@ -503,6 +505,7 @@ BaseNIntegerList GetList()
 				nb_element = (unsigned short)strtol(input_as_str, NULL, 10);
 			else
 				printf("\r                                                \r");
+			free(input_as_str);
 		}while (nb_element == 0);
 
 		printf("Number of maximum digits for each element of the list ? (1 to 15)\n");
@@ -513,6 +516,7 @@ BaseNIntegerList GetList()
 				element_size = (unsigned char)strtol(input_as_str, NULL, 10);
 			else
 				printf("\r                                                 \r");
+			free(input_as_str);
 		}while (element_size == 0);
 		
 		printf("Generating list\n");
@@ -700,7 +704,7 @@ BOOL isWithinRange(char* val, unsigned long int min, unsigned long int max, unsi
 		SetEcho(FALSE);
 		InstantGetChar();
 		SetEcho(TRUE);
-		printf("\r                             \r");
+		printf("\r                                \r");
 		CursorVerticalMove( -1 );
 		return FALSE;
 	}
