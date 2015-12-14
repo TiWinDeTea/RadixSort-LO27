@@ -31,7 +31,7 @@ int main()
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- Input a list\0- Lists related functions\0- Conversion functions\0- List of lists related functions(!!)\0- Extra functions(!!)\0- How are you gentlemen ?\0Exit\0", 7, "yellow", "blue", user_choice);
+		user_choice = Menu("- Input a list\0- Lists related functions\0- Conversion functions\0- List of lists related functions(!!)\0- Extra functions\0- How are you gentlemen ?\0Exit\0", 7, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 
 		switch (user_choice) {
@@ -349,7 +349,7 @@ void extraMenu(ArrayOfList list_array)
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- ConvertBaseToBase()\0- ConvertListBase() (!!)\0- Sumbase() (!!)\0Back\0", 4, "yellow", "blue", user_choice);
+		user_choice = Menu("- ConvertBaseToBase()\0- ConvertListBase()\0Back\0", 3, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -391,22 +391,19 @@ void extraMenu(ArrayOfList list_array)
 			printf("Note that this function won't work if any number is above 2 147 483 647 (base 10)\n");
 			list_array = IAIEAFI(list_array);
 			if (list_array.size != 0) {
-				
+				unsigned char selected_list;
+				unsigned char base;
+				selected_list = listSelector(list_array.size);
+				printf("Output base ? [2~36]\n");
+				base = (unsigned char)GetNumberWithinRange(2, 36);
+				list_array.lists[selected_list] = ConvertListBase(list_array.lists[selected_list], base);
+				waitForUser();
 			}
-			break;
-		case 2:
-			SetTextAttributes("+bold");
-			SetTextColor("red");
-			SetTextAttributes("+underline");
-			printf("Not Yet Implemented\n");
-			SetTextAttributes("reset");
-			waitForUser();
-			/* TODO SumBase */
 			break;
 		default:
 			break;
 		}
-	}while (user_choice != 3);
+	}while (user_choice != 2);
 }
 
 ArrayOfList addList(ArrayOfList list_array)
