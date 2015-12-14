@@ -54,12 +54,10 @@ BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList l)
 	for (i = 0; i < l.base; ++i) {
 
 		ListElem* inserted_elem = l.list[i].head;
-		if (inserted_elem != NULL) {
-			size = (unsigned short)strlen(inserted_elem->value);
-		}
 
 		while (inserted_elem != NULL) {
 
+			size = (unsigned short)strlen(inserted_elem->value);
 			char* number = (char*) malloc((unsigned)(size + 1)*sizeof(char));
 			for (j = 0; j < size; ++j)
 				number[j] = inserted_elem->value[j];
@@ -81,6 +79,21 @@ void DeleteBucketList(BaseNIntegerListOfList list_of_list)
 
 BaseNIntegerList RadixSort(BaseNIntegerList list)
 {
-	BaseNIntegerList output;
+	BaseNIntegerList list_of_list = CreateIntegerList(l.base);
+	unsigned short max_size = strlen(list.heah->value);
+	unsigned short tmp_size;
+	ListElem* elem = l.head;
+
+	/*find the size of the biggest element of list*/
+	while(elem.next != NULL)
+	{
+		elem = elem.next;
+		tmp_size = strlen(elem.value)
+
+		if(tmp_size > max_size)
+			max_size = tmp_size;
+	}
+
+
 	return output;
 }
