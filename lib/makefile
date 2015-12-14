@@ -1,5 +1,5 @@
-#general makefile template
-CXX = gcc
+#General makefile template
+COMPILER = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -fPIC
 CSTD= -ansi
 IOSTD= -std=c99
@@ -16,44 +16,54 @@ IO=$(IOSOURCE:.c=.so)
 EXEOBJECT=$(EXESOURCE:.c=.o)
 LIBSOBJECTS=$(LIBSOURCE:.c=.o)
 IOOBJECT=$(IOSOURCE:.c=.o)
-EXENAME=$(EXESOURCE:.c=.exe)
 
+#Builds and runs the executable
 run: $(EXECUTABLE)
-	@echo ""
-	@echo "Executing "$(EXECUTABLE)
-	@sh run.sh ./$(EXECUTABLE)
+	@echo -e "\nExecuting "$(EXECUTABLE)
+	@sh run.sh $(EXECUTABLE)
 
+#Builds the executable
 all: $(EXECUTABLE)
+	@echo -e "\033[0m\nYou may run the executable using '\033[35mmake run\033[0m' or '\033[35m./run.sh "$(EXECUTABLE)"\033[0m'."
 
+#Builds the executable
 $(EXECUTABLE): $(LIBS) $(IO) $(EXEOBJECT)
 	@echo -e "\nBuilding the executable..."
-	@$(CXX) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) $(LIBS) $(IO) -o $(EXENAME) $(EXESOURCE)
+	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) $(LIBS) $(IO) -o $(EXECUTABLE) $(EXESOURCE)
 	@echo "Done"
-	@echo -e "\nYou may run the executable using 'make run'"
 
+#Builds libraries
+libs: lib
 lib: $(LIBS) $(IO)
 	@echo "Done"
 
-$(EXEOBJECT): $(EXESOURCE) $(LIBS) $(IO)
+#Builds executable object files from executable source code
+$(EXEOBJECT): $(EXESOURCE)
 	@echo "Building" $< "into" $@"..."
-	@$(CXX) $(CFLAGS) $(CSTD) $(LIBS) $(IO) -o $@ $<
+	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBS) $(IO) -o $@ $<
 
+#Builds IO libraries files from IO objects code files
 $(IO): $(IOOBJECT)
 	@echo "Building" $< "into" $@"..."
-	@$(CXX) $(CFLAGS) $(IOSTD) -shared -o $@ $<
+	@$(COMPILER) $(CFLAGS) $(IOSTD) -shared -o $@ $<
 
+#Builds IO object files from IO source code files
 $(IOOBJECT): $(IOSOURCE)
 	@echo "Building" $< "into" $@"..."
-	@$(CXX) $(CFLAGS) $(IOSTD) -o $@ -c $<
+	@$(COMPILER) $(CFLAGS) $(IOSTD) -o $@ -c $<
 
+#Builds libraries files from libraries object files
 $(LIBS): $(LIBSOBJECTS)
 	@echo "Building" $< "into" $@"..."
-	@$(CXX) $(CFLAGS) $(CSTD) -shared -o $@ $<
+	@$(COMPILER) $(CFLAGS) $(CSTD) -shared -o $@ $<
 
+#Builds libraries object files from libraries source code files
 $(LIBSOBJECTS): $(LIBSOURCE)
 	@echo "Building" $< "into" $@"..."
-	@$(CXX) $(CFLAGS) $(CSTD) -o $@ -c $<
+	@$(COMPILER) $(CFLAGS) $(CSTD) -o $@ -c $<
 
+#Removes temporary files
 clean:
 	@echo "Cleaning temporary files"
-	rm -f *.o *~ *.so *.exe
+	@rm -f *.o *~ *.so *.exe
+	@echo "Done"

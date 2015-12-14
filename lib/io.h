@@ -98,6 +98,7 @@ BaseNIntegerList GetList(void);
 /* Gets a char without waiting for the user to input '\n' */
 char InstantGetChar(void);
 
+unsigned long int GetNumberWithinRange(unsigned long int min, unsigned long int max);
 /* inner functions */
 
 /*

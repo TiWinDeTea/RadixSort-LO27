@@ -195,7 +195,7 @@ char* SumIntegerList(BaseNIntegerList l);
 /**
  * @brief Convert the list from its base to the given base
  * @details Convert all values of the list and change the base field of the list,
- * /!\ Max value: 4 294 967 295
+ * /!\ Max value: 2 147 483 647
  * 
  * @param l: The list to convert
  * @param base: Base to convert the list

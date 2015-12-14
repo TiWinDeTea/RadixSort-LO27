@@ -43,6 +43,7 @@ void PrintList(BaseNIntegerList l)
 	{
 		printf("This screen is too small to display this list properly.\n");
 		printf("Press Enter if you still want to do it.");
+		term_height/=3;
 		if (InstantGetChar() != '\n')
 			return;
 	}
@@ -471,18 +472,9 @@ BaseNIntegerList GetList()
 	Clear();
 	char user_input;
 	unsigned char base=129;
-	char* input_as_str;
 
 	printf("What is the base of your new list [2~36] ?\n");
-	do
-	{
-		input_as_str = GetNumber(10, FALSE);
-		if (isWithinRange(input_as_str, 2, 36, 10))
-			base = (unsigned char)strtol(input_as_str, NULL, 10);
-		else
-			printf("\r                                                      \r");
-		free(input_as_str);
-	}while(base >= 128);
+	base = (unsigned char)GetNumberWithinRange(2,36);
 
 	// putting a new list in the array list
 	BaseNIntegerList l = CreateIntegerList( base );
@@ -498,26 +490,10 @@ BaseNIntegerList GetList()
 			printf("\n");
 
 		printf("Number of elements in the list ? (min 1, max 65025)\n");	//65025 : ushort
+		nb_element = (unsigned short)GetNumberWithinRange(1, 65025);
 
-		do{
-			input_as_str = GetNumber(10, FALSE);
-			if (isWithinRange(input_as_str, 1, 65025, 10))
-				nb_element = (unsigned short)strtol(input_as_str, NULL, 10);
-			else
-				printf("\r                                                \r");
-			free(input_as_str);
-		}while (nb_element == 0);
-
-		printf("Number of maximum digits for each element of the list ? (3 to 15 adviced ; [1~189])\n");
-
-		do {
-			input_as_str = GetNumber(10, FALSE);
-			if (isWithinRange(input_as_str, 1, 189, 10))
-				element_size = (unsigned char)strtol(input_as_str, NULL, 10);
-			else
-				printf("\r                                                 \r");
-			free(input_as_str);
-		}while (element_size == 0);
+		printf("Number of maximum digits for each element of the list ? (3 to 15 adviced ; [1~250])\n");
+		element_size = (unsigned char)GetNumberWithinRange(1, 250);
 		
 		printf("Generating list\n");
 		srand((unsigned int)time(0));
@@ -608,6 +584,24 @@ char InstantGetChar()
 	return key;
 }
 
+unsigned long int GetNumberWithinRange(unsigned long int min, unsigned long int max)
+{
+	char* input = NULL;
+	unsigned long int output;
+
+	do {
+		input = GetNumber(10, FALSE);
+		if (!isWithinRange(input, min, max, 10)) {
+			printf("                                                     \r");
+			free(input);
+			input = NULL;
+		}
+	}while (input == 0);
+
+	output = strtoul(input, NULL, 10);
+	free(input);
+	return output;
+}
 // inner functions
 
 unsigned short ConsoleHeight()
