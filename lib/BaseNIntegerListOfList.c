@@ -79,21 +79,6 @@ void DeleteBucketList(BaseNIntegerListOfList list_of_list)
 
 BaseNIntegerList RadixSort(BaseNIntegerList list)
 {
-	BaseNIntegerList list_of_list = CreateIntegerList(l.base);
-	unsigned short max_size = strlen(list.heah->value);
-	unsigned short tmp_size;
-	ListElem* elem = l.head;
-
-	/*find the size of the biggest element of list*/
-	while(elem.next != NULL)
-	{
-		elem = elem.next;
-		tmp_size = strlen(elem.value)
-
-		if(tmp_size > max_size)
-			max_size = tmp_size;
-	}
-
-
+	BaseNIntegerList output;
 	return output;
 }
