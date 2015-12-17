@@ -184,9 +184,14 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				char* s;
 				selected_list = selector(list_array.size, "list");
 				s = SumIntegerList(list_array.lists[selected_list]);
-				Reverse(s, (unsigned int)strlen(s));
-				printf("All what's in list%u makes %s (result given in base %u)\n", selected_list, s, list_array.lists[selected_list].base);
-				free (s);
+				if (s == NULL) {
+					printf("Well, this list seems to be empty...\n");
+				}
+				else {
+					Reverse(s, (unsigned int)strlen(s));
+					printf("All what's in list%u makes %s (result given in base %u)\n", selected_list, s, list_array.lists[selected_list].base);
+					free (s);
+				}
 				waitForUser();
 			}
 			break;
@@ -276,7 +281,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- CreateBucketList()\0- BuildBucketList() (!!)\0- BuildIntegerList() (!!)\0- AddIntegerToBucket() (!!)\0- DeleteBucketList() (!!)\0- RadixSort() (!!)\0-PrintBucketList() (!!)\0Back", 8, "yellow", "blue", user_choice);
+		user_choice = Menu("- CreateBucketList()\0- BuildBucketList()\0- BuildIntegerList() (!!)\0- AddIntegerToBucket() (!!)\0- DeleteBucketList() (!!)\0- RadixSort() (!!)\0- PrintBucketList() (!!)\0Back", 8, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -288,21 +293,33 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			*list_array = ifListArrayEmptyAskInput(*list_array);
 			selection = selector(list_array->size, "list");
 
-			printf("Which digit do you want to take into consideration for building the bucket (rightmost) ? [1~255]\n");
+			printf("Which digit do you want to take into consideration for building the bucket (rightmost ; the rightess digit is digit 1) ? [1~255]\n");
 			digit = (unsigned char)GetNumberWithinRange(1, 255);
 			bucket_array.size++;
 			bucket_array.buckets = (BaseNIntegerListOfList*) realloc(bucket_array.buckets, bucket_array.size*sizeof(BaseNIntegerListOfList));
-			bucket_array.buckets[bucket_array.size-1] = BuildBucketList(list_array->lists[selection], digit);
+			bucket_array.buckets[bucket_array.size-1] = BuildBucketList(list_array->lists[selection], (unsigned)(digit - 1));
+			printf("Bucket saved as ");
+			SetTextAttributes("+bold");
+			printf("bucket%d\n", bucket_array.size - 1);
+			SetTextAttributes("reset");
 			waitForUser();
 			break;
 		case 2:
+			bucket_array = ifBucketArryEmptyAskInput(bucket_array);
+			selection = selector(bucket_array.size, "bucket");
+
+			list_array->size++;
+			list_array->lists = (BaseNIntegerList*) realloc(list_array->lists, list_array->size*sizeof(BaseNIntegerList));
+			list_array->lists[list_array->size-1] = BuildIntegerList(bucket_array.buckets[selection]);
+			printf("List generated as ");
 			SetTextAttributes("+bold");
-			SetTextColor("red");
-			SetTextAttributes("+underline");
-			printf("Not Yet Implemented\n");
+			printf("list%d\n", list_array->size - 1);
 			SetTextAttributes("reset");
 			waitForUser();
-			/* TODO Buildintegerlist */
+
+			if (yes("Do you want to print the list ?", 1)) {
+				PrintList(list_array->lists[list_array->size-1]);
+			}
 			break;
 		case 3:
 			SetTextAttributes("+bold");
@@ -426,7 +443,7 @@ ArrayOfBuckets addBucket(ArrayOfBuckets bucket_array)
 	bucket_array.buckets[bucket_array.size - 1] = CreateBucketList(ui);
 	printf("Bucket saved as ");
 	SetTextAttributes("+bold");
-	printf("list%d\n", bucket_array.size - 1);
+	printf("bucket%d\n", bucket_array.size - 1);
 	SetTextAttributes("reset");
 	waitForUser();
 	return bucket_array;
@@ -447,13 +464,8 @@ ArrayOfList addList(ArrayOfList list_array)
 
 ArrayOfList ifListArrayEmptyAskInput(ArrayOfList list_array)
 {
-	if (list_array.size == 0) {
-		char ui;
-		printf("You don't have any list !\nDo you want to input one ? [Y/n]");
-		ui = InstantGetChar();
-		if (ui != 'n' && ui != 'N') {
-			list_array = addList(list_array);
-		}
+	if (list_array.size == 0 && yes("You don't have any list !\nDo you want to input one ?", 1)) {
+		list_array = addList(list_array);
 	}
 	return list_array;
 }
@@ -485,13 +497,8 @@ void waitForUser()
 
 ArrayOfBuckets ifBucketArryEmptyAskInput(ArrayOfBuckets bucket_array)
 {
-	if (bucket_array.size == 0) {
-		char ui;
-		printf("You don't have any bucket list !\nDo you want to input one ? [Y/n]");
-		ui = InstantGetChar();
-		if (ui != 'n' && ui != 'N') {
-			bucket_array = addBucket(bucket_array);
-		}
+	if (bucket_array.size == 0 && yes("You don't have any bucket !\nDo you want to create one ?", 1)) {
+		bucket_array = addBucket(bucket_array);
 	}
 	return bucket_array;
 }

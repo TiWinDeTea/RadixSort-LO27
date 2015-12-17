@@ -1,6 +1,5 @@
 #include "io.h"
 
-
 // pure output
 void Clear()
 {
@@ -81,7 +80,7 @@ void PrintList(BaseNIntegerList l)
 				}
 			}
 			printf("]\n");
-			
+
 			elem = elem->next;
 		}
 		else
@@ -335,16 +334,24 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 
 			switch (key_pressed)
 			{
-				case 'A':	//Key up
+				case 'A':	//Arrow up
 					if (choice == 0)
 						choice = (unsigned char)(nb_choices - 1);
 					else --choice;
 					break;
 
-				case 'B':	//Key down
+				case 'B':	//Arrow down
 					if (choice == nb_choices - 1)
 						choice = 0;
 					else ++choice;
+					break;
+
+				case '5':	//Page Up
+					choice = 0;
+					break;
+
+				case '6':	//Page Down
+					choice = (unsigned char)(nb_choices - 1);
 					break;
 
 				default:
@@ -369,6 +376,32 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 
 // pure input
 
+BOOL yes(char* question, char default_ans)
+{
+	char answer;
+	printf("%s [%c/%c]", question, default_ans == 1 ? 'Y' : 'y', default_ans == -1 ? 'N' : 'n');
+	SetEcho(FALSE);
+	do {
+		answer = InstantGetChar();
+		answer = (char)tolower(answer);
+		if (default_ans == 1) {
+			if (answer != 'n') {
+				answer = 'y';
+			}
+		} else {
+			if (default_ans == -1) {
+				if (answer != 'y') {
+					answer = 'n';
+				}
+			}
+			
+		}
+	}while (answer != 'y' && answer != 'n');
+	SetEcho(TRUE);
+	printf("%c\n", answer);
+	return answer == 'y' ? TRUE : FALSE;
+	
+}
 char* GetNumber(unsigned char i_base, BOOL with_brackets)
 {
 	if (i_base > 10)
@@ -470,7 +503,6 @@ char* GetNumber(unsigned char i_base, BOOL with_brackets)
 BaseNIntegerList GetList()
 {
 	Clear();
-	char user_input;
 	unsigned char base=129;
 
 	printf("What is the base of your new list [2~36] ?\n");
@@ -479,22 +511,18 @@ BaseNIntegerList GetList()
 	// putting a new list in the array list
 	BaseNIntegerList l = CreateIntegerList( base );
 
-	printf("Generate a random list ? [Y/n]");
-	user_input = InstantGetChar();
-	
-	if (user_input != 'n' && user_input != 'N')
+
+	if (yes("Generate a random list ?", 1))
 	{
 		unsigned short nb_element = 0;
 		unsigned char element_size = 0;
-		if (user_input != '\n')
-			printf("\n");
 
 		printf("Number of elements in the list ? (min 1, max 65025)\n");	//65025 : ushort
 		nb_element = (unsigned short)GetNumberWithinRange(1, 65025);
 
 		printf("Number of maximum digits for each element of the list ? (3 to 15 adviced ; [1~250])\n");
 		element_size = (unsigned char)GetNumberWithinRange(1, 250);
-		
+
 		printf("Generating list\n");
 		srand((unsigned int)time(0));
 
@@ -508,7 +536,7 @@ BaseNIntegerList GetList()
 				number[j] = (char)(rand()%base);
 				number[j] = (char)(number[j] + (number[j] > 9 ? 'A' - 10 : '0'));
 			}
-			l = InsertTail( l, number); 
+			l = InsertTail( l, number);
 		}
 
 		return l;
@@ -572,14 +600,14 @@ char InstantGetChar()
 	tcgetattr(0, &original_settings);       //retrieve the terminal settings
 
 	struct termios new_settings = original_settings;
-	
+
 	new_settings.c_lflag &= ~ICANON;        // Allow getchar() to return without waiting '\n'
 	new_settings.c_cc[VMIN] = 1;            // getchar() should read only 1 character
 	new_settings.c_cc[VTIME] = 0;           // getchar() should wait for an input, forever.
 	tcsetattr(0, TCSANOW, &new_settings);   // applies the new settings
-	
+
 	char key = (char)getchar();
-	
+
 	tcsetattr(0, TCSANOW, &original_settings);// Back to original settings
 	return key;
 }

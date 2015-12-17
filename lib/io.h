@@ -83,6 +83,13 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 /* pure input */
 
 /*
+ * Retrieves a user answer to a yes/no question
+ * @param question The quetion adressed to the user
+ * @param default  1 for Yes as default, -1 for No as default, any other for no default.
+ * @return True if user inputed yes, False otherwise
+ */
+BOOL yes(char* question, char default_ans);
+/*
  * Retrieves a number inputed in base i_base
  * @param i_base       input base
  * @return             the inputed number
