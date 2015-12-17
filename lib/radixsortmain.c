@@ -40,32 +40,29 @@ int main()
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- Input a list\0- Lists related functions\0- Conversion functions\0- List of lists related functions(!!)\0- Extra functions\0- How are you gentlemen ?\0Exit\0", 7, "yellow", "blue", user_choice);
+		user_choice = Menu("- Lists related functions\0- Conversion functions\0- List of lists related functions(!!)\0- Extra functions\0- How are you gentlemen ?\0Exit\0", 6, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 
 		switch (user_choice) {
 		case 0:
-			list_array = addList(list_array);
-			break;
-		case 1:
 			list_array = listsMenu(list_array);
 			break;
-		case 2:
+		case 1:
 			conversionsMenu();
 			break;
-		case 3:
+		case 2:
 			bucket_array = listOfListsMenu(bucket_array, &list_array);
 			break;
-		case 4:
+		case 3:
 			list_array = extraMenu(list_array);
 			break;
-		case 5:
+		case 4:
 			TrollMenu();
 			break;
 		default:
 			break;
 		}
-	}while (user_choice != 6);
+	}while (user_choice != 5);
 
 	Clear();
 	return EXIT_SUCCESS;
@@ -77,14 +74,17 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- IsEmpty\0- InsertHead\0- InsertTail\0- RemoveHead\0- RemoveTail\0- DeleteIntegerList\0- SumIntegerList\0- PrintList\0Back\0", 9, "yellow", "blue", user_choice);
+		user_choice = Menu("- Input a List\0- IsEmpty\0- InsertHead\0- InsertTail\0- RemoveHead\0- RemoveTail\0- DeleteIntegerList\0- SumIntegerList\0- PrintList\0Back\0", 10, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
-		if (user_choice != 8)
+		if (user_choice != 9 && user_choice != 0)
 			list_array = ifListArrayEmptyAskInput(list_array);
 
 		switch (user_choice) {
 		case 0:
+			list_array = addList(list_array);
+			break;
+		case 1:
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				selected_list = selector(list_array.size, "list");
@@ -99,8 +99,8 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 			}
 			break;
 
-		case 1:
 		case 2:
+		case 3:
 			if (list_array.size != 0) {
 				char* val;
 				unsigned char selected_list;
@@ -144,7 +144,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 					}
 				}
 				if (val != NULL) {
-					if (user_choice == 1)
+					if (user_choice == 2)
 						list_array.lists[selected_list] = InsertHead(list_array.lists[selected_list], val);
 					else
 						list_array.lists[selected_list] = InsertTail(list_array.lists[selected_list], val);
@@ -156,12 +156,12 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				waitForUser();
 			}
 			break;
-		case 3:
 		case 4:
+		case 5:
 			if (list_array.size != 0){
 				unsigned char selected_list;
 				selected_list = selector(list_array.size, "list");
-				if (user_choice == 3)
+				if (user_choice == 4)
 					list_array.lists[selected_list] = RemoveHead(list_array.lists[selected_list]);
 				else
 					list_array.lists[selected_list] = RemoveTail(list_array.lists[selected_list]);
@@ -169,7 +169,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				waitForUser();
 			}
 			break;
-		case 5:
+		case 6:
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				selected_list = selector(list_array.size, "list");
@@ -178,7 +178,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				waitForUser();
 			}
 			break;
-		case 6:
+		case 7:
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				char* s;
@@ -195,7 +195,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				waitForUser();
 			}
 			break;
-		case 7:
+		case 8:
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				selected_list = selector(list_array.size, "list");
@@ -205,7 +205,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 		default:
 			break;
 		}
-	}while (user_choice != 8);
+	}while (user_choice != 9);
 	return list_array;
 }
 
