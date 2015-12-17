@@ -103,11 +103,11 @@ BaseNIntegerList RemoveTail(BaseNIntegerList l)
 	return l;
 }
 
-void DeleteIntegerList(BaseNIntegerList l)
+void DeleteIntegerList(BaseNIntegerList* l)
 {
-	while(!IsEmpty(l))
+	while(!IsEmpty(*l))
 	{
-		l = RemoveHead(l);
+		*l = RemoveHead(*l);
 	}
 }
 

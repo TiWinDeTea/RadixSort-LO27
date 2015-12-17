@@ -100,7 +100,7 @@ BaseNIntegerList RemoveTail(BaseNIntegerList l);
  * 
  * @param l: The list to delete
  */
-void DeleteIntegerList(BaseNIntegerList l);
+void DeleteIntegerList(BaseNIntegerList* l);
 
 /**
  * @brief Give the value of a character in base 36, can be used for smaller bases
