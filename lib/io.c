@@ -30,6 +30,7 @@ void PrintList(BaseNIntegerList l)
 
 	SetEcho( FALSE );
 	ListElem* elem = l.head; // Value to display
+	unsigned short b = 3; // To display numbers by group of 3
 	unsigned short term_height = ConsoleHeight();
 	unsigned short term_width = ConsoleWidth();
 	unsigned short j = 0;	// Counter for the number of elements currently on the screen
@@ -38,7 +39,12 @@ void PrintList(BaseNIntegerList l)
 	char user_input = 0;
 	BOOL digit_was_displayed; // Used to remove the left '0' (on display)
 
-	if (term_width < (val_size + 2))
+	if (l.base == 2 || l.base == 16) {
+		b = 4;
+	}
+
+	//we want to display a space every b numbers plus the '[' ']' around them
+	if (term_width < ((b+1) * val_size / b + 1))
 	{
 		printf("This screen is too small to display this list properly.\n");
 		printf("Press Enter if you still want to do it.");
@@ -64,19 +70,26 @@ void PrintList(BaseNIntegerList l)
 			digit_was_displayed = FALSE;
 
 			// Align : right
-			CursorHorizontalMove( (unsigned short)( term_width - 2 - val_size) );
+			CursorHorizontalMove( (unsigned short)( term_width - 1 - (b+1) * val_size / b) - (val_size%b != 0) );
 
 			// Printing the value of the pointed element
 			printf("[");
 			for (unsigned short i = val_size; i-- ;)	// We are in Little Endian
 			{
 				// We don't want to display the 0 on the left, but we want to display 0 if the actual value is 0
-				if (!digit_was_displayed && elem->value[i] == '0' && i != 0)
+				if (!digit_was_displayed && elem->value[i] == '0' && i != 0){
 					printf(" ");
+					if (i%b == 0) {
+						printf(" ");
+					}
+				}
 				else
 				{
 					printf("%c", elem->value[i]);
 					digit_was_displayed = TRUE;
+					if (i%b == 0 && i != 0) {
+						printf(" ");
+					}
 				}
 			}
 			printf("]\n");

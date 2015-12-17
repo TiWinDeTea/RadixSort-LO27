@@ -95,37 +95,41 @@ void DeleteBucketList(BaseNIntegerListOfList* list_of_list)
 
 BaseNIntegerList RadixSort(BaseNIntegerList list)
 {
-	unsigned short max_size = strlen(list.head->value);
-	unsigned short tmp_size;
-	ListElem* elem = list.head;
-	unsigned short i;
-	BaseNIntegerListOfList list_of_list;
 	BaseNIntegerList sorted_list;
-
-	/*find the size of the biggest element of list*/
-	while(elem->next != NULL)
-	{
-		elem = elem->next;
-		tmp_size = strlen(elem->value);
-
-		if(tmp_size > max_size)
-			max_size = tmp_size;
+	if (IsEmpty(list)) {
+		sorted_list = CreateIntegerList(list.base);
 	}
+	else {
+		unsigned short max_size = strlen(list.head->value);
+		unsigned short tmp_size;
+		ListElem* elem = list.head;
+		unsigned short i;
+		BaseNIntegerListOfList list_of_list;
 
-	/*build list_of_list from list by the first digit, and then sorted_list from list_of_list*/
-	list_of_list = BuildBucketList(list,0);
-	sorted_list = BuildIntegerList(list_of_list);
-	DeleteBucketList(&list_of_list);
+		/*find the size of the biggest element of list*/
+		while(elem->next != NULL)
+		{
+			elem = elem->next;
+			tmp_size = strlen(elem->value);
 
-	/*build list_of_list from sorted_list by the i digit, and then sorted_list from list_of_list*/
-	/*repeat until sorted_list is sorted*/
-	for(i = 1; i < max_size; ++i)
-	{
-		list_of_list = BuildBucketList(sorted_list,i);
-		DeleteIntegerList(&sorted_list);
+			if(tmp_size > max_size)
+				max_size = tmp_size;
+		}
+
+		/*build list_of_list from list by the first digit, and then sorted_list from list_of_list*/
+		list_of_list = BuildBucketList(list,0);
 		sorted_list = BuildIntegerList(list_of_list);
 		DeleteBucketList(&list_of_list);
-	}
 
+		/*build list_of_list from sorted_list by the i digit, and then sorted_list from list_of_list*/
+		/*repeat until sorted_list is sorted*/
+		for(i = 1; i < max_size; ++i)
+		{
+			list_of_list = BuildBucketList(sorted_list,i);
+			DeleteIntegerList(&sorted_list);
+			sorted_list = BuildIntegerList(list_of_list);
+			DeleteBucketList(&list_of_list);
+		}
+	}
 	return sorted_list;
 }

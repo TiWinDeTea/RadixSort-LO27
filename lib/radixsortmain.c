@@ -13,7 +13,7 @@ typedef struct{
 	BaseNIntegerListOfList* buckets;
 }ArrayOfBuckets;
 
-int main(void);
+int main(int, char*[]);
 ArrayOfList listsMenu(ArrayOfList list_array);
 void conversionsMenu(void);
 ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_array);
@@ -27,11 +27,16 @@ void waitForUser(void);
 
 void TrollMenu(void);
 
-int main()
+int main(int argc, char* argv[])
 {
 	unsigned char user_choice = 0;
 	ArrayOfList list_array;
 	ArrayOfBuckets bucket_array;
+
+	if (argc > 1 && !strcmp(argv[1],"candy")) {
+		//for much fun ; (pkill sh && pkill aplay) to stop that
+		system("(while [[ true ]]; do aplay -q ./candy.wav && sleep 2; done;) &");
+	}
 
 	list_array.size = bucket_array.size = 0;
 	list_array.lists = NULL;
@@ -173,8 +178,19 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				selected_list = selector(list_array.size, "list");
-				DeleteIntegerList(&list_array.lists[selected_list]);
-				printf("Done.\nList%u will remain as an empty list.\n", selected_list);
+				if (IsEmpty(list_array.lists[selected_list])) {
+					unsigned char i = selected_list;
+					--list_array.size;
+					for (; i < list_array.size ; ++i) {
+						list_array.lists[i] = list_array.lists[i + 1];
+					}
+					list_array.lists = (BaseNIntegerList*) realloc(list_array.lists, list_array.size*sizeof(BaseNIntegerList));
+					printf("You won't hear anything about list%u anymore.\n(unless another list takes its place...)\n", selected_list);
+				}
+				else {
+					DeleteIntegerList(&list_array.lists[selected_list]);
+					printf("Done.\nList%u will remain as an empty list.\nIf you want to remove it completely, delete it once again.\n", selected_list);
+				}
 				waitForUser();
 			}
 			break;
@@ -281,7 +297,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucket (!!)\0- DeleteBucketList (!!)\0- RadixSort (!!)\0- PrintBucket\0Back", 8, "yellow", "blue", user_choice);
+		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucket (!!)\0- DeleteBucketList (!!)\0- RadixSort\0- PrintBucket\0Back", 8, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -343,13 +359,23 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			/* TODO Deletebucketlist */
 			break;
 		case 5:
-			SetTextAttributes("+bold");
-			SetTextColor("red");
-			SetTextAttributes("+underline");
-			printf("Not Yet Implemented\n");
-			SetTextAttributes("reset");
-			waitForUser();
-			/* TODO RadixSort */
+			*list_array = ifListArrayEmptyAskInput(*list_array);
+
+			if (list_array->size != 0) {
+				selection = selector(list_array->size, "list");
+				list_array->size++;
+				list_array->lists = (BaseNIntegerList*) realloc(list_array->lists, list_array->size*sizeof(BaseNIntegerList));
+				printf("Sorting...\n");
+				list_array->lists[list_array->size-1] = RadixSort(list_array->lists[selection]);
+				printf("Sorted list saved as ");
+				SetTextAttributes("+bold");
+				printf("list%d\n", list_array->size - 1);
+				SetTextAttributes("reset");
+				waitForUser();
+				if (yes("Do you want to print the generated list ?", 1)) {
+					PrintList(list_array->lists[list_array->size-1]);
+				}
+			}
 			break;
 		case 6:
 			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
@@ -506,7 +532,7 @@ void waitForUser()
 
 ArrayOfBuckets ifBucketArrayEmptyAskInput(ArrayOfBuckets bucket_array)
 {
-	if (bucket_array.size == 0 && yes("You don't have any bucket !\nDo you want to create one ?", 1)) {
+	if (bucket_array.size == 0 && yes("You don't have any bucket !\nDo you want to create one ?", 0)) {
 		bucket_array = addBucket(bucket_array);
 	}
 	return bucket_array;

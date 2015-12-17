@@ -29,6 +29,9 @@ run: $(EXECUTABLE)
 	@echo -e "\nExecuting "$(EXECUTABLE)
 	@sh run.sh $(EXECUTABLE)
 
+sperun: $(EXECUTABLE)
+	@sh run2.sh $(EXECUTABLE)
+
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
 	@echo -e "\nBuilding the executable..."
