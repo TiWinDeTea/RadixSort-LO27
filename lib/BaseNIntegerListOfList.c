@@ -64,6 +64,7 @@ BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList list_of_list)
 	BaseNIntegerList output = CreateIntegerList( list_of_list.base ); /* Will be returned */
 	unsigned short size;
 	unsigned char i, j;
+	char* number;
 
 	for (i = 0; i < list_of_list.base; ++i) {
 
@@ -72,7 +73,7 @@ BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList list_of_list)
 		while (inserted_elem != NULL) {
 
 			size = (unsigned short)strlen(inserted_elem->value);
-			char* number = (char*) malloc((unsigned)(size + 1)*sizeof(char));
+			number = (char*) malloc((unsigned)(size + 1)*sizeof(char));
 			for (j = 0; j <= size; ++j)
 				number[j] = inserted_elem->value[j];
 			output = InsertTail(output, number);
@@ -98,6 +99,8 @@ BaseNIntegerList RadixSort(BaseNIntegerList list)
 	unsigned short tmp_size;
 	ListElem* elem = list.head;
 	unsigned short i;
+	BaseNIntegerListOfList list_of_list;
+	BaseNIntegerList sorted_list;
 
 	/*find the size of the biggest element of list*/
 	while(elem->next != NULL)
@@ -110,8 +113,8 @@ BaseNIntegerList RadixSort(BaseNIntegerList list)
 	}
 
 	/*build list_of_list from list by the first digit, and then sorted_list from list_of_list*/
-	BaseNIntegerListOfList list_of_list = BuildBucketList(list,0);
-	BaseNIntegerList sorted_list = BuildIntegerList(list_of_list);
+	list_of_list = BuildBucketList(list,0);
+	sorted_list = BuildIntegerList(list_of_list);
 	DeleteBucketList(&list_of_list);
 
 	/*build list_of_list from sorted_list by the i digit, and then sorted_list from list_of_list*/
