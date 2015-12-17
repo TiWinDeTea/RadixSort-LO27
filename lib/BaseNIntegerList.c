@@ -65,7 +65,8 @@ BaseNIntegerList RemoveHead(BaseNIntegerList l)
 		{
 			free(l.head->value);
 			free(l.head);
-			l.head = l.tail = NULL;
+			l.head = NULL;
+			l.tail = NULL;
 			l.size = 0;
 		}
 		else

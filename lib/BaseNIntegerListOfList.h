@@ -60,7 +60,7 @@ BaseNIntegerList BuildIntegerList(BaseNIntegerListOfList list_of_list);
  * Clears and delete the specified BaseNIntegerListOfList
  * @param list_of_list BaseNIntegerListOfList to free
  */
-void DeleteBucketList(BaseNIntegerListOfList list_of_list);
+void DeleteBucketList(BaseNIntegerListOfList* list_of_list);
 
 /*
  * Sorts the specified BaseNIntegerList using LSD radixsort
