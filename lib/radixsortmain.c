@@ -19,7 +19,7 @@ void conversionsMenu(void);
 ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_array);
 ArrayOfList extraMenu(ArrayOfList list_array);
 ArrayOfList ifListArrayEmptyAskInput(ArrayOfList list_array);
-ArrayOfBuckets ifBucketArryEmptyAskInput(ArrayOfBuckets bucket_array);
+ArrayOfBuckets ifBucketArrayEmptyAskInput(ArrayOfBuckets bucket_array);
 ArrayOfBuckets addBucket(ArrayOfBuckets bucket_array);
 ArrayOfList addList(ArrayOfList list_array);
 unsigned char selector(unsigned char arraySize, const char* type);
@@ -77,7 +77,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- IsEmpty()\0- InsertHead()\0- InsertTail()\0- RemoveHead()\0- RemoveTail()\0- DeleteIntegerList()\0- SumIntegerList()\0- PrintList()\0Back\0", 9, "yellow", "blue", user_choice);
+		user_choice = Menu("- IsEmpty\0- InsertHead\0- InsertTail\0- RemoveHead\0- RemoveTail\0- DeleteIntegerList\0- SumIntegerList\0- PrintList\0Back\0", 9, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 		if (user_choice != 8)
@@ -217,7 +217,7 @@ void conversionsMenu()
 		char* conv_result;
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- ConvertBaseToBinary()\0- ConvertBinaryToBase()\0Back\0", 3, "yellow", "blue", user_choice);
+		user_choice = Menu("- ConvertBaseToBinary\0- ConvertBinaryToBase\0Back\0", 3, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -281,7 +281,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- CreateBucketList()\0- BuildBucketList()\0- BuildIntegerList() (!!)\0- AddIntegerToBucket() (!!)\0- DeleteBucketList() (!!)\0- RadixSort() (!!)\0- PrintBucketList() (!!)\0Back", 8, "yellow", "blue", user_choice);
+		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucket (!!)\0- DeleteBucketList (!!)\0- RadixSort (!!)\0- PrintBucket\0Back", 8, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -291,21 +291,24 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			break;
 		case 1:
 			*list_array = ifListArrayEmptyAskInput(*list_array);
-			selection = selector(list_array->size, "list");
 
-			printf("Which digit do you want to take into consideration for building the bucket (rightmost ; the rightess digit is digit 1) ? [1~255]\n");
-			digit = (unsigned char)GetNumberWithinRange(1, 255);
-			bucket_array.size++;
-			bucket_array.buckets = (BaseNIntegerListOfList*) realloc(bucket_array.buckets, bucket_array.size*sizeof(BaseNIntegerListOfList));
-			bucket_array.buckets[bucket_array.size-1] = BuildBucketList(list_array->lists[selection], (unsigned)(digit - 1));
-			printf("Bucket saved as ");
-			SetTextAttributes("+bold");
-			printf("bucket%d\n", bucket_array.size - 1);
-			SetTextAttributes("reset");
-			waitForUser();
+			if (list_array->size != 0) {
+				selection = selector(list_array->size, "list");
+
+				printf("Which digit do you want to take into consideration for building the bucket (rightmost ; the rightess digit is digit 1) ? [1~255]\n");
+				digit = (unsigned char)GetNumberWithinRange(1, 255);
+				bucket_array.size++;
+				bucket_array.buckets = (BaseNIntegerListOfList*) realloc(bucket_array.buckets, bucket_array.size*sizeof(BaseNIntegerListOfList));
+				bucket_array.buckets[bucket_array.size-1] = BuildBucketList(list_array->lists[selection], (unsigned)(digit - 1));
+				printf("Bucket saved as ");
+				SetTextAttributes("+bold");
+				printf("bucket%d\n", bucket_array.size - 1);
+				SetTextAttributes("reset");
+				waitForUser();
+			}
 			break;
 		case 2:
-			bucket_array = ifBucketArryEmptyAskInput(bucket_array);
+			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
 			selection = selector(bucket_array.size, "bucket");
 
 			list_array->size++;
@@ -349,13 +352,19 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			/* TODO RadixSort */
 			break;
 		case 6:
-			SetTextAttributes("+bold");
-			SetTextColor("red");
-			SetTextAttributes("+underline");
-			printf("Not Yet Implemented\n");
-			SetTextAttributes("reset");
-			waitForUser();
-			/* TODO PrintList */
+			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
+
+			if (bucket_array.size != 0) {
+				unsigned char i = 0;
+				selection = selector(bucket_array.size, "bucket");
+
+				for (; i < bucket_array.buckets[selection].base ; ++i) {
+					Clear();
+					printf("Printing the list related to the digit %c\n", i > 9 ? i + 'A' - 10 : i + '0');
+					waitForUser();
+					PrintList(bucket_array.buckets[selection].list[i]);
+				}
+			}
 			break;
 		default:
 			break;
@@ -495,7 +504,7 @@ void waitForUser()
 	printf("\r               \r");
 }
 
-ArrayOfBuckets ifBucketArryEmptyAskInput(ArrayOfBuckets bucket_array)
+ArrayOfBuckets ifBucketArrayEmptyAskInput(ArrayOfBuckets bucket_array)
 {
 	if (bucket_array.size == 0 && yes("You don't have any bucket !\nDo you want to create one ?", 1)) {
 		bucket_array = addBucket(bucket_array);
