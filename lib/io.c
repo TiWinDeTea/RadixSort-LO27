@@ -59,6 +59,7 @@ void PrintList(BaseNIntegerList l)
 	--term_height;
 
 	char percentage[40]; // Contains percentage and usable inputs (for display purposes)
+	int cursor_shift = 1 + (b+1) * val_size / b + (val_size%b != 0);
 
 	while (elem != NULL && user_input != 'q')
 	{
@@ -70,7 +71,7 @@ void PrintList(BaseNIntegerList l)
 			digit_was_displayed = FALSE;
 
 			// Align : right
-			CursorHorizontalMove( (unsigned short)( term_width - 1 - (b+1) * val_size / b) - (val_size%b != 0) );
+			CursorHorizontalMove(term_width - cursor_shift);
 
 			// Printing the value of the pointed element
 			printf("[");
@@ -134,15 +135,15 @@ void PrintList(BaseNIntegerList l)
 					if (term_width > (val_size + 5))
 					{
 						CursorVerticalMove( -1 );
-						if (term_width > (25 + val_size))
+						if (term_width > (22 + cursor_shift))
 						{
 							// Align : right
-							CursorHorizontalMove( (unsigned short)(term_width - 25 - val_size) );
+							CursorHorizontalMove(term_width - 22 - cursor_shift);
 							printf("Last line was here -->\r");
 						}
 						else
 						{
-							CursorHorizontalMove( (unsigned short)(term_width - 5 - val_size) );
+							CursorHorizontalMove(term_width - 3 - cursor_shift);
 							printf("-->\r");
 						}
 						CursorVerticalMove( 1 );
