@@ -28,14 +28,12 @@ void waitForUser(void);
 void TrollMenu(void);
 
 int main(int argc, char* argv[])
-{
-	unsigned char user_choice = 0;
+{ unsigned char user_choice = 0;
 	ArrayOfList list_array;
 	ArrayOfBuckets bucket_array;
 
 	if (argc > 1 && !strcmp(argv[1],"candy")) {
-		/*for much fun ; (pkill sh && pkill aplay) to stop 
-that*/
+		/*for much fun ; (pkill sh && pkill aplay) to stop that*/
 		system("(while [[ true ]]; do aplay -q ./candy.wav && sleep 2; done;) &");
 	}
 
@@ -178,8 +176,14 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 		case 6:
 			if (list_array.size != 0) {
 				unsigned char selected_list;
+				BOOL was_empty = TRUE;
 				selected_list = selector(list_array.size, "list");
-				if (IsEmpty(list_array.lists[selected_list])) {
+				if (!IsEmpty(list_array.lists[selected_list])) {
+					was_empty = FALSE;
+					DeleteIntegerList(&list_array.lists[selected_list]);
+					printf("Done.\nList%u will remain as an empty list.\n", selected_list);
+				}
+				if ((was_empty && yes("This list is empty, so it will be completely removed.\nDo you agree with that ?", 1)) || yes("Do you want to remove it completly ?", 1)) {
 					unsigned char i = selected_list;
 					--list_array.size;
 					for (; i < list_array.size ; ++i) {
@@ -187,12 +191,8 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 					}
 					list_array.lists = (BaseNIntegerList*) realloc(list_array.lists, list_array.size*sizeof(BaseNIntegerList));
 					printf("You won't hear anything about list%u anymore.\n(unless another list takes its place...)\n", selected_list);
+					waitForUser();
 				}
-				else {
-					DeleteIntegerList(&list_array.lists[selected_list]);
-					printf("Done.\nList%u will remain as an empty list.\nIf you want to remove it completely, delete it once again.\n", selected_list);
-				}
-				waitForUser();
 			}
 			break;
 		case 7:
@@ -326,19 +326,21 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			break;
 		case 2:
 			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
-			selection = selector(bucket_array.size, "bucket");
+			if (bucket_array.size != 0) {
+				selection = selector(bucket_array.size, "bucket");
 
-			list_array->size++;
-			list_array->lists = (BaseNIntegerList*) realloc(list_array->lists, list_array->size*sizeof(BaseNIntegerList));
-			list_array->lists[list_array->size-1] = BuildIntegerList(bucket_array.buckets[selection]);
-			printf("List generated as ");
-			SetTextAttributes("+bold");
-			printf("list%d\n", list_array->size - 1);
-			SetTextAttributes("reset");
-			waitForUser();
+				list_array->size++;
+				list_array->lists = (BaseNIntegerList*) realloc(list_array->lists, list_array->size*sizeof(BaseNIntegerList));
+				list_array->lists[list_array->size-1] = BuildIntegerList(bucket_array.buckets[selection]);
+				printf("List generated as ");
+				SetTextAttributes("+bold");
+				printf("list%d\n", list_array->size - 1);
+				SetTextAttributes("reset");
+				waitForUser();
 
-			if (yes("Do you want to print the list ?", 1)) {
-				PrintList(list_array->lists[list_array->size-1]);
+				if (yes("Do you want to print the list ?", 1)) {
+					PrintList(list_array->lists[list_array->size-1]);
+				}
 			}
 			break;
 		case 3:
@@ -351,13 +353,20 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			/* TODO Addintegerlisttobucket */
 			break;
 		case 4:
-			SetTextAttributes("+bold");
-			SetTextColor("red");
-			SetTextAttributes("+underline");
-			printf("Not Yet Implemented\n");
-			SetTextAttributes("reset");
-			waitForUser();
-			/* TODO Deletebucketlist */
+			if (bucket_array.size != 0) {
+				unsigned char i = 0;
+				selection = selector(bucket_array.size, "bucket");
+				if (bucket_array.buckets[selection].list != NULL) {
+					DeleteBucketList(&bucket_array.buckets[selection]);
+				}
+				--bucket_array.size;
+				for (; i < bucket_array.size ; ++i) {
+					bucket_array.buckets[i] = bucket_array.buckets[i + 1];
+				}
+				bucket_array.buckets = (BaseNIntegerListOfList*) realloc(bucket_array.buckets, bucket_array.size*sizeof(BaseNIntegerListOfList));
+				printf("You won't hear anything about bucket%u anymore.\n(unless another bucket takes its place...)\n", selection);
+				waitForUser();
+			}
 			break;
 		case 5:
 			*list_array = ifListArrayEmptyAskInput(*list_array);
@@ -515,7 +524,7 @@ unsigned char selector(unsigned char arraySize, const char* type)
 		waitForUser();
 	}
 	else {
-		printf("Which list do you want to use ? [%s0 to %s%u]\n", type, type, arraySize - 1);
+		printf("Which %s do you want to use ? [%s0 to %s%u]\n", type, type, type, arraySize - 1);
 		selection = (unsigned char)GetNumberWithinRange(0, (unsigned)arraySize - 1);
 		printf("\n");
 	}
