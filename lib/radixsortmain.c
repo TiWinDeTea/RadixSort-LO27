@@ -34,7 +34,8 @@ int main(int argc, char* argv[])
 	ArrayOfBuckets bucket_array;
 
 	if (argc > 1 && !strcmp(argv[1],"candy")) {
-		//for much fun ; (pkill sh && pkill aplay) to stop that
+		/*for much fun ; (pkill sh && pkill aplay) to stop 
+that*/
 		system("(while [[ true ]]; do aplay -q ./candy.wav && sleep 2; done;) &");
 	}
 

@@ -323,16 +323,25 @@ char* SumIntegerList(BaseNIntegerList l)
 	if(!IsEmpty(l))
 	{
 		ListElem* element = l.head;
-		char* s = element->value;
-		char* tmp = NULL;
-		element = element->next;
-
-		while(element != NULL)
-		{
-			s = SumBase(s, element->value, l.base);
-			free(tmp);
-			tmp = s;
-			element = element->next;
+		char* s;
+		if (l.size == 1) {
+			size_t i = strlen(element->value) + 1;
+			s = (char*) malloc(i*sizeof(char));
+			++i;
+			for (; i > 0 ; --i ) {
+				s[i-1] = element->value[i-1];
+			}
+		}
+		else { 
+			char* tmp = NULL;
+			s = element->value;
+			do
+			{
+				element = element->next;
+				s = SumBase(s, element->value, l.base);
+				free(tmp);
+				tmp = s;
+			}while(element != NULL);
 		}
 		return s;
 	}
