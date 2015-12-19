@@ -1,6 +1,6 @@
 #General makefile template
 COMPILER = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -fpic -g
+CFLAGS = -Wall -Werror -Wextra -pedantic -fpic -fstack-protector
 CSTD= -ansi
 IOSTD= -std=c99
 LIBSDIR = -L. -L/usr/lib
@@ -28,9 +28,6 @@ all: $(EXECUTABLE)
 run: $(EXECUTABLE)
 	@echo -e "\nExecuting "$(EXECUTABLE)
 	@sh run.sh $(EXECUTABLE)
-
-sperun: $(EXECUTABLE)
-	@sh run2.sh $(EXECUTABLE)
 
 #Builds the executable
 $(EXECUTABLE): lib$(LIB) lib$(LIB2) lib$(IO) $(EXEOBJECT)

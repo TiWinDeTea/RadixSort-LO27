@@ -13,7 +13,7 @@ typedef struct{
 	BaseNIntegerListOfList* buckets;
 }ArrayOfBuckets;
 
-int main(int, char*[]);
+int main(void);
 ArrayOfList listsMenu(ArrayOfList list_array);
 void conversionsMenu(void);
 ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_array);
@@ -27,16 +27,11 @@ void waitForUser(void);
 
 void TrollMenu(void);
 
-int main(int argc, char* argv[])
+int main()
 {
 	unsigned char user_choice = 0;
 	ArrayOfList list_array;
 	ArrayOfBuckets bucket_array;
-
-	if (argc > 1 && !strcmp(argv[1],"candy")) {
-		/*for much fun ; (pkill sh && pkill aplay) to stop that*/
-		system("(while [[ true ]]; do aplay -q ./candy.wav && sleep 2; done;) &");
-	}
 
 	list_array.size = bucket_array.size = 0;
 	list_array.lists = NULL;

@@ -171,7 +171,7 @@ void PrintList(BaseNIntegerList l)
 		SetTextAttributes("+invert");
 		CPrint("-- END --", term_height);
 		SetTextAttributes("-invert");
-		InstantGetChar();
+		(void)InstantGetChar();
 	}
 	printf("\n");
 	SetEcho( TRUE );
