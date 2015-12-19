@@ -14,18 +14,74 @@ typedef struct{
 }ArrayOfBuckets;
 
 int main(void);
-ArrayOfList listsMenu(ArrayOfList list_array);
-void conversionsMenu(void);
-ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_array);
-ArrayOfList extraMenu(ArrayOfList list_array);
-ArrayOfList ifListArrayEmptyAskInput(ArrayOfList list_array);
-ArrayOfBuckets ifBucketArrayEmptyAskInput(ArrayOfBuckets bucket_array);
-ArrayOfBuckets addBucket(ArrayOfBuckets bucket_array);
-ArrayOfList addList(ArrayOfList list_array);
-unsigned char selector(unsigned char arraySize, const char* type);
-void waitForUser(void);
 
-void TrollMenu(void);
+/*
+ * List sub menu. Access to lists related functions.
+ * @param list_array An array of list
+ * @return           The array of list that might have been modified
+ */
+ArrayOfList listsMenu(ArrayOfList list_array);
+
+/*
+ * Conversion sub menu. Access to ConvertBaseToBinary and ConvertBinaryToBase.
+ */
+void conversionsMenu(void);
+
+/*
+ * List of lists sub menu. Access to bucket lists related functions and RadixSort
+ * @param bucket_array An array of bucket
+ * @param list_array   A pointer to an array of list, not binded to the array of bucket.
+ * @return             The array of bucket passed to the function, eventually modified
+ */
+ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_array);
+
+/*
+ * Extra sub menu. Access to functions not asked for this project but still developped.
+ * @param list_array An array of list
+ * @return           The array of list, eventually modified
+ */
+ArrayOfList extraMenu(ArrayOfList list_array);
+
+/*
+ * Checks if an arrayoflist is empty, and ask the user if (s)he to input one if so.
+ * @param list_array ArrayOfList to check
+ * @return           The arrayoflist, eventually modified
+ */
+ArrayOfList ifListArrayEmptyAskInput(ArrayOfList list_array);
+
+/*
+ * Checks if an arrayofbuckets is empty, and ask the user if (s)he wants to input one if so.
+ * @param bucket_array Arrayofbuckets to check
+ * @return             The arrayofbuckets, eventually modified
+ */
+ArrayOfBuckets ifBucketArrayEmptyAskInput(ArrayOfBuckets bucket_array);
+
+/*
+ * Adds a bucket to an arrayofbuckets.
+ * @param bucket_array Arrayofbuckets to modify.
+ * @return             The modified arrayofbuckets
+ */
+ArrayOfBuckets addBucket(ArrayOfBuckets bucket_array);
+
+/*
+ * Adds a list to an arrayoflist
+ * @param list_array Arrayoflist to modify
+ * @return           The modified arrayoflist
+ */
+ArrayOfList addList(ArrayOfList list_array);
+
+/*
+ * Asks the user to input a number between 0 and arraysize. if arraysize equals 0, 0 is returned without questionning the user.
+ * @param arraysize Maximum value the user can select + 1
+ * @param type      String to display to inform the user what he is selecting
+ * @return          The choice of the user.
+ */
+unsigned char selector(unsigned char arraySize, const char* type);
+
+/*
+ * Waits for the user to press a key.
+ */
+void waitForUser(void);
 
 int main()
 {
@@ -40,7 +96,7 @@ int main()
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- Lists related functions\0- Conversion functions\0- List of lists related functions(!!)\0- Extra functions\0- How are you gentlemen ?\0Exit\0", 6, "yellow", "blue", user_choice);
+		user_choice = Menu("- Lists related functions\0- Conversion functions\0- List of lists related functions\0- Extra functions\0Exit\0", 5, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 
 		switch (user_choice) {
@@ -56,13 +112,10 @@ int main()
 		case 3:
 			list_array = extraMenu(list_array);
 			break;
-		case 4:
-			TrollMenu();
-			break;
 		default:
 			break;
 		}
-	}while (user_choice != 5);
+	}while (user_choice != 4);
 
 	Clear();
 	return EXIT_SUCCESS;
@@ -70,8 +123,7 @@ int main()
 
 ArrayOfList listsMenu(ArrayOfList list_array)
 {
-	unsigned char user_choice = 0;
-	do {
+	unsigned char user_choice = 0; do {
 		Clear();
 		SetTextAttributes("+bold");
 		user_choice = Menu("- Input a List\0- IsEmpty\0- InsertHead\0- InsertTail\0- RemoveHead\0- RemoveTail\0- DeleteIntegerList\0- SumIntegerList\0- PrintList\0Back\0", 10, "yellow", "blue", user_choice);
@@ -294,7 +346,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucket (!!)\0- DeleteBucketList\0- RadixSort\0- PrintBucket\0Back", 8, "yellow", "blue", user_choice);
+		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucketList\0- DeleteBucketList\0- RadixSort\0- PrintBucketList\0Back", 8, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -308,7 +360,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			if (list_array->size != 0) {
 				selection = selector(list_array->size, "list");
 
-				printf("Which digit do you want to take into consideration for building the bucket (rightmost ; the rightess digit is digit 1) ? [1~255]\n");
+				printf("Which digit do you want to take into consideration for building the bucket (rightmost ; the rightest digit is digit 1) ? [1~255]\n");
 				digit = (unsigned char)GetNumberWithinRange(1, 255);
 				bucket_array.size++;
 				bucket_array.buckets = (BaseNIntegerListOfList*) realloc(bucket_array.buckets, bucket_array.size*sizeof(BaseNIntegerListOfList));
@@ -340,13 +392,23 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			}
 			break;
 		case 3:
-			SetTextAttributes("+bold");
-			SetTextColor("red");
-			SetTextAttributes("+underline");
-			printf("Not Yet Implemented\n");
-			SetTextAttributes("reset");
-			waitForUser();
-			/* TODO Addintegerlisttobucket */
+			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
+
+			if (bucket_array.size != 0) {
+				char* number;
+				selection = selector(bucket_array.size, "bucket");
+
+				printf("Which number do you want to add ? [base %u]\n", bucket_array.buckets[selection].base);
+				number = GetNumber(bucket_array.buckets[selection].base, FALSE);
+
+				printf("In which bucket do you want to add it ? [0~%u]\n", bucket_array.buckets[selection].base - 1);
+				digit = (unsigned char)GetNumberWithinRange(0, (unsigned)bucket_array.buckets[selection].base - 1);
+
+				bucket_array.buckets[selection] = AddIntegerIntoBucket(bucket_array.buckets[selection], number, digit);
+
+				printf("Done.\n");
+				waitForUser();
+			}
 			break;
 		case 4:
 			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
@@ -417,7 +479,7 @@ ArrayOfList extraMenu(ArrayOfList list_array)
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- ConvertBaseToBase()\0- ConvertListBase()\0Back\0", 3, "yellow", "blue", user_choice);
+		user_choice = Menu("- ConvertBaseToBase\0- ConvertListBase\0Back\0", 3, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -543,33 +605,4 @@ ArrayOfBuckets ifBucketArrayEmptyAskInput(ArrayOfBuckets bucket_array)
 		bucket_array = addBucket(bucket_array);
 	}
 	return bucket_array;
-}
-
-void TrollMenu()
-{
-	unsigned char trolling = 0;
-	do
-	{
-		Clear();
-		SetTextAttributes("+bold");
-		trolling = Menu("ALL YOUR BASE ARE BELONG TO US !\0!!\0", 2, "light red", "light green", trolling);
-		SetTextAttributes("reset");
-		Clear();
-
-		if (!trolling) {
-			printf("YOU HAVE NO CHANCE TO SURVIVE TAKE YOUR TIME\n");
-			InstantGetChar();
-		} else {
-			do{
-				printf("HA HA HA");
-				InstantGetChar();
-				Clear();
-				SetTextAttributes("+bold");
-				Menu(" T-T\0", 1, "ligt cyan", "light yellow",0);
-				SetTextAttributes("reset");
-				Clear();
-			}while (TRUE);
-		}
-
-	}while (trolling != 10);
 }

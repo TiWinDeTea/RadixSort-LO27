@@ -58,12 +58,12 @@ void PrintList(BaseNIntegerList l)
 	// keeping space for percentage display
 	--term_height;
 
-	char percentage[40]; // Contains percentage and usable inputs (for display purposes)
+	char percentage[45]; // Contains percentage and usable inputs (for display purposes)
 	int cursor_shift = 1 + (b+1) * val_size / b + (val_size%b != 0);
 
 	while (elem != NULL && user_input != 'q')
 	{
-		// if we have some space in the terminal to display yet another list
+		// if we have some space in the terminal to display yet another list element
 		if (j < term_height)
 		{
 			++j;
