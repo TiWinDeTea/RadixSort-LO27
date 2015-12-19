@@ -1,6 +1,6 @@
 #General makefile template
 COMPILER = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -fPIC
+CFLAGS = -Wall -Werror -Wextra -pedantic -fpic -g
 CSTD= -ansi
 IOSTD= -std=c99
 LIBSDIR = -L. -L/usr/lib
@@ -33,14 +33,14 @@ sperun: $(EXECUTABLE)
 	@sh run2.sh $(EXECUTABLE)
 
 #Builds the executable
-$(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
+$(EXECUTABLE): lib$(LIB) lib$(LIB2) lib$(IO) $(EXEOBJECT)
 	@echo -e "\nBuilding the executable..."
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) $(LIB) $(LIB2) $(IO) -o $(EXECUTABLE) $(EXEOBJECT)
+	@$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(LIB:.so=) -l$(LIB2:.so=) -l$(IO:.so=) -o $(EXECUTABLE)
 	@echo "Done"
 
 #Builds libraries
 libs: lib
-lib: $(LIB) $(LIB2) $(IO)
+lib: lib$(LIB) lib$(LIB2) lib$(IO)
 	@echo "Done"
 
 #Builds executable object files from executable source code
@@ -49,7 +49,7 @@ $(EXEOBJECT): $(EXESOURCE)
 	@$(COMPILER) $(CFLAGS) $(CSTD) -o $@ -c $<
 
 #Builds IO libraries files from IO objects code files
-$(IO): $(IOOBJECT)
+lib$(IO): $(IOOBJECT)
 	@echo "Building" $< "into" $@"..."
 	@$(COMPILER) $(CFLAGS) $(IOSTD) -shared -o $@ $<
 
@@ -59,11 +59,11 @@ $(IOOBJECT): $(IOSOURCE)
 	@$(COMPILER) $(CFLAGS) $(IOSTD) -o $@ -c $<
 
 #Builds libraries files from libraries object files
-$(LIB2): $(LIB2OBJECT)
+lib$(LIB2): $(LIB2OBJECT)
 	@echo "Building" $< "into" $@"..."
 	@$(COMPILER) $(CFLAGS) $(CSTD) -shared -o $@ $<
-$(LIB): $(LIBOBJECT)
-	@echo "Building" $< "into" $@"..."
+lib$(LIB): $(LIBOBJECT)
+	@echo "Building" $< "into" lib$@"..."
 	@$(COMPILER) $(CFLAGS) $(CSTD) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
@@ -75,6 +75,7 @@ $(LIBOBJECT): $(LIBSOURCE)
 	@$(COMPILER) $(CFLAGS) $(CSTD) -o $@ -c $<
 
 #Removes temporary files
+clear:clean
 clean:
 	@echo "Cleaning temporary files"
 	@rm -f *.o *~ *.so *.exe

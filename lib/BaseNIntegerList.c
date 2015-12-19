@@ -335,12 +335,13 @@ char* SumIntegerList(BaseNIntegerList l)
 		else { 
 			char* tmp = NULL;
 			s = element->value;
+			element = element->next;
 			do
 			{
-				element = element->next;
 				s = SumBase(s, element->value, l.base);
 				free(tmp);
 				tmp = s;
+				element = element->next;
 			}while(element != NULL);
 		}
 		return s;

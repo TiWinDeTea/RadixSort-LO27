@@ -28,7 +28,8 @@ void waitForUser(void);
 void TrollMenu(void);
 
 int main(int argc, char* argv[])
-{ unsigned char user_choice = 0;
+{
+	unsigned char user_choice = 0;
 	ArrayOfList list_array;
 	ArrayOfBuckets bucket_array;
 
@@ -298,7 +299,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 	do {
 		Clear();
 		SetTextAttributes("+bold");
-		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucket (!!)\0- DeleteBucketList (!!)\0- RadixSort\0- PrintBucket\0Back", 8, "yellow", "blue", user_choice);
+		user_choice = Menu("- CreateBucketList\0- BuildBucketList\0- BuildIntegerList\0- AddIntegerToBucket (!!)\0- DeleteBucketList\0- RadixSort\0- PrintBucket\0Back", 8, "yellow", "blue", user_choice);
 		SetTextAttributes("reset");
 		Clear();
 
@@ -353,6 +354,7 @@ ArrayOfBuckets listOfListsMenu(ArrayOfBuckets bucket_array, ArrayOfList* list_ar
 			/* TODO Addintegerlisttobucket */
 			break;
 		case 4:
+			bucket_array = ifBucketArrayEmptyAskInput(bucket_array);
 			if (bucket_array.size != 0) {
 				unsigned char i = 0;
 				selection = selector(bucket_array.size, "bucket");
