@@ -1,6 +1,6 @@
 #General makefile template
 COMPILER = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -fpic -fstack-protector
+CFLAGS = -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3
 CSTD= -ansi
 IOSTD= -std=c99
 LIBSDIR = -L. -L/usr/lib
