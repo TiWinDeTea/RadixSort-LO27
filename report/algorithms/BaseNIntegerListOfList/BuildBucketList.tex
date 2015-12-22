@@ -1,0 +1,26 @@
+\begin{lstlisting}[breaklines]
+function BuildBucketList (list: BaseNIntegerList, digit_pos: Integer): BaseNIntegerListOfList
+Begin
+|    list_of_list: BaseNIntegerListOfList
+|    number: array<characters>
+|
+|    list_of_list <- CreateBucketList(base(list))
+|    list_element <- head(list)
+|
+|    while (list_element ≠ NULL) do
+|    |    number <- copy(value(list_element))
+|    |
+|    |    if (arraySize(number) > digit_pos)
+|    |    then
+|    |    |    list_of_list <- AddIntegerIntoBucket (list_of_list, number, GetValue(number[digit_pos]))
+|    |    else
+|    |    |    list_of_list <- AddIntegerIntoBucket (list_of_list, number, 0)
+|    |    endif
+|    |
+|    |    list_of_list <- next(list_of_list)
+|    done
+|
+|    Buildbucketlist <- list_of_list
+|
+Done
+\end{lstlisting}

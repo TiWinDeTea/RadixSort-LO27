@@ -26,13 +26,12 @@ BaseNIntegerListOfList BuildBucketList(BaseNIntegerList list, unsigned int digit
 	unsigned short size;
 	char* number;
 	unsigned int j;
+	ListElem* list_element = list.head;
 
-	if(!IsEmpty(list))
+	while(list_element != NULL)
 	{
-		ListElem* list_element = list.head;
-
 		size = strlen(list_element->value);
-		number = (char*)malloc((size + 1)*sizeof(char));
+		number = (char*) malloc((size + 1)*sizeof(char));
 		for (j = 0; j <= size; ++j)
 			number[j] = list_element->value[j];
 
@@ -40,22 +39,8 @@ BaseNIntegerListOfList BuildBucketList(BaseNIntegerList list, unsigned int digit
 			list_of_list = AddIntegerIntoBucket(list_of_list, number, GetValue(number[digit_pos]));
 		else
 			list_of_list = AddIntegerIntoBucket(list_of_list, number, 0);
-
-		while(list_element->next != NULL)
-		{
-			list_element = list_element->next;
-			size = strlen(list_element->value);
-			number = (char*) malloc((size + 1)*sizeof(char));
-			for (j = 0; j <= size; ++j)
-				number[j] = list_element->value[j];
-
-			if(strlen(number) > digit_pos)
-				list_of_list = AddIntegerIntoBucket(list_of_list, number, GetValue(number[digit_pos]));
-			else
-				list_of_list = AddIntegerIntoBucket(list_of_list, number, 0);
-		}
+		list_element = list_element->next;
 	}
-
 	return list_of_list;
 }
 

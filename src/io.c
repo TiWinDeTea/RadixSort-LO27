@@ -70,6 +70,7 @@ void PrintList(BaseNIntegerList l)
 
 	char percentage[45]; // Contains percentage and usable inputs (for display purposes)
 	int cursor_shift = 1 + (b+1) * val_size / b + (val_size%b != 0);
+	unsigned short whitesp;
 
 	while (elem != NULL && user_input != 'q')
 	{
@@ -86,11 +87,16 @@ void PrintList(BaseNIntegerList l)
 			// Printing the value of the pointed element
 			printf("[");
 
-			// Size of the value + number of whitespaces to display.
 			tmp = (unsigned short)strlen(elem->value);
 
+			// Number of extra whitespaces to print for all nb to have the same size
+			whitesp = (unsigned short)(val_size - tmp + (val_size-tmp) / b + (tmp%b==0));
+			if (b == 4) {
+				whitesp += (tmp%b == 3 || tmp%b == 2);
+			}
+
 			// Printing whitespaces for missing left values
-			for (unsigned short i = val_size + val_size/b ; i > tmp + tmp/b ; --i) {
+			for (unsigned short i = whitesp ; i > 0 ; --i) {
 				printf(" ");
 			}
 
@@ -590,10 +596,12 @@ BaseNIntegerList GetList()
 			// deleting eventual left 0 (big endian)
 			while(value[0] == '0' && value[1] != '\0')
 			{
-				for (unsigned int j = 0 ; j < tmp - 1 ; ++j)
+				for (unsigned int j = 0 ; j < tmp ; ++j)
 					value[j] = value[j+1]; // shifting to the left
 				--tmp;
 			}
+			value = (char*) realloc(value, (tmp+1)*sizeof(char));
+
 			// we are using little endian
 			Reverse(value, tmp);
 			l = InsertTail( l, value);

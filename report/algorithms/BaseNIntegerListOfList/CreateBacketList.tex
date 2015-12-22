@@ -1,0 +1,15 @@
+\begin{lstlisting}[breaklines]
+function CreateBucketList (N: positive integer): BaseNIntegerListOfList
+Begin
+|    l: BaseNIntegerListOfList
+|
+|    base(l) <- N
+|    list(l) <- array<BaseNIntegerList>[N] //From 0 to N-1
+|
+|    for i from 0 to (N - 1) do
+|    |    list(l)[i] <- CreateIntegerList(N)
+|    done
+|
+|    CreateBucketList <- l
+Done
+\end{lstlisting}
