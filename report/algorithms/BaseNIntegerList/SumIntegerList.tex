@@ -1,0 +1,31 @@
+\begin{lstlisting}[breaklines]
+function SumIntegerList(l: BaseNIntegerList): array<characters>
+Begin
+|    if (not IsEmpty(l))
+|    then
+|    |    element: ListElem*
+|    |    element <- head(l)
+|    |
+|    |    if (size(l) = 1)
+|    |    then
+|    |    |    SumIntegerList <- copy(value(element))
+|    |    else
+|    |    |    s: array<characters>
+|    |    |    tmp: array<characters>
+|    |    |    s <- value(element)
+|    |    |    element <- next(element)
+|    |    |
+|    |    |    do
+|    |    |    |    s <- SumBase(s, element->value, l.base)
+|    |    |    |    free(tmp)
+|    |    |    |    tmp <- s
+|    |    |    |    element <- next(element)
+|    |    |    while (element ≠ NULL)
+|    |    |
+|    |    |    Sumintegerlist <- s
+|    |    endif
+|    else
+|    |    SumIntegerList <- NULL
+|    endif
+done
+\end{lstlisting}

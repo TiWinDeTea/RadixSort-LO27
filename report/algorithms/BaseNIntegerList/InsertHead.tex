@@ -1,0 +1,22 @@
+\begin{lstlisting}[breaklines]
+function InsertHead (l: BaseNIntegerList, v: array<characters>): BaseNIntegerList
+Begin
+|    newel: ListElem*
+|    newel <- alloc(ListElem)
+|    value(newel) <- v
+|    next(newel) <- head(l)
+|    previous(newel) <- NULL
+|
+|    if (not IsEmpty(l))
+|    then
+|    |    previous(head(l)) <- newel
+|    else
+|    |    tail(l) <- newel
+|    endif
+|
+|    head(l) <- newel
+|    size(l) <- size(l) + 1
+|
+|    InsertHead <- l
+Done
+\end{lstlisting}

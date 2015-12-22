@@ -1,0 +1,27 @@
+\begin{lstlisting}[breaklines]
+function IntToBase(v: positive integer, base: positive integer): array<characters>
+Begin
+|    k, i: positive integers
+|    w, base_digit: array<characters>
+|
+|    k <- 1
+|    i <- base
+|    base_digit <- {'0','1', \ldots, '9', 'A', 'B', \ldots, 'Z'}
+|    
+|    while (v ≥ i) do
+|    |    i <- i*base
+|    |    k <- k + 1
+|    done
+|
+|    w <- alloc(k*characters)
+|    w[0] <- '0'
+|    k <- 0
+|
+|    while (v > 0) do
+|    |    w[k] <- base_digit[v\%base]
+|    |    k <- k + 1
+|    |    v <- v/base
+|    done
+|    IntToBase <- w
+Done
+\end{lstlisting}

@@ -1,0 +1,22 @@
+\begin{lstlisting}[breaklines]
+function RemoveHead(l: BaseNIntegerList): BaseNIntegerList
+Begin
+|    if (not IsEmpty(l))
+|    then
+|    |    if (size(l) = 1)
+|    |    then
+|    |    |    free(value(head(l)))
+|    |    |    free(head(l))
+|    |    |    head(l) <- NULL
+|    |    |    tail(l) <- NULL
+|    |    |    size(l) <- 0
+|    |    else
+|    |    |    head(l) <- next(head(l))
+|    |    |    free(value(previous(head(l))))
+|    |    |    free(previous(head(l)))
+|    |    |    previous(head(l)) <- NULL
+|    |    |    size(l) <- size(l) - 1
+|    |    endif
+|    endif
+done
+\end{lstlisting}

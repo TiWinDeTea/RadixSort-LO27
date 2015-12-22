@@ -1,0 +1,23 @@
+nb : GetValue returns the value represented by a character. (GetValue('F') = 16)
+\begin{lstlisting}[breaklines]
+function BaseToInt (v: array<characters>, base: positive integer): positive integer
+Begin
+|    n, temp, size, i: positive integers
+|    n <- 0
+|    temp <- 1
+|    size <- arraySize(v)
+|
+|    if (size > 0)
+|    then
+|    |    n <- GetValue(v[0])
+|    |
+|    |    for i from 1 to (size - 1) do
+|    |    |    temp <- base * temp
+|    |    |    n <- n + GetValue(v[0]) * temp
+|    |    done
+|    |
+|    endif
+|
+|    BaseToInt <- n
+Done
+\end{lstlisting}

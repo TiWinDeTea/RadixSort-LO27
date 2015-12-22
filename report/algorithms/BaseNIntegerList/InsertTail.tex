@@ -1,0 +1,22 @@
+\begin{lstlisting}[breaklines]
+function InsertTail (l: BaseNIntegerList, v: array<characters>): BaseNIntegerList
+Begin
+|    newel: ListElem*
+|    newel <- alloc(ListElem)
+|    value(newel) <- v
+|    next(newel) <- NULL
+|    previous(newel) <- tail(l)
+|
+|    if (not IsEmpty(l))
+|    then
+|    |    next(tail(l)) <- newel
+|    else
+|    |    head(l) <- newel
+|    endif
+|
+|    tail(l) <- newel
+|    size(l) <- size(l) + 1
+|
+|    InsertTail <- l
+Done
+\end{lstlisting}

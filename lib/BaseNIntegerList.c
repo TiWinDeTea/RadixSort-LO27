@@ -84,16 +84,16 @@ BaseNIntegerList RemoveHead(BaseNIntegerList l)
 BaseNIntegerList RemoveTail(BaseNIntegerList l)
 {
 	if(!IsEmpty(l))
-	{		
+	{
 		if(l.size == 1)
-		{			
+		{
 			free(l.head->value);
 			free(l.head);
 			l.head = l.tail = NULL;
 			l.size = 0;
 		}
 		else
-		{			
+		{
 			l.tail = l.tail->previous;
 			free(l.tail->next->value);
 			free(l.tail->next);
@@ -122,22 +122,17 @@ unsigned int BaseToInt(char* v, unsigned char base)
 	unsigned int n = 0; /* value of v */
 	unsigned int temp = 1;
 	unsigned int size = strlen(v);
-	unsigned int i = 0;
+	unsigned int i = 1;
 
 	if(size > 0)
 	{
 		/* temp = base^0 */
-		n += GetValue(v[i]) * temp;
-		++i;
+		n = GetValue(v[0]);
 
-		while(i < size)
-		{
-			temp *= base;
+		for (; i < size ; ++i) {
 			/* temp = base^i */
-
-			n += GetValue(v[i]) * temp;
-
-			++i;
+			temp *= base;
+			n += GetValue(v[i])*temp;
 		}
 	}
 
@@ -169,7 +164,7 @@ char* IntToBase(unsigned int v, unsigned char base)
 		++k;
 		v /= base;
 	}
-	
+
 	return w;
 }
 
@@ -325,14 +320,10 @@ char* SumIntegerList(BaseNIntegerList l)
 		ListElem* element = l.head;
 		char* s;
 		if (l.size == 1) {
-			size_t i = strlen(element->value) + 1;
-			s = (char*) malloc(i*sizeof(char));
-			++i;
-			for (; i > 0 ; --i ) {
-				s[i-1] = element->value[i-1];
-			}
+			s = (char*) malloc((strlen(element->value)+1)*sizeof(char));
+			s = strcpy(s, element->value);
 		}
-		else { 
+		else {
 			char* tmp = NULL;
 			s = element->value;
 			element = element->next;

@@ -1,0 +1,46 @@
+\begin{lstlisting}[breaklines]
+function SumBase(a: array<characters>, b: array<characters>, base: positive integer): array<characters>
+Begin
+|    i, j, k, a_len, b_len, remainder: integers
+|    s, base_digits : array<characters>
+|
+|    i <- 0
+|    j <- 0
+|    k <- 0
+|    a_len <- arraySize(a)
+|    b_len <- arraySize(b)
+|    base_digits <- { '0', '1', \ldots, '9', 'A', 'B', \ldots, 'Z' }
+|
+|    while ((i < a_len) and (j < b_len)) do
+|    |    remainder <- remainder + GetValue(a[i]) + GetValue(b[j])
+|    |    s[k] <- base_digits[remainder\%base]
+|    |    remainder <- remainder/base
+|    |    k <- k + 1
+|    |    i <- i + 1
+|    |    j <- j + 1
+|    done
+|
+|    while (i < a_len) do
+|    |    remainder <- remainder + Getvalue(a[i])
+|    |    s[k] <- base_digits[remainder\%base]
+|    |    remainder <- remainder/base
+|    |    k <- k+1
+|    |    i <- i+1
+|    done
+|    
+|    while (j < b_len) do
+|    |    remainder <- remainder + Getvalue(a[i])
+|    |    s[k] <- base_digits[remainder\%base]
+|    |    remainder <- remainder/base
+|    |    k <- k+1
+|    |    j <- j+1
+|    done
+|
+|    if (remainder ≠ 0)
+|    then
+|    |    s[k] <- base_digits[remainder]
+|    endif
+|
+|    SumBase <- s
+Done
+\end{lstlisting}
