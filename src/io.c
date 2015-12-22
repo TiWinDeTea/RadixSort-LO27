@@ -34,7 +34,7 @@ void PrintList(BaseNIntegerList l)
 	unsigned short term_height = ConsoleHeight();
 	unsigned short term_width = ConsoleWidth();
 	unsigned short j = 0;	// Counter for the number of elements currently on the screen
-	unsigned short val_size = 0;
+	unsigned short max_val_size = 0;
 	unsigned short nb_displayed = 0; // Counter for the total amount of elements displayed
 	char user_input = 0;
 	BOOL digit_was_displayed; // Used to remove the left '0' (on display)
@@ -42,8 +42,8 @@ void PrintList(BaseNIntegerList l)
 
 	while (elem != NULL) {
 		tmp = (unsigned short)strlen(elem->value);
-		if (tmp > val_size) {
-			val_size = tmp;
+		if (tmp > max_val_size) {
+			max_val_size = tmp;
 		}
 		elem = elem->next;
 	}
@@ -54,7 +54,7 @@ void PrintList(BaseNIntegerList l)
 	}
 
 	//we want to display a space every b numbers plus the '[' ']' around them
-	if (term_width < ((b+1) * val_size / b + 1))
+	if (term_width < ((b+1) * max_val_size / b + (max_val_size%b!=0) + 1))
 	{
 		printf("This screen is too small to display this list properly.\n");
 		printf("Press Enter if you still want to do it.");
@@ -69,7 +69,7 @@ void PrintList(BaseNIntegerList l)
 	--term_height;
 
 	char percentage[45]; // Contains percentage and usable inputs (for display purposes)
-	int cursor_shift = 1 + (b+1) * val_size / b + (val_size%b != 0);
+	int cursor_shift = 1 + (b+1) * max_val_size / b + (max_val_size%b != 0);
 	unsigned short whitesp;
 
 	while (elem != NULL && user_input != 'q')
@@ -90,9 +90,21 @@ void PrintList(BaseNIntegerList l)
 			tmp = (unsigned short)strlen(elem->value);
 
 			// Number of extra whitespaces to print for all nb to have the same size
-			whitesp = (unsigned short)(val_size - tmp + (val_size-tmp) / b + (tmp%b==0));
-			if (b == 4) {
-				whitesp += (tmp%b == 3 || tmp%b == 2);
+			whitesp = (unsigned short)((b + 1)*(max_val_size - tmp) / b);
+
+			/* A little bit of magic */
+			if (max_val_size != tmp) {
+				
+				if (b == 3) {
+					if (max_val_size%b == 2 && tmp%b == 0) {
+						++whitesp;
+					}
+				}
+				else {
+					if (max_val_size%b == 1 && tmp%b != 1) {
+						++whitesp;
+					}
+				}
 			}
 
 			// Printing whitespaces for missing left values
@@ -157,7 +169,7 @@ void PrintList(BaseNIntegerList l)
 					else j=1;
 
 					//Adding a marker for readability purposes
-					if (term_width > (val_size + 5))
+					if (term_width > (max_val_size + 5))
 					{
 						CursorVerticalMove( -1 );
 						if (term_width > (22 + cursor_shift))
