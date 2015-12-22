@@ -27,7 +27,7 @@ all: $(EXECUTABLE)
 #Builds and runs the executable
 run: $(EXECUTABLE)
 	@echo -e "\nExecuting "$(EXECUTABLE)
-	@sh run.sh $(EXECUTABLE)
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(EXECUTABLE)
 
 #Builds the executable
 $(EXECUTABLE): lib$(LIB) lib$(LIB2) lib$(IO) $(EXEOBJECT)
