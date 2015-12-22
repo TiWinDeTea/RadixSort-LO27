@@ -34,10 +34,20 @@ void PrintList(BaseNIntegerList l)
 	unsigned short term_height = ConsoleHeight();
 	unsigned short term_width = ConsoleWidth();
 	unsigned short j = 0;	// Counter for the number of elements currently on the screen
-	unsigned short val_size = (unsigned short)strlen(elem->value); // all values should have the same size
+	unsigned short val_size = 0;
 	unsigned short nb_displayed = 0; // Counter for the total amount of elements displayed
 	char user_input = 0;
 	BOOL digit_was_displayed; // Used to remove the left '0' (on display)
+	unsigned short tmp;
+
+	while (elem != NULL) {
+		tmp = (unsigned short)strlen(elem->value);
+		if (tmp > val_size) {
+			val_size = tmp;
+		}
+		elem = elem->next;
+	}
+	elem = l.head;
 
 	if (l.base == 2 || l.base == 16) {
 		b = 4;
@@ -75,12 +85,21 @@ void PrintList(BaseNIntegerList l)
 
 			// Printing the value of the pointed element
 			printf("[");
-			for (unsigned short i = val_size; i-- ;)	// We are in Little Endian
+
+			// Size of the value + number of whitespaces to display.
+			tmp = (unsigned short)strlen(elem->value);
+
+			// Printing whitespaces for missing left values
+			for (unsigned short i = val_size + val_size/b ; i > tmp + tmp/b ; --i) {
+				printf(" ");
+			}
+
+			for (unsigned short i = tmp; i-- ;)	// We are in Little Endian
 			{
-				// We don't want to display the 0 on the left, but we want to display 0 if the actual value is 0
+				// We don't want to display eventuals 0 on the left, but we want to display 0 if the actual value is 0
 				if (!digit_was_displayed && elem->value[i] == '0' && i != 0){
 					printf(" ");
-					if (i%b == 0) {
+					if (i%b == 0 && i >= b ) {
 						printf(" ");
 					}
 				}
@@ -408,13 +427,13 @@ BOOL yes(char* question, char default_ans)
 					answer = 'n';
 				}
 			}
-			
+
 		}
 	}while (answer != 'y' && answer != 'n');
 	SetEcho(TRUE);
 	printf("%c\n", answer);
 	return answer == 'y' ? TRUE : FALSE;
-	
+
 }
 char* GetNumber(unsigned char i_base, BOOL with_brackets)
 {
@@ -559,52 +578,28 @@ BaseNIntegerList GetList()
 	printf("\nEnter your values in base %d", base);
 	printf("\nPress 'enter' on an empty value to end the input\n");
 
-	unsigned int max_length = 0; // maximum number of digits encountered
-	unsigned int length; // number of digit of the last inputed number
-	char** array_of_values = NULL; // array of char* pointing on the inputed numbers
-	unsigned int nb_of_values = 0; // number of numbers inputed
+	char* value;
 
 	do
 	{
-		++nb_of_values;
-		array_of_values = (char**) realloc(array_of_values, nb_of_values * sizeof(char*)); // allocating an extra char*
-		array_of_values[nb_of_values-1] = GetNumber( base, TRUE );
+		value = GetNumber(base, TRUE); // GetNumber allocates a new char*
 
-		if (array_of_values[nb_of_values-1] != NULL)
+		if (value != NULL)
 		{
-			length=(unsigned int)strlen(array_of_values[nb_of_values - 1]);
-
+			unsigned int tmp = (unsigned int)strlen(value);
 			// deleting eventual left 0 (big endian)
-			// note : to be optimised
-			while(array_of_values[nb_of_values - 1][0] == '0' && array_of_values[nb_of_values - 1][1] != '\0')
+			while(value[0] == '0' && value[1] != '\0')
 			{
-				for (unsigned int j = 0 ; j < length - 1 ; ++j)
-					array_of_values[nb_of_values - 1][j] = array_of_values[nb_of_values - 1][j+1]; // shifting to the left
-				array_of_values[nb_of_values - 1] = (char*) realloc( array_of_values[nb_of_values - 1], (length - 1)* sizeof(char)); // desallocating a char
-				--length;
+				for (unsigned int j = 0 ; j < tmp - 1 ; ++j)
+					value[j] = value[j+1]; // shifting to the left
+				--tmp;
 			}
-
-			if (length > max_length)
-				max_length = length;
-
 			// we are using little endian
-			Reverse(array_of_values[nb_of_values - 1], length);
+			Reverse(value, tmp);
+			l = InsertTail( l, value);
 		}
-	}while (array_of_values[nb_of_values - 1] != NULL);
-	// last input was a nullptr
-	--nb_of_values;
+	}while (value != NULL);
 
-	// adding right 0 (little endian) so that all chars* have the same size and adding them to the list
-	for (unsigned int i = 0 ; i<nb_of_values ; ++i)
-	{
-		array_of_values[i] = (char*) realloc(array_of_values[i], max_length * sizeof(char));
-		for (unsigned int j = (unsigned int)strlen(array_of_values[i]) ; j < max_length ; ++j)
-			array_of_values[i][j] = '0';
-
-		l = InsertTail( l, array_of_values[i]);
-	}
-
-	free (array_of_values);
 	return l;
 }
 

@@ -159,43 +159,10 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				selected_list = selector(list_array.size, "list");
 
 				printf("Enter the value you want to add below : (base %d)\n", list_array.lists[selected_list].base);
-				do {
-					val = GetNumber(list_array.lists[selected_list].base, TRUE);
-					if (val==NULL) {
-						CursorVerticalMove(-1);
-						printf("\r   \r");
-					}
-				}while (val == NULL);
+				val = GetNumber(list_array.lists[selected_list].base, TRUE);
 
-				Reverse(val, (unsigned int)strlen(val));
-
-				if (!IsEmpty(list_array.lists[selected_list]))
-				{
-					size_t val_size = strlen(val);
-					size_t list_vals_size = strlen(list_array.lists[selected_list].head->value);
-					size_t i;
-
-					if (val_size <= list_vals_size) {
-						val = realloc(val, list_vals_size*sizeof(char));
-						for (i = val_size ; i < list_vals_size ; ++i) {
-							val[i] = '0';
-						}
-						val[list_vals_size] = '\0';
-
-					}
-					else {
-						ListElem* elem = list_array.lists[selected_list].head;
-						while(elem != NULL) {
-							elem->value = realloc(elem->value, val_size*sizeof(char));
-							for (i = list_vals_size ; i < val_size ; ++i) {
-								elem->value[i] = '0';
-							}
-							elem->value[val_size] = '\0';
-							elem = elem->next;
-						}
-					}
-				}
 				if (val != NULL) {
+					Reverse(val, (unsigned int)strlen(val));
 					if (user_choice == 2)
 						list_array.lists[selected_list] = InsertHead(list_array.lists[selected_list], val);
 					else
