@@ -39,7 +39,7 @@ run: $(EXECUTABLE)
 
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
-	@echo -e "\nBuilding the executable..."
+	@echo -e "\nBuilding the executable into \\033[33m" $(EXECUTABLE)"\033[0m..."
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
 	@echo "Done"
 
@@ -50,38 +50,38 @@ lib: $(LIB) $(LIB2) $(IO)
 
 #Builds executable object files from executable source code
 $(EXEOBJECT): $(EXESOURCE)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds IO libraries files from IO objects code files
 $(IO): $(IOOBJECT)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@mkdir -p $(BINDIR)
 	@$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds IO object files from IO source code files
 $(IOOBJECT): $(IOSOURCE)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds libraries files from libraries object files
 $(LIB2): $(LIB2OBJECT)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@mkdir -p $(BINDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 $(LIB): $(LIBOBJECT)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@mkdir -p $(BINDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
 $(LIB2OBJECT): $(LIB2SOURCE)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 $(LIBOBJECT): $(LIBSOURCE)
-	@echo "Building" $< "into" $@"..."
+	@echo -e "Building\\033[33m" $< "\033[0minto\\033[33m" $@"\033[0m..."
 	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
