@@ -35,7 +35,7 @@ all: $(EXECUTABLE)
 #Builds and runs the executable
 run: $(EXECUTABLE)
 	@echo -e "\nExecuting "$(EXECUTABLE)
-	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./bin/ ./$(EXECUTABLE)
+	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./$(BINDIR) ./$(EXECUTABLE)
 
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
