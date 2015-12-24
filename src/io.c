@@ -1,4 +1,4 @@
-#include "io.h"
+#include <io.h>
 
 // pure output
 void Clear()
@@ -94,7 +94,7 @@ void PrintList(BaseNIntegerList l)
 
 			/* A little bit of magic */
 			if (max_val_size != tmp) {
-				
+
 				if (b == 3) {
 					if (max_val_size%b == 2 && tmp%b == 0) {
 						++whitesp;
@@ -604,18 +604,25 @@ BaseNIntegerList GetList()
 
 		if (value != NULL)
 		{
-			unsigned int tmp = (unsigned int)strlen(value);
+			unsigned int i = 0;
+			unsigned int j = 0;
 			// deleting eventual left 0 (big endian)
-			while(value[0] == '0' && value[1] != '\0')
+			while(value[i] == '0' && value[i+1] != '\0')
 			{
-				for (unsigned int j = 0 ; j < tmp ; ++j)
-					value[j] = value[j+1]; // shifting to the left
-				--tmp;
+				++i;
 			}
-			value = (char*) realloc(value, (tmp+1)*sizeof(char));
+
+			if (i != 0) {
+				while (value[i+j] != '\0') {
+					value[j] = value[i+j];
+					++j;
+				}
+				value[j] = '\0';
+				value = (char*) realloc(value, j);
+			}
 
 			// we are using little endian
-			Reverse(value, tmp);
+			Reverse(value, (unsigned int)strlen(value));
 			l = InsertTail( l, value);
 		}
 	}while (value != NULL);

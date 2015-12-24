@@ -1,0 +1,10 @@
+\begin{lstlisting}[breaklines]
+procedure DeleteBucketList (list_of_list: BaseNIntegerListOfList)
+Begin
+|    for i from 0 to (base(list_of_list) - 1) do
+|    |    DeleteIntegerList(list(list_of_list)[i])
+|    done
+|    free (list(list_of_list))
+|    list(list_of_list) <- NULL
+Done
+\end{lstlisting}

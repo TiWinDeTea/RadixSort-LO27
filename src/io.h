@@ -3,22 +3,15 @@
  * Written by Lucas LAZARE, lucas.lazare@utbm.fr, December 2015                          *
  *****************************************************************************************/
 
-#include "BaseNIntegerList.h"
-
-#ifndef BOOL_DEFINED
-#define BOOL_DEFINED
-typedef enum{
-	FALSE = 0,
-	TRUE = 1
-}BOOL;
-#endif /* BOOL_DEFINED */
-
 #ifndef SPECIAL
 #define SPECIAL '['
 #endif /* SPECIAL */
 
 #ifndef IO_H_INCLUDED
 #define IO_H_INCLUDED
+
+#include <BaseNIntegerList.h>
+#include <bool.h>
 
 #include <stdio.h>
 #include <stdlib.h>

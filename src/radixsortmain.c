@@ -1,6 +1,6 @@
-#include "BaseNIntegerList.h"
-#include "BaseNIntegerListOfList.h"
-#include "io.h"
+#include <BaseNIntegerList.h>
+#include <BaseNIntegerListOfList.h>
+#include <io.h>
 #include <stdio.h>
 
 typedef struct{

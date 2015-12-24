@@ -12,22 +12,13 @@
  * For bigger numbers don't use base-conversion functions, or modify the lib to use double or long double variable type.
  */
 
-#ifndef BOOL_DEFINED
-#define BOOL_DEFINED
-
-typedef enum{
-	FALSE = 0,
-	TRUE = 1
-}BOOL;
-
-#endif /*BOOL_DEFINED*/
-
 #ifndef BASENINTERGERLIST_H_INCLUDED
 #define BASENINTERGERLIST_H_INCLUDED
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <bool.h>
 
 typedef struct elem{
 	char* value;

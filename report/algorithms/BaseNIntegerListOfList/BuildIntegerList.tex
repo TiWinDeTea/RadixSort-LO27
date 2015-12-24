@@ -1,0 +1,24 @@
+\begin{lstlisting}[breaklines]
+function BuildIntegerList (list_of_list: BaseNIntegerListOfList): BaseNIntegerList
+Begin
+|    output: BaseNIntegerList
+|    val: array<characters>
+|    inserted_elem: ListElem*
+|
+|    output <- CreateIntegerList(base(list_of_list)
+|
+|    for i from 0 to (base(list_of_list) - 1) do
+|    |
+|    |    inserted_elem <- head(list_of_list[i])
+|    |
+|    |    while (inserted_elem ≠ NULL) do
+|    |    |
+|    |    |    value <- copy(value(inserted_elem))
+|    |    |    output <- InsertTail(output, value)
+|    |    |    inserted_elem <- next(inserted_elem)
+|    |    done
+|    done
+|
+|    BuildIntegerList <- output
+Done
+\end{lstlisting}

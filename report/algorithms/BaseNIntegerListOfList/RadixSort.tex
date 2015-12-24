@@ -1,0 +1,40 @@
+\begin{lstlisting}[breaklines]
+function RadixSort (list: BaseNIntegerList): BaseNIntegerList
+Begin
+|
+|    if (IsEmpty(list))
+|    then
+|    |    RadixSort <- CreateIntegerList(base(list))
+|    else
+|    |    max_size, tmp: integers
+|    |    elem: ListElem*
+|    |    list_of_list: BaseNIntegerListOfList
+|    |
+|    |    max_size <- arraySize(value(head(list)))
+|    |    elem <- head(list)
+|    |
+|    |    while (next(elem) ≠ NULL) do
+|    |    |    elem <- next(elem)
+|    |    |    tmp <- arraySize(value(elem))
+|    |    |    if (tmp > max_size)
+|    |    |    then
+|    |    |    |    max_size <- tmp
+|    |    |    endif
+|    |    done
+|    |
+|    |    list_of_list <- BuildBucketList(list, 0)
+|    |    sorted_list: <- BuildIntegerList(List_of_list)
+|    |    DeleteBucketList(list_of_list)
+|    |
+|    |    for i from 1 to (max_size - 1) do
+|    |    |
+|    |    |    list_of_list <- BuildBucketList(sorted_list, i)
+|    |    |    DeleteIntegerList(sorted_list)
+|    |    |    sorted_list <- BuildIntegerList(list_of_list)
+|    |    |    DeleteBucketList(list_of_list)
+|    |    done
+|    |
+|    |    RadixSort <- sorted_list
+|    endif
+Done
+\end{lstlisting}

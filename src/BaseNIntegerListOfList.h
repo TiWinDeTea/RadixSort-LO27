@@ -5,20 +5,11 @@
  *            Dec 2015                                                                   *
  *****************************************************************************************/
 
-#ifndef BOOL_DEFINED
-#define BOOL_DEFINED
-
-typedef enum{
-	FALSE = 0,
-	TRUE = 1
-}BOOL;
-
-#endif /*BOOL_DEFINED*/
-
 #ifndef BASENINTERGERLISTOFLIST_H_INCLUDED
 #define BASENINTERGERLISTOFLIST_H_INCLUDED
 
-#include "BaseNIntegerList.h"
+#include <BaseNIntegerList.h>
+#include <bool.h>
 
 typedef struct{
 	BaseNIntegerList* list;
