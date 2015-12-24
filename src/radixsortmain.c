@@ -196,11 +196,14 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 			if (list_array.size != 0){
 				unsigned char selected_list;
 				selected_list = selector(list_array.size, "list");
-				if (user_choice == 4)
+				if (user_choice == 4) {
 					list_array.lists[selected_list] = RemoveHead(list_array.lists[selected_list]);
-				else
+					printf("Done (head removal).\n");
+				}
+				else {
 					list_array.lists[selected_list] = RemoveTail(list_array.lists[selected_list]);
-				printf("Done\n");
+					printf("Done (tail removal)\n");
+				}
 				waitForUser();
 			}
 			break;
@@ -212,9 +215,9 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				if (!IsEmpty(list_array.lists[selected_list])) {
 					was_empty = FALSE;
 					DeleteIntegerList(&list_array.lists[selected_list]);
-					printf("Done.\nList%u will remain as an empty list.\n", selected_list);
+					printf("Done (list deletion).\nList%u will remain as an empty list.\n", selected_list);
 				}
-				if ((was_empty && yes("This list is empty, so it will be completely removed.\nDo you agree with that ?", 1)) || (!was_empty && yes("Do you want to remove it completly ?", 1))) {
+				if (yes( was_empty ? "This list is empty, so it will be completely removed.\nDo you agree with that ?" : "Do you want to remove it completely ?", 1)) {
 					unsigned char i = selected_list;
 					--list_array.size;
 					for (; i < list_array.size ; ++i) {
