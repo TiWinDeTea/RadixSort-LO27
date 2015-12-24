@@ -123,7 +123,8 @@ int main()
 
 ArrayOfList listsMenu(ArrayOfList list_array)
 {
-	unsigned char user_choice = 0; do {
+	unsigned char user_choice = 0;
+	do {
 		Clear();
 		SetTextAttributes("+bold");
 		user_choice = Menu("- Input a List\0- IsEmpty\0- InsertHead\0- InsertTail\0- RemoveHead\0- RemoveTail\0- DeleteIntegerList\0- SumIntegerList\0- PrintList\0Back\0", 10, "yellow", "blue", user_choice);
@@ -162,6 +163,21 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 				val = GetNumber(list_array.lists[selected_list].base, TRUE);
 
 				if (val != NULL) {
+					unsigned int i = 0, j = 0;
+
+					/* Removing eventual 0 on the left */
+					while (val[i] == '0' && val[i+1] != '\0') {
+						++i;
+					}
+					if (i != 0) {
+						while (val[i+j] != '\0') {
+							val[j] = val[i+j];
+							++j;
+						}
+						val[j] = '\0';
+						val = (char*) realloc(val, j + 1);
+					}
+
 					Reverse(val, (unsigned int)strlen(val));
 					if (user_choice == 2)
 						list_array.lists[selected_list] = InsertHead(list_array.lists[selected_list], val);
@@ -198,7 +214,7 @@ ArrayOfList listsMenu(ArrayOfList list_array)
 					DeleteIntegerList(&list_array.lists[selected_list]);
 					printf("Done.\nList%u will remain as an empty list.\n", selected_list);
 				}
-				if ((was_empty && yes("This list is empty, so it will be completely removed.\nDo you agree with that ?", 1)) || yes("Do you want to remove it completly ?", 1)) {
+				if ((was_empty && yes("This list is empty, so it will be completely removed.\nDo you agree with that ?", 1)) || (!was_empty && yes("Do you want to remove it completly ?", 1))) {
 					unsigned char i = selected_list;
 					--list_array.size;
 					for (; i < list_array.size ; ++i) {

@@ -94,15 +94,41 @@ void PrintList(BaseNIntegerList l)
 
 			/* A little bit of magic */
 			if (max_val_size != tmp) {
-
-				if (b == 3) {
-					if (max_val_size%b == 2 && tmp%b == 0) {
-						++whitesp;
+				if (b == 4) {
+					switch (max_val_size%b) {
+					case 3:
+						if (tmp%b == 0) {
+							++whitesp;
+						}
+						break;
+					case 2:
+						if (tmp%b == 3 || tmp%b == 0) {
+							++whitesp;
+						}
+						break;
+					case 1:
+						if (tmp%b != 1) {
+							++whitesp;
+						}
+						break;
+					default:
+						break;
 					}
 				}
 				else {
-					if (max_val_size%b == 1 && tmp%b != 1) {
-						++whitesp;
+					switch (max_val_size%b) {
+					case 2:
+						if (tmp%b == 0) {
+							++whitesp;
+						}
+						break;
+					case 1:
+						if (tmp%b != 1) {
+							++whitesp;
+						}
+						break;
+					default:
+						break;
 					}
 				}
 			}
@@ -618,7 +644,7 @@ BaseNIntegerList GetList()
 					++j;
 				}
 				value[j] = '\0';
-				value = (char*) realloc(value, j);
+				value = (char*) realloc(value, j + 1);
 			}
 
 			// we are using little endian
