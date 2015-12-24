@@ -1,24 +1,32 @@
 #General makefile template
-COMPILER = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3
-CSTD= -ansi
-IOSTD= -std=c99
-LIBSDIR = -L. -L/usr/lib
-INCLUDEDIR = -I. -I/usr/include
+COMPILER	= gcc
+CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3
+CSTD		= -ansi
+IOSTD		= -std=c99
+BINDIR		= bin/
+OBJDIR		= obj/
+SOURCEDIR	= src/
+LIBSDIR		= -L. -L/usr/lib -L./$(BINDIR)
+INCLUDEDIR	= -I. -I/usr/include -I./include/
 
-EXESOURCE=radixsortmain.c
-LIBSOURCE=BaseNIntegerList.c
-LIB2SOURCE=BaseNIntegerListOfList.c
-IOSOURCE=io.c
-EXECUTABLE=Radix-Sort.exe
+EXESOURCENAME	= radixsortmain.c
+LIBSOURCENAME	= BaseNIntegerList.c
+LIB2SOURCENAME	= BaseNIntegerListOfList.c
+IOSOURCENAME	= io.c
+EXECUTABLENAME	= Radix-Sort.exe
 
-LIB=lib$(LIBSOURCE:.c=.so)
-LIB2=lib$(LIB2SOURCE:.c=.so)
-IO=lib$(IOSOURCE:.c=.so)
-EXEOBJECT=$(EXESOURCE:.c=.o)
-LIBOBJECT=$(LIBSOURCE:.c=.o)
-LIB2OBJECT=$(LIB2SOURCE:.c=.o)
-IOOBJECT=$(IOSOURCE:.c=.o)
+EXESOURCE	= $(SOURCEDIR)$(EXESOURCENAME)
+LIBSOURCE	= $(SOURCEDIR)$(LIBSOURCENAME)
+LIB2SOURCE	= $(SOURCEDIR)$(LIB2SOURCENAME)
+IOSOURCE	= $(SOURCEDIR)$(IOSOURCENAME)
+EXECUTABLE	= $(BINDIR)$(EXECUTABLENAME)
+LIB		= $(BINDIR)lib$(LIBSOURCENAME:.c=.so)
+LIB2		= $(BINDIR)lib$(LIB2SOURCENAME:.c=.so)
+IO		= $(BINDIR)lib$(IOSOURCENAME:.c=.so)
+EXEOBJECT	= $(OBJDIR)$(EXESOURCENAME:.c=.o)
+LIBOBJECT	= $(OBJDIR)$(LIBSOURCENAME:.c=.o)
+LIB2OBJECT	= $(OBJDIR)$(LIB2SOURCENAME:.c=.o)
+IOOBJECT	= $(OBJDIR)$(IOSOURCENAME:.c=.o)
 
 #Builds the executable
 all: $(EXECUTABLE)
@@ -27,12 +35,12 @@ all: $(EXECUTABLE)
 #Builds and runs the executable
 run: $(EXECUTABLE)
 	@echo -e "\nExecuting "$(EXECUTABLE)
-	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(EXECUTABLE)
+	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./bin/ ./$(EXECUTABLE)
 
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
 	@echo -e "\nBuilding the executable..."
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(LIBSOURCE:.c=) -l$(LIB2SOURCE:.c=) -l$(IOSOURCE:.c=) -o $(EXECUTABLE)
+	@$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
 	@echo "Done"
 
 #Builds libraries
@@ -60,7 +68,7 @@ $(LIB2): $(LIB2OBJECT)
 	@echo "Building" $< "into" $@"..."
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 $(LIB): $(LIBOBJECT)
-	@echo "Building" $< "into" lib$@"..."
+	@echo "Building" $< "into" $@"..."
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
