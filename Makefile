@@ -56,27 +56,33 @@ $(EXEOBJECT): $(EXESOURCE)
 #Builds IO libraries files from IO objects code files
 $(IO): $(IOOBJECT)
 	@echo "Building" $< "into" $@"..."
+	@mkdir -p $(BINDIR)
 	@$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds IO object files from IO source code files
 $(IOOBJECT): $(IOSOURCE)
 	@echo "Building" $< "into" $@"..."
+	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds libraries files from libraries object files
 $(LIB2): $(LIB2OBJECT)
 	@echo "Building" $< "into" $@"..."
+	@mkdir -p $(BINDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 $(LIB): $(LIBOBJECT)
 	@echo "Building" $< "into" $@"..."
+	@mkdir -p $(BINDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
 $(LIB2OBJECT): $(LIB2SOURCE)
 	@echo "Building" $< "into" $@"..."
+	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 $(LIBOBJECT): $(LIBSOURCE)
 	@echo "Building" $< "into" $@"..."
+	@mkdir -p $(OBJDIR)
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Removes temporary files
