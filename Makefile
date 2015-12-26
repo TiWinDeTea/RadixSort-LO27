@@ -1,10 +1,10 @@
-#General makefile template
+#User-set variables ; OBJDIR and SOURCEDIR should end with '/'
 COMPILER	= gcc
 CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3
 CSTD		= -ansi
 IOSTD		= -std=c99
-BINDIR		= bin/
-OBJDIR		= obj/
+BINDIR		= bin/ernest/cakaofdoom/
+OBJDIR		= /tmp/obj/
 SOURCEDIR	= src/
 LIBSDIR		= -L. -L/usr/lib -L./$(BINDIR)
 INCLUDEDIR	= -I. -I/usr/include -I./include/
@@ -15,6 +15,7 @@ LIB2SOURCENAME	= BaseNIntegerListOfList.c
 IOSOURCENAME	= io.c
 EXECUTABLENAME	= Radix-Sort.exe
 
+#Generating variables from previous vars
 EXESOURCE	= $(SOURCEDIR)$(EXESOURCENAME)
 LIBSOURCE	= $(SOURCEDIR)$(LIBSOURCENAME)
 LIB2SOURCE	= $(SOURCEDIR)$(LIB2SOURCENAME)
@@ -34,12 +35,12 @@ all: $(EXECUTABLE)
 
 #Builds and runs the executable
 run: $(EXECUTABLE)
-	@printf "\nExecuting $(EXECUTABLE)\n"
+	@printf "\nExecuting \033[33m$(EXECUTABLENAME)\033[0m\n"
 	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./$(BINDIR) ./$(EXECUTABLE)
 
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
-	@printf "\nBuilding the executable into \\033[33m $(EXECUTABLE)\033[0m...\n"
+	@printf "\nBuilding the executable into \033[33m $(EXECUTABLE)\033[0m...\n"
 	@$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
 	@printf "Done\n"
 
@@ -88,6 +89,9 @@ $(LIBOBJECT): $(LIBSOURCE)
 #Removes temporary files
 clear: clean
 clean:
-	@printf "Cleaning files\n"
+	@printf "Cleaning files...\n"
 	@rm -f $(EXECUTABLE) $(LIB) $(LIB2) $(IO) $(IOOBJECT) $(LIB2OBJECT) $(LIBOBJECT) $(EXEOBJECT)
+	@printf "Cleaning empty builds directories...\n"
+	@(test -d $(OBJDIR) && rmdir -p --ignore-fail-on-non-empty $(OBJDIR) 2> /dev/null) || true
+	@(test -d $(BINDIR) && rmdir -p --ignore-fail-on-non-empty $(BINDIR) 2> /dev/null) || true
 	@printf "Done\n"
