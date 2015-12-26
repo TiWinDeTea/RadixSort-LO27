@@ -42,7 +42,6 @@ all: $(EXECUTABLE)
 run: $(EXECUTABLE)
 	@printf "\nExecuting \033[33m$(EXECUTABLENAME)\033[0m\n"
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(BINDIR) $(EXECUTABLE)
-	@make run
 
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
