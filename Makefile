@@ -3,8 +3,8 @@ COMPILER	= gcc
 CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3
 CSTD		= -ansi
 IOSTD		= -std=c99
-BINDIR		= bin/ernest/cakaofdoom/
-OBJDIR		= /tmp/obj/
+BINDIR		= bin/
+OBJDIR		= obj/
 SOURCEDIR	= src/
 LIBSDIR		= -L. -L/usr/lib -L./$(BINDIR)
 INCLUDEDIR	= -I. -I/usr/include -I./include/
