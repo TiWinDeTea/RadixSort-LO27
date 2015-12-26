@@ -29,6 +29,11 @@ LIBOBJECT	= $(OBJDIR)$(LIBSOURCENAME:.c=.o)
 LIB2OBJECT	= $(OBJDIR)$(LIB2SOURCENAME:.c=.o)
 IOOBJECT	= $(OBJDIR)$(IOSOURCENAME:.c=.o)
 
+#Builds the executable without echoing recipies by default
+silent:
+	@printf "Building without echoing recipies\n"
+	@printf "Use '\033[35mmake all\033[0m' to build with recipies echoes\n\n"
+	@make --silent all
 #Builds the executable
 all: $(EXECUTABLE)
 	@printf "\033[0m\nYou may run the executable using '\033[35mmake run\033[0m'\n"
@@ -36,12 +41,13 @@ all: $(EXECUTABLE)
 #Builds and runs the executable
 run: $(EXECUTABLE)
 	@printf "\nExecuting \033[33m$(EXECUTABLENAME)\033[0m\n"
-	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./$(BINDIR) ./$(EXECUTABLE)
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(BINDIR) $(EXECUTABLE)
+	@make run
 
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
 	@printf "\nBuilding the executable into \033[33m $(EXECUTABLE)\033[0m...\n"
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
+	$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
 	@printf "Done\n"
 
 #Builds libraries
@@ -52,39 +58,39 @@ lib: $(LIB) $(LIB2) $(IO)
 #Builds executable object files from executable source code
 $(EXEOBJECT): $(EXESOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds IO libraries files from IO objects code files
 $(IO): $(IOOBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	@$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds IO object files from IO source code files
 $(IOOBJECT): $(IOSOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	@$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds libraries files from libraries object files
 $(LIB2): $(LIB2OBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 $(LIB): $(LIBOBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
 $(LIB2OBJECT): $(LIB2SOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 $(LIBOBJECT): $(LIBSOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	@$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Removes temporary files
 clear: clean
