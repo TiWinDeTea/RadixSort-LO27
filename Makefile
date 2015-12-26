@@ -6,7 +6,7 @@ IOSTD		= -std=c99
 BINDIR		= bin/
 OBJDIR		= obj/
 SOURCEDIR	= src/
-LIBSDIR		= -L. -L/usr/lib -L./$(BINDIR)
+LIBSDIR		= -L. -L/usr/lib -L$(BINDIR)
 INCLUDEDIR	= -I. -I/usr/include -I./include/
 
 EXESOURCENAME	= radixsortmain.c
@@ -47,7 +47,7 @@ $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
 #Builds libraries
 libs: lib
 lib: $(LIB) $(LIB2) $(IO)
-	@printf "Done\n"
+	@printf "\nLibraries generated in '\033[35m$(BINDIR)\033[0m'\n"
 
 #Builds executable object files from executable source code
 $(EXEOBJECT): $(EXESOURCE)
