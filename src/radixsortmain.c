@@ -504,16 +504,22 @@ ArrayOfList extraMenu(ArrayOfList list_array)
 			waitForUser();
 			break;
 		case 1:
-			printf("Note that this function won't work if any number is above 2 147 483 647 (base 10)\n");
+			printf("Note that this function won't work if any number is above 1 073 741 824 (base 10)\n");
 			list_array = ifListArrayEmptyAskInput(list_array);
 			if (list_array.size != 0) {
 				unsigned char selected_list;
 				unsigned char base;
-				selected_list = selector(list_array.size, "type");
+				selected_list = selector(list_array.size, "list");
 				printf("Output base ? [2~36]\n");
 				base = (unsigned char)GetNumberWithinRange(2, 36);
+
 				list_array.lists[selected_list] = ConvertListBase(list_array.lists[selected_list], base);
+
+				printf("Done (base conversion)\n");
 				waitForUser();
+				if (yes("Do you want to print the list ?", 1)) {
+					PrintList(list_array.lists[selected_list]);
+				}
 			}
 			break;
 		default:

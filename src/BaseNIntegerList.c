@@ -345,12 +345,13 @@ BaseNIntegerList ConvertListBase(BaseNIntegerList l, unsigned char base)
 	if(!IsEmpty(l))
 	{
 		ListElem* element = l.head;
-		element->value = ConvertBaseToBase(element->value, l.base, base);
-		element = element->next;
+		char* tmp;
 
 		while(element != NULL)
 		{
+			tmp = element->value;
 			element->value = ConvertBaseToBase(element->value, l.base, base);
+			free(tmp);
 			element = element->next;
 		}
 	}

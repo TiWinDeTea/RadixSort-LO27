@@ -6,14 +6,16 @@ IOSTD		= -std=c99
 BINDIR		= bin/
 OBJDIR		= obj/
 SOURCEDIR	= src/
-LIBSDIR		= -L. -L/usr/lib -L$(BINDIR)
-INCLUDEDIR	= -I. -I/usr/include -I./include/
+HEADERSDIR	= include/
 
 EXESOURCENAME	= radixsortmain.c
 LIBSOURCENAME	= BaseNIntegerList.c
 LIB2SOURCENAME	= BaseNIntegerListOfList.c
 IOSOURCENAME	= io.c
 EXECUTABLENAME	= Radix-Sort.exe
+
+LIBSDIR		= -L/usr/lib -L$(BINDIR)
+INCLUDEDIR	= -I/usr/include -I$(HEADERSDIR)
 
 #Generating variables from previous vars
 EXESOURCE	= $(SOURCEDIR)$(EXESOURCENAME)
@@ -32,7 +34,8 @@ IOOBJECT	= $(OBJDIR)$(IOSOURCENAME:.c=.o)
 #Builds the executable without echoing recipies by default
 silent:
 	@printf "Building without echoing recipies\n"
-	@printf "Use '\033[35mmake all\033[0m' to build with recipies echoes\n\n"
+	@printf "Use '\033[35mmake all\033[0m' to build with recipies echoes\n"
+	@printf "(you may need to use '\033[35mmake clean\033[0m' before rebuilding)\n\n"
 	@make --silent all
 #Builds the executable
 all: $(EXECUTABLE)
@@ -97,6 +100,6 @@ clean:
 	@printf "Cleaning files...\n"
 	@rm -f $(EXECUTABLE) $(LIB) $(LIB2) $(IO) $(IOOBJECT) $(LIB2OBJECT) $(LIBOBJECT) $(EXEOBJECT)
 	@printf "Cleaning empty builds directories...\n"
-	@(test -d $(OBJDIR) && rmdir -p --ignore-fail-on-non-empty $(OBJDIR) 2> /dev/null) || true
-	@(test -d $(BINDIR) && rmdir -p --ignore-fail-on-non-empty $(BINDIR) 2> /dev/null) || true
+	@rmdir -p $(OBJDIR) 2> /dev/null || true
+	@rmdir -p $(BINDIR) 2> /dev/null || true
 	@printf "Done\n"
