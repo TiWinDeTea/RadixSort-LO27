@@ -53,7 +53,11 @@ $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
 	@printf "Done\n"
 
 #Builds libraries
-libs: lib
+libs:
+	@printf "Building libraries without echoing recipies\n"
+	@printf "Use '\033[35mmake lib\033[0m' to build with recipies echoes\n"
+	@printf "(you may need to use '\033[35mmake clean\033[0m' before rebuilding)\n\n"
+	@make --silent lib
 lib: $(LIB) $(LIB2) $(IO)
 	@printf "\nLibraries generated in '\033[35m$(BINDIR)\033[0m'\n"
 
@@ -103,3 +107,11 @@ clean:
 	@rmdir -p $(OBJDIR) 2> /dev/null || true
 	@rmdir -p $(BINDIR) 2> /dev/null || true
 	@printf "Done\n"
+
+#rebuilds the executable in debug and starts it
+debug: CFLAGS=-Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -g
+debug: clean $(EXECUTABLE)
+	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(BINDIR) gdb $(EXECUTABLE)
+
+
+
