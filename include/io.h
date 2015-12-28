@@ -4,7 +4,7 @@
  *****************************************************************************************/
 
 #ifndef SPECIAL
-#define SPECIAL '['
+#define SPECIAL 0x001B
 #endif /* SPECIAL */
 
 #ifndef IO_H_INCLUDED

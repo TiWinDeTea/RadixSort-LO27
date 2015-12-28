@@ -213,6 +213,9 @@ void PrintList(BaseNIntegerList l)
 					}
 
 					break;
+				case SPECIAL:
+					(void)InstantGetChar();
+					break;
 				default:
 					// Printing only the next value
 					--j;
@@ -402,7 +405,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 		}
 
 		key_pressed = InstantGetChar();
-		if (key_pressed == SPECIAL) // pressing an arrow inputs both SPECIAL and a normal letter
+		if ((key_pressed == SPECIAL && InstantGetChar() == '[') || key_pressed == '[') // pressing an arrow inputs both SPECIAL, [, and a letter ; pressing pge up/down inputs [, a number, and ~
 		{
 			// deselecting text
 			key_pressed = InstantGetChar();
@@ -411,24 +414,30 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
 
 			switch (key_pressed)
 			{
-				case 'A':	//Arrow up
+				case 'A':	// Arrow up
 					if (choice == 0)
 						choice = (unsigned char)(nb_choices - 1);
 					else --choice;
 					break;
 
-				case 'B':	//Arrow down
+				case 'B':	// Arrow down
 					if (choice == nb_choices - 1)
 						choice = 0;
 					else ++choice;
 					break;
 
-				case '5':	//Page Up
-					choice = 0;
+				case '5':
+					// Page up
+					if (InstantGetChar() == '~') {
+						choice = 0;
+					}
 					break;
 
-				case '6':	//Page Down
-					choice = (unsigned char)(nb_choices - 1);
+				case '6':
+					// Page Down
+					if (InstantGetChar() == '~') {
+						choice = (unsigned char)(nb_choices - 1);
+					}
 					break;
 
 				default:
