@@ -1,8 +1,6 @@
 #User-set variables ; OBJDIR and SOURCEDIR should end with '/'
 COMPILER	= gcc
-CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3
-CSTD		= -ansi
-IOSTD		= -std=c99
+CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3 -ansi
 BINDIR		= bin/
 OBJDIR		= obj/
 SOURCEDIR	= src/
@@ -33,8 +31,8 @@ IOOBJECT	= $(OBJDIR)$(IOSOURCENAME:.c=.o)
 
 #Builds the executable without echoing recipies by default
 silent:
-	@printf "Building without echoing recipies\n"
-	@printf "Use '\033[35mmake all\033[0m' to build with recipies echoes\n"
+	@printf "Building without echoing recipes\n"
+	@printf "Use '\033[35mmake all\033[0m' to build with recipes echoes\n"
 	@printf "(you may need to use '\033[35mmake clean\033[0m' before rebuilding)\n\n"
 	@make --silent all
 #Builds the executable
@@ -49,13 +47,13 @@ run: $(EXECUTABLE)
 #Builds the executable
 $(EXECUTABLE): $(LIB) $(LIB2) $(IO) $(EXEOBJECT)
 	@printf "\nBuilding the executable into \033[33m $(EXECUTABLE)\033[0m...\n"
-	$(COMPILER) $(CFLAGS) $(CSTD) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
+	$(COMPILER) $(CFLAGS) $(EXEOBJECT) $(LIBSDIR) -l$(IOSOURCENAME:.c=) -l$(LIBSOURCENAME:.c=) -l$(LIB2SOURCENAME:.c=) -o $(EXECUTABLE)
 	@printf "Done\n"
 
 #Builds libraries
 libs:
-	@printf "Building libraries without echoing recipies\n"
-	@printf "Use '\033[35mmake lib\033[0m' to build with recipies echoes\n"
+	@printf "Building libraries without echoing recipes\n"
+	@printf "Use '\033[35mmake lib\033[0m' to build with recipes echoes\n"
 	@printf "(you may need to use '\033[35mmake clean\033[0m' before rebuilding)\n\n"
 	@make --silent lib
 lib: $(LIB) $(LIB2) $(IO)
@@ -64,39 +62,39 @@ lib: $(LIB) $(LIB2) $(IO)
 #Builds executable object files from executable source code
 $(EXEOBJECT): $(EXESOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
-	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds IO libraries files from IO objects code files
 $(IO): $(IOOBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds IO object files from IO source code files
 $(IOOBJECT): $(IOSOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(IOSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds libraries files from libraries object files
 $(LIB2): $(LIB2OBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 $(LIB): $(LIBOBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
 $(LIB2OBJECT): $(LIB2SOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 $(LIBOBJECT): $(LIBSOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(CSTD) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
 
 #Removes temporary files
 clear: clean
@@ -114,4 +112,17 @@ debug: clean $(EXECUTABLE)
 	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(BINDIR) gdb $(EXECUTABLE)
 
 
-
+#help
+?:help
+h:help
+help:
+	@printf "\nRecipes :\n"
+	@printf "  all          Builds all targets (lib$(LIB2SOURCENAME:.c=.so), lib$(LIBSOURCENAME:.c=.so), lib$(IOSOURCENAME:.c=.so), $(EXECUTABLENAME)) and their objects\n"
+	@printf "  silent       Similar to 'make --silent all' (default)\n"
+	@printf "  run          Executes the executable (builds it if required)\n"
+	@printf "  lib          Builds all libs (lib$(LIB2SOURCENAME:.c=.so), lib$(LIBSOURCENAME:.c=.so), lib$(IOSOURCENAME:.c=.so))\n"
+	@printf "  libs         Similar to 'make --silent lib'\n"
+	@printf "  clean/clear  Cleans all generated files and folders (if empty)\n\n"
+	@printf "Build folder for objects files : $(OBJDIR)\n"
+	@printf "Build folder for elf files :     $(BINDIR)\n\n"
+	@printf "Compiler and general compiler options :\n  $(COMPILER) $(CFLAGS)\n\n"
