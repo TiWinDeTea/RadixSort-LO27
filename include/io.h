@@ -3,12 +3,9 @@
  * Written by Lucas LAZARE, lucas.lazare@utbm.fr, December 2015                          *
  *****************************************************************************************/
 
-#ifndef SPECIAL
-#define SPECIAL 0x001B
-#endif /* SPECIAL */
-
 #ifndef IO_H_INCLUDED
 #define IO_H_INCLUDED
+#define IO_SPECIAL_CHAR 0x001B
 
 #include <BaseNIntegerList.h>
 #include <bool.h>
