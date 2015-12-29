@@ -62,39 +62,39 @@ lib: $(LIB) $(LIB2) $(IO)
 #Builds executable object files from executable source code
 $(EXEOBJECT): $(EXESOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds IO libraries files from IO objects code files
 $(IO): $(IOOBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) -shared -o $@ $<
 
 #Builds IO object files from IO source code files
 $(IOOBJECT): $(IOSOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(INCLUDEDIR) -o $@ -c $<
 
 #Builds libraries files from libraries object files
 $(LIB2): $(LIB2OBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) -shared -o $@ $<
 $(LIB): $(LIBOBJECT)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(BINDIR)
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -shared -o $@ $<
+	$(COMPILER) $(CFLAGS) $(LIBSDIR) -shared -o $@ $<
 
 #Builds libraries object files from libraries source code files
 $(LIB2OBJECT): $(LIB2SOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(INCLUDEDIR) -o $@ -c $<
 $(LIBOBJECT): $(LIBSOURCE)
 	@printf "Building\033[33m $< \033[0minto\033[33m $@\033[0m...\n"
 	@mkdir -p $(OBJDIR)
-	$(COMPILER) $(CFLAGS) $(LIBSDIR) $(INCLUDEDIR) -o $@ -c $<
+	$(COMPILER) $(CFLAGS) $(INCLUDEDIR) -o $@ -c $<
 
 #Removes temporary files
 clear: clean
