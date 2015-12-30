@@ -86,6 +86,7 @@ void waitForUser(void);
 int main()
 {
 	unsigned char user_choice = 0;
+	unsigned char i;
 	ArrayOfList list_array;
 	ArrayOfBuckets bucket_array;
 
@@ -116,6 +117,16 @@ int main()
 			break;
 		}
 	}while (user_choice != 4);
+
+	for (i = list_array.size ; i > 0 ; --i) {
+		DeleteIntegerList(&list_array.lists[i - 1]);
+	}
+	free (list_array.lists);
+
+	for ( i = bucket_array.size ; i > 0 ; --i) {
+		DeleteBucketList(&bucket_array.buckets[i - 1]);
+	}
+	free (bucket_array.buckets);
 
 	Clear();
 	return EXIT_SUCCESS;
