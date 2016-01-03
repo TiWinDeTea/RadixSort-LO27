@@ -118,13 +118,13 @@ int main()
 		}
 	}while (user_choice != 4);
 
-	for (i = list_array.size ; i > 0 ; --i) {
-		DeleteIntegerList(&list_array.lists[i - 1]);
+	for ( i = 0 ; i < list_array.size ; ++i) {
+		DeleteIntegerList(&list_array.lists[i]);
 	}
 	free (list_array.lists);
 
-	for ( i = bucket_array.size ; i > 0 ; --i) {
-		DeleteBucketList(&bucket_array.buckets[i - 1]);
+	for ( i = 0 ; i < bucket_array.size ; ++i) {
+		DeleteBucketList(&bucket_array.buckets[i]);
 	}
 	free (bucket_array.buckets);
 

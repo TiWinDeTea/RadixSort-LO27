@@ -7,16 +7,18 @@ Begin
 |    |    then
 |    |    |    free(value(head(l)))
 |    |    |    free(head(l))
-|    |    |    head(l) <- NULL
-|    |    |    tail(l) <- NULL
+|    |    |    head(l) <- undefined
+|    |    |    tail(l) <- undefined
 |    |    |    size(l) <- 0
 |    |    else
 |    |    |    head(l) <- next(head(l))
 |    |    |    free(value(previous(head(l))))
 |    |    |    free(previous(head(l)))
-|    |    |    previous(head(l)) <- NULL
+|    |    |    previous(head(l)) <- undefined
 |    |    |    size(l) <- size(l) - 1
 |    |    endif
 |    endif
+|
+|    RemoveHead <- l
 done
 \end{lstlisting}

@@ -6,9 +6,9 @@ Begin
 |
 |    k <- 1
 |    i <- base
-|    base_digit <- {'0','1', \ldots, '9', 'A', 'B', \ldots, 'Z'}
+|    base_digit <- {'0','1', ..., '9', 'A', 'B', ..., 'Z'}
 |    
-|    while (v ≥ i) do
+|    while (v >= i) do
 |    |    i <- i*base
 |    |    k <- k + 1
 |    done
@@ -18,7 +18,7 @@ Begin
 |    k <- 0
 |
 |    while (v > 0) do
-|    |    w[k] <- base_digit[v\%base]
+|    |    w[k] <- base_digit[v%base]
 |    |    k <- k + 1
 |    |    v <- v/base
 |    done

@@ -1,0 +1,39 @@
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{color}
+
+%link option, especialy for the table of contents
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    linktoc=all
+}
+
+\definecolor{codecolor}{HTML}{205280}
+
+%environment 'lstlisting' settings
+\lstset{ %
+language=C,
+morekeywords={BaseNIntegerList, BaseNIntegerListOfList, array, Integer, Character, Integers, Characters, ListElem, integer, integers, positive, character, characters, undefined},
+basicstyle=\normalsize\color{codecolor},
+keywordstyle=\normalsize\color{purple},
+commentstyle=\itshape\color{gray},
+identifierstyle=\textbf,
+stringstyle=\color{red},
+numbers=left,
+numberstyle=\scriptsize,
+stepnumber=1,
+numbersep=7pt,
+backgroundcolor=\color{yellow!3},
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+frame=single,
+tabsize=4,
+captionpos=b,
+breaklines=true,
+breakatwhitespace=true,
+emph={if, then, else, endif, for, foreach, while, do, done, switch, case, break, end, procedure, function, Begin, Done},
+emphstyle={\color{orange}\bfseries}
+}

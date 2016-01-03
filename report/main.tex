@@ -1,12 +1,13 @@
 \documentclass[backcover, english, report, nodocumentinfo]{upmethodology-document}
 
+\include{settings}
 \usepackage[utf8]{inputenc}
-\usepackage[chapter]{algorithm}
-\usepackage{algpseudocode}
 \usepackage{natbib}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{color}
+
+\newcommand{\nxtalgo}{\centerline{$$$$\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#$$$$}}
+\newcommand{\ov}{\emph{Overview}}
 
 \setfrontcover{classic}
 
@@ -18,9 +19,9 @@
 \addauthorvalidator*[lucas.lazare@utbm.fr]{Lucas}{LAZARE}{Author}
 \addauthorvalidator*[maxime.pinard@utbm.fr]{Maxime}{PINARD}{Author}
 
+\setdocabstract{}
 \setdockeywords{\LaTeX, LO27, Base-N integer list, Radix sort}
 
-\setdocabstract{}
 
 \makeatletter
 \let\VERversion\upm@package@version@ver
@@ -37,21 +38,136 @@
 \setcopyrighter{Lucas LAZARE \& Maxime PINARD}
 \setprintingaddress{France}
 
-\DeclareUnicodeCharacter{00A0}{~}
-\DeclareUnicodeCharacter{00D7}{\times}
-
 \begin{document}
 
 \tableofcontents
 
 \chapter{Introduction}
-\chapter{Base-N Integer Lists Library}
-\section{Functions Documentation}
-\section{Functions Algorithms}
-\chapter{Base-N Integer Lists of Lists Library}
-\section{Fuctions Documentation}
-\section{Functions Algorithms}
+\chapter{Algorithms}
+	\section{BaseNIntegerList}
+
+		\begin{minipage}{\linewidth}
+			\emph{createIntegerList}: \emph{Integer} \(\rightarrow\) \emph{BaseNIntegerList}\\
+				Creates a new BaseNIntegerList for storing integers in the specified base.
+			\label{algo:BNIL-CreateIntegerList}
+			\input{algorithms/BaseNIntegerList/CreateIntegerList}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{isEmpty}: \emph{BaseNIntegerList} \(\rightarrow\) \emph{Boolean}\\
+				Returns true if the specified list is empty, false otherwise.
+			\label{algo:BNIL-IsEmpty}
+			\input{algorithms/BaseNIntegerList/IsEmpty}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{insertHead}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
+				Adds the specified integer (char*, represented in the considered base) at the beginning of the specified list.\\
+			\ov
+			\begin{itemize}
+				\item Creates a new element
+				\item Roots its following element to the actual head of the list
+				\item Reroots the head of the list to it
+				\item Increases the size of the list
+			\end{itemize}
+			\label{algo:BNIL-InsertHead}
+			\input{algorithms/BaseNIntegerList/InsertHead}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{insertTail}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
+				Adds the specified integer (char*) at the end of the specified list.\\
+			\ov
+			\begin{itemize}
+				\item Creates a new element
+				\item Roots its previous element to the actual tail of the list
+				\item Reroots the tail of the list to it
+				\item Increases the size of the list
+			\end{itemize}
+			\label{algo:BNIL-InsertTail}
+			\input{algorithms/BaseNIntegerList/InsertTail}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{removeHead}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
+				Removes the first element of the specified list.\\
+			\ov \emph{ (assuming the list has more than one element)}
+			\begin{itemize}
+				\item Reroots the head of the list to the second element
+				\item Deletes the new head's previous element
+				\item Reroots the head's previous element to nothing
+				\item Decreases the size of the list
+			\end{itemize}
+			\label{algo:BNIL-RemoveHead}
+			\input{algorithms/BaseNIntegerList/RemoveHead}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{removeTail}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
+				Removes the last element of the specified list.\\
+			\ov \emph{ (assuming the list has more than one element)}
+			\begin{itemize}
+				\item Reroots the tail of the list to the second-to-last element
+				\item Deletes the new tail's next element
+				\item Reroots the tail's next element to nothing
+				\item Decreases the size of the list
+			\end{itemize}
+			\label{algo:BNIL-RemoveTail}
+			\input{algorithms/BaseNIntegerList/RemoveTail}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{deleteIntegerList}: \emph{BaseNIntegerList} \(\rightarrow \emptyset\)
+				Clears and deletes the specified BaseNIntegerList (free previously allocated memory).\\
+			\label{algo:BNIL-DeleteIntegerList}
+			\input{algorithms/BaseNIntegerList/DeleteIntegerList}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\emph{sumIntegerList}: \emph{BaseNIntegerList} \(\rightarrow\) \emph{char*}\\
+				Sums all the intgers defined in the specified list using the Binary addition (base 2)
+				and returns the corresponding results as an integer (char*) defined in the base of the list.\\
+			\label{algo:BNIL-SumIntegerList}
+			\input{algorithms/BaseNIntegerList/SumIntegerList}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\label{algo:BNIL-BaseToInt}
+			\input{algorithms/BaseNIntegerList/BaseToInt}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\label{algo:BNIL-IntToBase}
+			\input{algorithms/BaseNIntegerList/IntToBase}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\label{algo:BNIL-ConvertBaseToBinary}
+			\input{algorithms/BaseNIntegerList/ConvertBaseToBinary}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\label{algo:BNIL-ConvertBinaryToBase}
+			\input{algorithms/BaseNIntegerList/ConvertBinaryToBase}
+		\end{minipage}
+		\nxtalgo
+
+		\begin{minipage}{\linewidth}
+			\label{algo:BNIL-SumBase}
+			\input{algorithms/BaseNIntegerList/SumBase}
+		\end{minipage}
+	\section{BaseNIntegerListOfList}
 \chapter{Input Output Library}
-\section{Functions Documentation}
 
 \end{document}

@@ -13,7 +13,7 @@ Begin
 |    |    max_size <- arraySize(value(head(list)))
 |    |    elem <- head(list)
 |    |
-|    |    while (next(elem) ≠ NULL) do
+|    |    while (next(elem) != undefined) do
 |    |    |    elem <- next(elem)
 |    |    |    tmp <- arraySize(value(elem))
 |    |    |    if (tmp > max_size)
