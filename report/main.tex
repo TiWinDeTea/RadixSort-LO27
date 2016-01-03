@@ -43,6 +43,7 @@
 \tableofcontents
 
 \chapter{Introduction}
+\chapter{Objectives and problem statements}
 \chapter{Algorithms}
 	\section{BaseNIntegerList}
 
@@ -123,7 +124,7 @@
 		\nxtalgo
 
 		\begin{minipage}{\linewidth}
-			\emph{deleteIntegerList}: \emph{BaseNIntegerList} \(\rightarrow \emptyset\)
+			\emph{deleteIntegerList}: \emph{BaseNIntegerList} \(\rightarrow \emptyset\)\\
 				Clears and deletes the specified BaseNIntegerList (free previously allocated memory).\\
 			\label{algo:BNIL-DeleteIntegerList}
 			\input{algorithms/BaseNIntegerList/DeleteIntegerList}
@@ -134,14 +135,21 @@
 			\emph{sumIntegerList}: \emph{BaseNIntegerList} \(\rightarrow\) \emph{char*}\\
 				Sums all the intgers defined in the specified list using the Binary addition (base 2)
 				and returns the corresponding results as an integer (char*) defined in the base of the list.\\
+			\ov\\
+			This function traverses the whole list, gradually summing each element.
 			\label{algo:BNIL-SumIntegerList}
 			\input{algorithms/BaseNIntegerList/SumIntegerList}
+			\emph{SumBase(a,b,c)} returns the sum \((a+b)\), with \(a\) and \(b\) in base \(c\)
 		\end{minipage}
 		\nxtalgo
 
 		\begin{minipage}{\linewidth}
+			\emph{BaseToInt}: \emph{char*} \(x\) \emph{integer} \(\rightarrow\) \emph{integer}\\
+				Converts the value \emph{char*} (given in base 10) into the given base.
 			\label{algo:BNIL-BaseToInt}
 			\input{algorithms/BaseNIntegerList/BaseToInt}
+			\emph{GetValue(a)} returns the value represented by the character \(a\)
+			(ie : \emph{(GetValue('F')} \(= 16\))
 		\end{minipage}
 		\nxtalgo
 
@@ -169,5 +177,5 @@
 		\end{minipage}
 	\section{BaseNIntegerListOfList}
 \chapter{Input Output Library}
-
+\chapter{Conclusion}
 \end{document}
