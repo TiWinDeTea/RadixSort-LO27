@@ -136,7 +136,8 @@ Besides being fully working, all these functions should be efficient and without
 			This function traverses the whole list, gradually summing each element.
 			\label{algo:BNIL-SumIntegerList}
 			\input{algorithms/BaseNIntegerList/SumIntegerList}
-			\textit{SumBase(a,b,c)} returns the sum $(a+b)$, with $a$ and $b$ in base $c$
+			\textit{SumBase(a,b,c)} returns the sum $(a+b)$, with $a$ and $b$ in base $c$.\\
+			See \hyperref[algo:BNIL-SumBase]{SumBase's algorithm} for more details.
 		\end{minipage}
 		\nxtalgo{}
 
@@ -180,8 +181,8 @@ Besides being fully working, all these functions should be efficient and without
 		\begin{minipage}{\linewidth}
 			\textit{SumBase}: \textit{char*} $\times$  \textit{char*} $\times$  \textit{integer} $\rightarrow$ \textit{char*}\\
 			Sum two integer (char*) represented with the specified base (Integer, third parameter) and return the sum in the same base.
-			\label{algo:BNIL-SumBase}
 			\input{algorithms/BaseNIntegerList/SumBase}
+			\label{algo:BNIL-SumBase}
 		\end{minipage}
 
 		\begin{minipage}{\linewidth}
@@ -243,7 +244,7 @@ Besides being fully working, all these functions should be efficient and without
 			\textit{radixsort}: \textit{BaseNIntegerListOfList} $\rightarrow \emptyset$\\
 			Sorts the specified BaseNIntegerList using the proposed radix sort approach.\\
 			\ov\\
-			This function works as specified in \hyperref[chapter 1]{chapter:Objectives}.\\
+			This function works as specified in \hyperref[chapter:Objectives]{chapter 1}.\\
 			Assuming the list is non-empty and that its base is b.
 			\begin{itemize}
 				\item[1]{} Scan all values, and let m be the number of digit of the longest value.
