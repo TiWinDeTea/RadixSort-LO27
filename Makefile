@@ -1,5 +1,6 @@
 #User-set variables ; OBJDIR and SOURCEDIR should end with '/'
 COMPILER	= gcc
+DEBUGGER	= gdb
 CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3 -ansi
 BINDIR		= bin/
 OBJDIR		= obj/
@@ -107,9 +108,9 @@ clean:
 	@printf "Done\n"
 
 #rebuilds the executable in debug and starts it
-debug: CFLAGS=-Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -g
+debug: CFLAGS += -g
 debug: clean $(EXECUTABLE)
-	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(BINDIR) gdb $(EXECUTABLE)
+	@LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(BINDIR) $(DEBUGGER)
 
 
 #help
@@ -123,6 +124,7 @@ help:
 	@printf "  \033[36mrun\033[0m          Executes the executable (builds it if required)\n"
 	@printf "  \033[36mlib\033[0m          Builds all libs (lib$(LIB2SOURCENAME:.c=.so), lib$(LIBSOURCENAME:.c=.so), lib$(IOSOURCENAME:.c=.so))\n"
 	@printf "  \033[36mlibs\033[0m         Similar to 'make --silent lib'\n"
+	@printf "  \033[36mdebug\033[0m        Rebuilds the executable with the additionnal flag '-g' and runs $(DEBUGGER)\n"
 	@printf "  \033[36mclean/clear\033[0m  Cleans all generated files and folders (if empty)\n\n"
 	@printf "\033[1mBuild folders\033[0m\n"
 	@printf "  objects files : \033[36m$(OBJDIR)\033[0m\n"
