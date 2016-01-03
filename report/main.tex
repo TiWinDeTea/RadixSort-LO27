@@ -5,9 +5,11 @@
 
 \chapter*{Introduction}
 In this document, we will present you BaseNIntegerList, and BaseNIntegerListOfList libraries. We'll also make a quick introduction to the io library.\\
-\qquad \textit{BaseNIntegerList} is a library implementing a doubly link list and functions to manage them.\\
-\qquad \textit{BaseNIntegerListOfList} is a library implementing methods for lists of BaseNIntegerList and their management.\\
-\qquad \textit{io} is a library, implementing input and output functions.\\
+\begin{itemize}
+	\item{}   \textit{BaseNIntegerList} is a library implementing a doubly link list and functions to manage them.\\
+	\item{}   \textit{BaseNIntegerListOfList} is a library implementing methods for lists of BaseNIntegerList and their management.\\
+	\item{}   \textit{io} is a library, implementing input and output functions.\\
+\end{itemize}
 
 All these libraries were built in order to implement a radix sort solution.\\
 
@@ -246,28 +248,27 @@ Besides being fully working, all these functions should be efficient and without
 	The \textit{io} library is a library that implements some useful input and output functions, especially for BaseNIntegerList.\\
 	We used it to provide a nice CLI for the user.\\
 	\section{Usefull functions}
+	\begin{itemize}
 		\textit{Clear}\\
-			\qquad Clears the screen\\
+		\item{} Clears the screen
 		\textit{SetTextColor, SetTextAttributes, SetBgColor}\\
-			\qquad Changes the colors and the attributes of the text (bold,\ldots)\\
+		\item{}    Changes the colors and the attributes of the text (bold,\ldots)
 		\textit{PrintList}\\
-			\qquad Prints a list. All numbers displayed are between brackets, and a whitespace is displayed every
-			3 or 4 digits (depending on the base)\\
+		\item{}    Prints a list. All numbers displayed are between brackets, and a whitespace is displayed every 3 or 4 digits (depending on the base)
 		\textit{Menu}\\
-			\qquad Prints a menu where you can navigate using arrows and page up/down, and select your choice
-			pressing enter.\\
+		\item{}    Prints a menu where you can navigate using arrows and page up/down, and select your choice pressing enter.
 		\textit{GetNumberWithinRange}\\
-			\qquad Waits for the user to input a number within a given range. If the user inputs a number out of
-			the asked range, the input is voided and to be repeated\\
-		\textit{GetList}\\
-			\qquad Asks the user to input a list. It can be manually inputed or randomly generated.\\
+		\item{}    Waits for the user to input a number within a given range. If the user inputs a number out of the asked range, the input is voided and to be repeated
+		\textit{GetList}
+		\item{}    Asks the user to input a list. It can be manually inputed or randomly generated.
 		\textit{InstantGetChar}\\
-			\qquad Similar to a normal getChar() but it doesn't wait for the user to press enter.\\
+		\item{}    Similar to a normal getChar() but it doesn't wait for the user to press enter.
+	\end{itemize}
 	\section{Menu}
 		In this section, we will talk a little bit more in detail about the \textit{Menu} and the \textit{GetList} functions.\\
 		\newline
-		The \textit{Menu} function took us quite some times. Its prototype is the following :\\
-		\textit{function Menu}(choices: \textit{array<characters>}, nb\_choices: \textit{integer}, text\_color: \textit{array<characters>}, bg\_color: \textit{array<characters}, choice: \textit{integer}): \textit{integer}\\
+		The \textit{Menu} function took us quite some time. Its prototype is the following :\\
+		\textit{function Menu}(choices: \textit{array$<$characters$>$}, nb\_choices: \textit{integer}, text\_color: \textit{array$<$characters$>$}, bg\_color: \textit{array$<$characters$>$}, choice: \textit{integer}): \textit{integer}\\
 		\begin{itemize}
 			\item{} choices is a string with each choice, separated by a null character
 			\item{} nb\_choices is the number of choices the user has
@@ -278,7 +279,7 @@ Besides being fully working, all these functions should be efficient and without
 		The selected choice will be displayed in inverted color (background color becomes the text color and vice-versa).\\
 		All choices are display in an rectangle, which color is 'bg\_color', with two grey lines on the top and right.\\
 		\newline
-		\ov
+		\ov\\
 		The first step is to convert the choices array into sub arrays containing each one a single choice. This is done by scanning for null characters.\\
 		After that, we will look for the longest choice, to know the width of our rectangle (the height is given by the number of choices).\\
 		When this is done, we will compute the coordinate of the left character of each choice. This is not really a required step for the way we used the menu, but thanks to that, it can be easily adapted to display choices with a centered or right aligned display of each choice.\\
