@@ -39,7 +39,7 @@ Besides being fully working, all these functions should be efficient and without
 
 \chapter{Algorithms} \label{chapter:Algorithms}
 	\section{BaseNIntegerList}
-	The \texit{BaseNIntegerList} library implements a doubly linked list structure, with management functions as well.\\
+	The \textit{BaseNIntegerList} library implements a doubly linked list structure, with management functions as well.\\
 	A BaseNIntegerList contains a pointer to its first and last element, an integer telling its base, and an integer telling the number of elements within it.\\
 	An Element contains a value (stored as an array of characters in the base of the list), a pointer to its predecessor, and a pointer to its successor.\\
 
@@ -187,7 +187,7 @@ Besides being fully working, all these functions should be efficient and without
 		\end{minipage}
 
 	\section{BaseNIntegerListOfList}
-		The \texit{BaseNIntegerListOfList} library implements a structure, with management functions as well.\\
+		The \textit{BaseNIntegerListOfList} library implements a structure, with management functions as well.\\
 		The BaseNIntegerListOfList structure is basically an array of n lists in base n.\\
 
 		\begin{minipage}{\linewidth}
@@ -242,4 +242,7 @@ Besides being fully working, all these functions should be efficient and without
 The \textit{io} library is a library that implements some useful input and output functions, especially for BaseNIntegerList.\\
 We used it to provide a nice CLI for the user.\\
 \chapter{Conclusion} \label{chapter:Conclusion}
+	The base manipulation function were very interesting to think about and the limitation of number convertion to 2 147 483 647 can be overcome by implementing a conversion function using a function that compute the multiplication in any base, this function would use the addition in any base already in the lib.
+
+	Use pointers instead of copy the numbers (char*) and even just reroot the ListElem* of the lists into the bucketlists and after reroot them in the list. With this modification we can use only  one ListOfList and one List for the RadixSort.
 \end{document}
