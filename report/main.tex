@@ -194,10 +194,42 @@ Besides being fully working, all these functions should be efficient and without
 		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\textit{buildBucketList}: \textit{Integer} $\rightarrow$ \textit{BaseNIntegerListOfList}\\
+			\textit{buildBucketList}: \textit{BaseNIntegerList} $\times$ \textit{Integer} $\rightarrow$ \textit{BaseNIntegerListOfList}\\
 			Builds a new BaseNIntegerListOfList according to the specified BaseNIntegerList and considering the specified digit position (rightmost).
 			\label{algo:BNIL-BuildBucketList}
 			\input{algorithms/BaseNIntegerListOfList/BuildBucketList}
+		\end{minipage}
+		\nxtalgo{}
+
+		\begin{minipage}{\linewidth}
+			\textit{buildIntegerList}: \textit{BaseNIntegerListOfList} $\rightarrow$ \textit{BaseNIntegerList}\\
+			Builds a new BaseNIntegerList from the specified BaseNIntegerListOfList (respecting the ascending order on the buckets).
+			\label{algo:BNIL-BuildIntegerList}
+			\input{algorithms/BaseNIntegerListOfList/BuildIntegerList}
+		\end{minipage}
+		\nxtalgo{}
+
+		\begin{minipage}{\linewidth}
+			\textit{addIntegerIntoBucket}: \textit{BaseNIntegerListOfList} $\times$  \textit{char*} $\times$  \textit{integer} $\rightarrow$ \textit{BaseNIntegerListOfList}\\
+			Adds a new integer (char*) at the end of the specified list in bucket N (N being the third parameter).
+			\label{algo:BNIL-AddIntegerIntoBucket}
+			\input{algorithms/BaseNIntegerListOfList/AddIntegerIntoBucket}
+		\end{minipage}
+		\nxtalgo{}
+
+		\begin{minipage}{\linewidth}
+			\textit{deleteBucketList}: \textit{BaseNIntegerListOfList} $\rightarrow \emptyset$\\
+			Clears and deletes the specified BaseNIntegerListOfList (free the previously allocated memory).
+			\label{algo:BNIL-DeleteBucketList}
+			\input{algorithms/BaseNIntegerListOfList/DeleteBucketList}
+		\end{minipage}
+		\nxtalgo{}
+
+		\begin{minipage}{\linewidth}
+			\textit{radixsort}: \textit{BaseNIntegerListOfList} $\rightarrow \emptyset$\\
+			Sorts the specified BaseNIntegerList using the proposed radix sort approach.
+			\label{algo:BNIL-RadixSort}
+			\input{algorithms/BaseNIntegerListOfList/RadixSort}
 		\end{minipage}
 		\nxtalgo{}
 
