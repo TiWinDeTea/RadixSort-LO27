@@ -144,9 +144,8 @@ Besides being fully working, all these functions should be efficient and without
 			\textit{BaseToInt}: \textit{char*} $\times$ \textit{integer} $\rightarrow$ \textit{integer}\\
 			Converts the value char* (in the given base) into integer.
 			\ov\\
-			\begin{itemize}
-				\item
-			\end{itemize}
+			n starts at 0.\\
+			For each digit, we sum n and the given digit multiplied by the base^(digit position) -- where digit position is the position of the digit in the number, starting to the left.
 			\label{algo:BNIL-BaseToInt}
 			\input{algorithms/BaseNIntegerList/BaseToInt}
 			\textit{GetValue(a)} returns the value represented by the character $a$
