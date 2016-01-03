@@ -141,6 +141,10 @@ Besides being fully working, all these functions should be efficient and without
 		\begin{minipage}{\linewidth}
 			\textit{BaseToInt}: \textit{char*} $\times$ \textit{integer} $\rightarrow$ \textit{integer}\\
 			Converts the value char* (in the given base) into integer.
+			\ov\\
+			\begin{itemize}
+				\item 
+			\end{itemize}
 			\label{algo:BNIL-BaseToInt}
 			\input{algorithms/BaseNIntegerList/BaseToInt}
 			\textit{GetValue(a)} returns the value represented by the character $a$
@@ -239,10 +243,26 @@ Besides being fully working, all these functions should be efficient and without
 		\nxtalgo{}
 
 \chapter{Input Output Library} \label{chapter:IO-Lib}
-The \textit{io} library is a library that implements some useful input and output functions, especially for BaseNIntegerList.\\
-We used it to provide a nice CLI for the user.\\
+	The \textit{io} library is a library that implements some useful input and output functions, especially for BaseNIntegerList.\\
+	We used it to provide a nice CLI for the user.\\
 \chapter{Conclusion} \label{chapter:Conclusion}
-	The base manipulation function were very interesting to think about and the limitation of number convertion to 2 147 483 647 can be overcome by implementing a conversion function using a function that compute the multiplication in any base, this function would use the addition in any base already in the lib.
+	The work distribution was:
+	\begin{itemize}
+		\item{} Maxime:
+			\begin{itemize}
+				\item{} BaseNIntegerList library
+				\item{} BaseNIntegerListOfList library
+			\end{itemize}
+		\item{} Lucas:
+			\begin{itemize}
+				\item{} io library
+				\item{} radixsortmain
+			\end{itemize}
+	\end{itemize}
+	Base manipulation functions were very interesting to think about and the limitation of number convertion to 2 147 483 647 can be overcome by implementing a conversion function using a function that compute the multiplication in any base, this function would use the addition in any base already in the lib.
 
-	Use pointers instead of copy the numbers (char*) and even just reroot the ListElem* of the lists into the bucketlists and after reroot them in the list. With this modification we can use only  one ListOfList and one List for the RadixSort.
+	We apreciated to implement the CLI because unlike the Lists libraries the result is visual and user adjustable and colorful. 
+
+	If we had to change someting in this programme this would be to use more pointers.
+	Use pointers instead of copy the numbers (char*) and even just reroot the ListElem* of the lists into the bucketlists and after reroot them in the list. With this modification we can use only one ListOfList and one List for the RadixSort.
 \end{document}
