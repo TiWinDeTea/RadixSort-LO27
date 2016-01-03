@@ -5,6 +5,7 @@
 \usepackage{natbib}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{hyperref}
 
 \newcommand{\nxtalgo}{\centerline{$$$$\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#$$$$}}
 \newcommand{\ov}{\textbf{Overview}}
@@ -34,11 +35,13 @@ In this document, we will present you BaseNIntegerList, and BaseNIntegerListOfLi
 
 All these libraries were built in order to implement a radix sort solution.\\
 
-In the first chapter, we will talk about the objectives of this project, and the problems we encountered.\\
-In the second chapter, we will introduce the founded solutions, with their algorithms.
-Finally, in the third chapter, we will quickly talk about  the io library
+In the \hyperref[chapter:Objectives]{first chapter}, we will talk about the objectives of this project, and the problems we encountered.\\
+In the \hyperref[chapter:Algorithms]{second chapter}, we will introduce the founded solutions, with their algorithms.
+Finally, in the \hyperref[chapter:IO-Lib]{third chapter}, we will quickly talk about  the io library
+
 \tableofcontents{}
-\chapter{Objectives and problem statements}
+
+\chapter{Objectives and problem statements} \label{chapter:Objectives}
 The main objective of this project was to implement a library that could perform a Radix Sort.\\
 Radix sort is a algorithm used to sort numbers. It works as the following (with m the maximum number of digit in the elements of the list, b the base of the numbers)\footnote{Note that this is a Least Significant Digit (LSD) Radix Sort variant} :\\
 \begin{itemize}
@@ -49,8 +52,16 @@ Radix sort is a algorithm used to sort numbers. It works as the following (with 
 	\item[5]{} if m is greater or equal to n, increase n by 1 and step back to 2.
 \end{itemize}
 
+In order to complete this objective, we had to face several problems :
+\begin{itemize}
+	\item{} Implement functions to manage BaseNIntegerList
+	\item{} Implement functions to manage Bucket List
+	\item{} Implement functions to have a user-friendly interface
+\end{itemize}
 
-\chapter{Algorithms}
+Besides being fully working, all these functions should be efficient and without memory leaks.
+
+\chapter{Algorithms} \label{chapter:Algorithms}
 	\section{BaseNIntegerList}
 
 		\begin{minipage}{\linewidth}
@@ -214,6 +225,6 @@ Radix sort is a algorithm used to sort numbers. It works as the following (with 
 		\end{minipage}
 		\nxtalgo{}
 
-\chapter{Input Output Library}
-\chapter{Conclusion}
+\chapter{Input Output Library} \label{chapter:IO-Lib}
+\chapter{Conclusion} \label{chapter:Conclusion}
 \end{document}
