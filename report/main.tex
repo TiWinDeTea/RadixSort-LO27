@@ -1,4 +1,4 @@
-\documentclass[book, backcover, english, report, nodocumentinfo]{upmethodology-document}
+\documentclass[book, backcover, english, nodocumentinfo]{upmethodology-document}
 
 \include{settings}
 \usepackage[utf8]{inputenc}
@@ -27,8 +27,29 @@
 \begin{document}
 
 \chapter*{Introduction}
+In this document, we will present you BaseNIntegerList, and BaseNIntegerListOfList libraries. We'll also make a quick introduction to the io library.\\
+\qquad \textit{BaseNIntegerList} is a library implementing a doubly link list and functions to manage them.\\
+\qquad \textit{BaseNIntegerListOfList} is a library implementing methods for lists of BaseNIntegerList and their management.\\
+\qquad \textit{io} is a library, implementing input and output functions.\\
+
+All these libraries were built in order to implement a radix sort solution.\\
+
+In the first chapter, we will talk about the objectives of this project, and the problems we encountered.\\
+In the second chapter, we will introduce the founded solutions, with their algorithms.
+Finally, in the third chapter, we will quickly talk about  the io library
 \tableofcontents{}
 \chapter{Objectives and problem statements}
+The main objective of this project was to implement a library that could perform a Radix Sort.\\
+Radix sort is a algorithm used to sort numbers. It works as the following (with m the maximum number of digit in the elements of the list, b the base of the numbers)\footnote{Note that this is a Least Significant Digit (LSD) Radix Sort variant} :\\
+\begin{itemize}
+	\item[1]{} let \(n\) equals 1, and make a ListOfList of B lists
+	\item[2]{} Traverse all the list, watching for the \(n^{th}\) digit of each value, starting from the right.
+	\item[3]{} Store each element in its corresponding List. If the watched digit was 1, it should go in the  list 1.
+	\item[4]{} Convert the list of list into a single list, enqueing them.
+	\item[5]{} if m is greater or equal to n, increase n by 1 and step back to 2.
+\end{itemize}
+
+
 \chapter{Algorithms}
 	\section{BaseNIntegerList}
 
@@ -64,7 +85,7 @@
 		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\textit{insertTail}: \textit{BaseNIntegerList} $\times$ \textit(char*) $\rightarrow$ \textit{BaseNIntegerList}\\
+			\textit{insertTail}: \textit{BaseNIntegerList} $\times$ \textit{char*} $\rightarrow$ \textit{BaseNIntegerList}\\
 			Adds the specified integer (char*) at the end of the specified list.\\
 			\ov
 			\begin{itemize}
@@ -79,7 +100,7 @@
 		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\textit{removeHead}: \textit{BaseNIntegerList} $\times$ \textit(char*) $\rightarrow$ \textit{BaseNIntegerList}\\
+			\textit{removeHead}: \textit{BaseNIntegerList} $\times$ \textit{char*} $\rightarrow$ \textit{BaseNIntegerList}\\
 			Removes the first element of the specified list.\\
 			\ov \textit{ (assuming the list has more than one element)}
 			\begin{itemize}
@@ -94,7 +115,7 @@
 		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\textit{removeTail}: \textit{BaseNIntegerList} $\times$ \textit(char*) $\rightarrow$ \textit{BaseNIntegerList}\\
+			\textit{removeTail}: \textit{BaseNIntegerList} $\times$ \textit{char*} $\rightarrow$ \textit{BaseNIntegerList}\\
 			Removes the last element of the specified list.\\
 			\ov \textit{ (assuming the list has more than one element)}
 			\begin{itemize}
