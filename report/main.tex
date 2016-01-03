@@ -7,7 +7,7 @@
 \usepackage{amssymb}
 
 \newcommand{\nxtalgo}{\centerline{$$$$\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#$$$$}}
-\newcommand{\ov}{\emph{Overview}}
+\newcommand{\ov}{\textbf{Overview}}
 
 \setfrontcover{classic}
 
@@ -27,30 +27,30 @@
 \begin{document}
 
 \chapter*{Introduction}
-\tableofcontents
+\tableofcontents{}
 \chapter{Objectives and problem statements}
 \chapter{Algorithms}
 	\section{BaseNIntegerList}
 
 		\begin{minipage}{\linewidth}
-			\emph{createIntegerList}: \emph{Integer} \(\rightarrow\) \emph{BaseNIntegerList}\\
-				Creates a new BaseNIntegerList for storing integers in the specified base.
+			\textit{createIntegerList}: \textit{Integer} $\rightarrow$ \textit{BaseNIntegerList}\\
+			Creates a new BaseNIntegerList for storing integers in the specified base.
 			\label{algo:BNIL-CreateIntegerList}
 			\input{algorithms/BaseNIntegerList/CreateIntegerList}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{isEmpty}: \emph{BaseNIntegerList} \(\rightarrow\) \emph{Boolean}\\
-				Returns true if the specified list is empty, false otherwise.
+			\textit{isEmpty}: \textit{BaseNIntegerList} $\rightarrow$ \textit{Boolean}\\
+			Returns true if the specified list is empty, false otherwise.
 			\label{algo:BNIL-IsEmpty}
 			\input{algorithms/BaseNIntegerList/IsEmpty}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{insertHead}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
-				Adds the specified integer (char*, represented in the considered base) at the beginning of the specified list.\\
+			\textit{insertHead}: \textit{BaseNIntegerList} $\times$ \textit{char*} $\rightarrow$ \textit{BaseNIntegerList}\\
+			Adds the specified integer (char*, represented in the considered base) at the beginning of the specified list.\\
 			\ov
 			\begin{itemize}
 				\item Creates a new element
@@ -61,11 +61,11 @@
 			\label{algo:BNIL-InsertHead}
 			\input{algorithms/BaseNIntegerList/InsertHead}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{insertTail}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
-				Adds the specified integer (char*) at the end of the specified list.\\
+			\textit{insertTail}: \textit{BaseNIntegerList} $\times$ \textit(char*) $\rightarrow$ \textit{BaseNIntegerList}\\
+			Adds the specified integer (char*) at the end of the specified list.\\
 			\ov
 			\begin{itemize}
 				\item Creates a new element
@@ -76,12 +76,12 @@
 			\label{algo:BNIL-InsertTail}
 			\input{algorithms/BaseNIntegerList/InsertTail}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{removeHead}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
-				Removes the first element of the specified list.\\
-			\ov \emph{ (assuming the list has more than one element)}
+			\textit{removeHead}: \textit{BaseNIntegerList} $\times$ \textit(char*) $\rightarrow$ \textit{BaseNIntegerList}\\
+			Removes the first element of the specified list.\\
+			\ov \textit{ (assuming the list has more than one element)}
 			\begin{itemize}
 				\item Reroots the head of the list to the second element
 				\item Deletes the new head's previous element
@@ -91,12 +91,12 @@
 			\label{algo:BNIL-RemoveHead}
 			\input{algorithms/BaseNIntegerList/RemoveHead}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{removeTail}: \emph{BaseNIntegerList} \(x\) \emph(char*) \(\rightarrow\) \emph{BaseNIntegerList}\\
-				Removes the last element of the specified list.\\
-			\ov \emph{ (assuming the list has more than one element)}
+			\textit{removeTail}: \textit{BaseNIntegerList} $\times$ \textit(char*) $\rightarrow$ \textit{BaseNIntegerList}\\
+			Removes the last element of the specified list.\\
+			\ov \textit{ (assuming the list has more than one element)}
 			\begin{itemize}
 				\item Reroots the tail of the list to the second-to-last element
 				\item Deletes the new tail's next element
@@ -106,59 +106,73 @@
 			\label{algo:BNIL-RemoveTail}
 			\input{algorithms/BaseNIntegerList/RemoveTail}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{deleteIntegerList}: \emph{BaseNIntegerList} \(\rightarrow \emptyset\)\\
-				Clears and deletes the specified BaseNIntegerList (free previously allocated memory).\\
+			\textit{deleteIntegerList}: \textit{BaseNIntegerList} $\rightarrow \emptyset$\\
+			Clears and deletes the specified BaseNIntegerList (free previously allocated memory).\\
 			\label{algo:BNIL-DeleteIntegerList}
 			\input{algorithms/BaseNIntegerList/DeleteIntegerList}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{sumIntegerList}: \emph{BaseNIntegerList} \(\rightarrow\) \emph{char*}\\
-				Sums all the intgers defined in the specified list using the Binary addition (base 2)
-				and returns the corresponding results as an integer (char*) defined in the base of the list.\\
+			\textit{sumIntegerList}: \textit{BaseNIntegerList} $\rightarrow$ \textit{char*}\\
+			Sums all the intgers defined in the specified list using the Binary addition (base 2) and returns the corresponding results as an integer (char*) defined in the base of the list.\\
 			\ov\\
 			This function traverses the whole list, gradually summing each element.
 			\label{algo:BNIL-SumIntegerList}
 			\input{algorithms/BaseNIntegerList/SumIntegerList}
-			\emph{SumBase(a,b,c)} returns the sum \((a+b)\), with \(a\) and \(b\) in base \(c\)
+			\textit{SumBase(a,b,c)} returns the sum $(a+b)$, with $a$ and $b$ in base $c$
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
-			\emph{BaseToInt}: \emph{char*} \(x\) \emph{integer} \(\rightarrow\) \emph{integer}\\
-				Converts the value \emph{char*} (given in base 10) into the given base.
+			\textit{BaseToInt}: \textit{char*} $\times$ \textit{integer} $\rightarrow$ \textit{integer}\\
+			Converts the value char* (in the given base) into integer.
 			\label{algo:BNIL-BaseToInt}
 			\input{algorithms/BaseNIntegerList/BaseToInt}
-			\emph{GetValue(a)} returns the value represented by the character \(a\)
-			(ie : \emph{(GetValue('F')} \(= 16\))
+			\textit{GetValue(a)} returns the value represented by the character $a$
+			(ie : \textit{(GetValue('F')} $= 16$)
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
+			\textit{IntToBase}: \textit{integer} $\times$ \textit{integer} $\rightarrow$ \textit{char*}\\
+			Converts the integer value into char* in the given base.
 			\label{algo:BNIL-IntToBase}
 			\input{algorithms/BaseNIntegerList/IntToBase}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
+			\textit{ConvertBaseToBinary}: \textit{char*} $\times$ \textit{integer} $\rightarrow$ \textit{char*}\\
+			Converts the specied integer (char*) represented with the specified base (Integer, second parameter) into a corresponding binary integer (base 2).
 			\label{algo:BNIL-ConvertBaseToBinary}
 			\input{algorithms/BaseNIntegerList/ConvertBaseToBinary}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
+			\textit{ConvertBinaryToBase}: \textit{char*} $\times$ \textit{integer} $\rightarrow$ \textit{char*}\\
+			Converts an integer represented using a binary base (base 2) into a corresponding integer represented with the specified base (Integer, second parameter).
 			\label{algo:BNIL-ConvertBinaryToBase}
 			\input{algorithms/BaseNIntegerList/ConvertBinaryToBase}
 		\end{minipage}
-		\nxtalgo
+		\nxtalgo{}
 
 		\begin{minipage}{\linewidth}
+			\textit{SumBase}: \textit{char*} $\times$  \textit{char*} $\times$  \textit{integer} $\rightarrow$ \textit{char*}\\
+			Sum two integer (char*) represented with the specified base (Integer, third parameter) and return the sum in the same base.
 			\label{algo:BNIL-SumBase}
 			\input{algorithms/BaseNIntegerList/SumBase}
+		\end{minipage}
+
+		\begin{minipage}{\linewidth}
+			\textit{SumBase}: \textit{char*} $\times$  \textit{char*} $\times$  \textit{integer} $\rightarrow$ \textit{char*}\\
+			Sum two integer (char*) represented in binary base and return the sum in binary base.
+			\label{algo:BNIL-SumBinary}\\
+			\textbf{Similar to \textit{SumBase}}
 		\end{minipage}
 	\section{BaseNIntegerListOfList}
 \chapter{Input Output Library}
