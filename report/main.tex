@@ -23,11 +23,11 @@ Finally, in the \hyperref[chapter:IO-Lib]{third chapter}, we will quickly talk a
 The main objective of this project was to implement two libraries, with one that could perform a Radix Sort, together with an user-friendly executable to tests the library.\\
 Radix sort is a algorithm used to sort numbers. It works as the following (with m the maximum number of digit in the elements of the list, b the base of the numbers)\footnote{Note that this is a Least Significant Digit (LSD) Radix Sort variant} :\\
 \begin{itemize}
-	\item[1]{} let \(n\) equals 1, and make a ListOfList of B lists
-	\item[2]{} Traverse all the list, watching for the \(n^{th}\) digit of each value, starting from the right.
+	\item[1]{} let $n$ equals 1, and make a ListOfList of B lists
+	\item[2]{} Traverse all the list, watching for the $n^{th}$ digit of each value, starting from the right.
 	\item[3]{} Store each element in its corresponding List. If the watched digit was 1, it should go in the  list 1.
 	\item[4]{} Convert the list of list into a single list, enqueing them.
-	\item[5]{} if m is greater or equal to n, increase n by 1 and step back to 2.
+	\item[5]{} if $m$ is greater or equal to $n$, increase $n$ by 1 and step back to 2.
 \end{itemize}
 
 In order to complete this objective, we had to face several problems :
