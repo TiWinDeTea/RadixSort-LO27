@@ -79,6 +79,7 @@ unsigned char Menu(const char* choices, unsigned char nb_choices, char* text_col
  * @return True if user inputed yes, False otherwise
  */
 BOOL yes(char* question, char default_ans);
+
 /*
  * Retrieves a number inputed in base i_base
  * @param i_base       input base
@@ -95,6 +96,12 @@ BaseNIntegerList GetList(void);
 /* Gets a char without waiting for the user to input '\n' */
 char InstantGetChar(void);
 
+/*
+ * Gets a number within a given range
+ * @param min minimum value to return
+ * @param max maximum value to return
+ * @return    value inputed by the user
+ */
 unsigned long int GetNumberWithinRange(unsigned long int min, unsigned long int max);
 /* inner functions */
 

@@ -18,7 +18,7 @@ Finally, in the \hyperref[chapter:IO-Lib]{third chapter}, we will quickly talk a
 \tableofcontents{}
 
 \chapter{Objectives and problem statements} \label{chapter:Objectives}
-The main objective of this project was to implement a library that could perform a Radix Sort.\\
+The main objective of this project was to implement two libraries, with one that could perform a Radix Sort, together with an user-friendly executable to tests the library.\\
 Radix sort is a algorithm used to sort numbers. It works as the following (with m the maximum number of digit in the elements of the list, b the base of the numbers)\footnote{Note that this is a Least Significant Digit (LSD) Radix Sort variant} :\\
 \begin{itemize}
 	\item[1]{} let \(n\) equals 1, and make a ListOfList of B lists
@@ -39,6 +39,9 @@ Besides being fully working, all these functions should be efficient and without
 
 \chapter{Algorithms} \label{chapter:Algorithms}
 	\section{BaseNIntegerList}
+	The \texit{BaseNIntegerList} library implements a doubly linked list structure, with management functions as well.\\
+	A BaseNIntegerList contains a pointer to its first and last element, an integer telling its base, and an integer telling the number of elements within it.\\
+	An Element contains a value (stored as an array of characters in the base of the list), a pointer to its predecessor, and a pointer to its successor.\\
 
 		\begin{minipage}{\linewidth}
 			\textit{createIntegerList}: \textit{Integer} $\rightarrow$ \textit{BaseNIntegerList}\\
@@ -184,6 +187,8 @@ Besides being fully working, all these functions should be efficient and without
 		\end{minipage}
 
 	\section{BaseNIntegerListOfList}
+		The \texit{BaseNIntegerListOfList} library implements a structure, with management functions as well.\\
+		The BaseNIntegerListOfList structure is basically an array of n lists in base n.\\
 
 		\begin{minipage}{\linewidth}
 			\textit{createBucketList}: \textit{Integer} $\rightarrow$ \textit{BaseNIntegerListOfList}\\
@@ -234,5 +239,7 @@ Besides being fully working, all these functions should be efficient and without
 		\nxtalgo{}
 
 \chapter{Input Output Library} \label{chapter:IO-Lib}
+The \textit{io} library is a library that implements some useful input and output functions, especially for BaseNIntegerList.\\
+We used it to provide a nice CLI for the user.\\
 \chapter{Conclusion} \label{chapter:Conclusion}
 \end{document}
