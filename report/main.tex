@@ -143,7 +143,7 @@ Besides being fully working, all these functions should be efficient and without
 			Converts the value char* (in the given base) into integer.
 			\ov\\
 			\begin{itemize}
-				\item 
+				\item
 			\end{itemize}
 			\label{algo:BNIL-BaseToInt}
 			\input{algorithms/BaseNIntegerList/BaseToInt}
@@ -267,7 +267,7 @@ Besides being fully working, all these functions should be efficient and without
 		In this section, we will talk a little bit more in detail about the \textit{Menu} and the \textit{GetList} functions.\\
 		\newline
 		The \textit{Menu} function took us quite some times. Its prototype is the following :\\
-		\textit{function Menu}(choices: \textit{array<characters>}, nb_choices: \textit{integer}, text_color: \textit{array<characters>}, bg_color: \textit{array<characters}, choice: \textit{integer}): \textit{integer}
+		\textit{function Menu}(choices: \textit{array<characters>}, nb\_choices: \textit{integer}, text\_color: \textit{array<characters>}, bg\_color: \textit{array<characters}, choice: \textit{integer}): \textit{integer}\\
 		\begin{itemize}
 			\item{} choices is a string with each choice, separated by a null character
 			\item{} nb_choices is the number of choices the user has
@@ -284,13 +284,13 @@ Besides being fully working, all these functions should be efficient and without
 		When this is done, we will compute the coordinate of the left character of each choice. This is not really a required step for the way we used the menu, but thanks to that, it can be easily adapted to display choices with a centered or right aligned display of each choice.\\
 		The hardest job is done. All what's left is to wait for user to press a 'choice modifier key' -- in that case, change the selection -- or enter -- in this case, return.\\
 
-	
+
 \chapter{Conclusion} \label{chapter:Conclusion}
 	Maxime Pinard worked more on the functional part of the the project while Lucas Lazare focused more on the interface part and the makefile
-	
+
 	Base manipulation functions were very interesting to think about and the limitation of number convertion to 2 147 483 647 can be overcome by implementing a conversion function using a function that compute the multiplication in any base, this function would use the addition in any base already in the lib.
 
-	We apreciated to implement the CLI because unlike the Lists libraries the result is visual and user adjustable and colorful. 
+	We apreciated to implement the CLI because unlike the Lists libraries the result is visual and user adjustable and colorful.
 
 	If we had to change someting in this programme this would be to use more pointers.
 	Use pointers instead of copy the numbers (char*) and even just reroot the ListElem* of the lists into the bucketlists and after reroot them in the list. With this modification we can use only one ListOfList and one List for the RadixSort.
