@@ -1,4 +1,4 @@
-\documentclass[backcover, english, report, nodocumentinfo]{upmethodology-document}
+\documentclass[book, backcover, english, report, nodocumentinfo]{upmethodology-document}
 
 \include{settings}
 \usepackage[utf8]{inputenc}
@@ -19,30 +19,15 @@
 \addauthorvalidator*[lucas.lazare@utbm.fr]{Lucas}{LAZARE}{Author}
 \addauthorvalidator*[maxime.pinard@utbm.fr]{Maxime}{PINARD}{Author}
 
-\setdocabstract{}
 \setdockeywords{\LaTeX, LO27, Base-N integer list, Radix sort}
-
-
-\makeatletter
-\let\VERversion\upm@package@version@ver
-\let\VERfmt\upm@package@fmt@ver
-\let\VERdoc\upm@package@doc@ver
-\let\VERfp\upm@package@fp@ver
-\let\VERbp\upm@package@bp@ver
-\let\VERext\upm@package@ext@ver
-\let\VERtask\upm@package@task@ver
-\let\VERdocclazz\upm@package@docclazz@ver
-\let\VERcode\upm@package@code@ver
-\makeatother
 
 \setcopyrighter{Lucas LAZARE \& Maxime PINARD}
 \setprintingaddress{France}
 
 \begin{document}
 
+\chapter*{Introduction}
 \tableofcontents
-
-\chapter{Introduction}
 \chapter{Objectives and problem statements}
 \chapter{Algorithms}
 	\section{BaseNIntegerList}
