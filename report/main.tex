@@ -23,11 +23,11 @@ Finally, in the \hyperref[chapter:IO-Lib]{third chapter}, we will quickly talk a
 The main objective of this project was to implement two libraries, with one that could perform a Radix Sort, together with an user-friendly executable to tests the library.\\
 Radix sort is a algorithm used to sort numbers. It works as the following (with m the maximum number of digit in the elements of the list, b the base of the numbers)\footnote{Note that this is a Least Significant Digit (LSD) Radix Sort variant} :\\
 \begin{itemize}
-	\item[1]{} let $n$ equals 1, and make a ListOfList of B lists
+	\item[1]{} Let $n$ equals 1, and make a ListOfList of b lists
 	\item[2]{} Traverse all the list, watching for the $n^{th}$ digit of each value, starting from the right.
 	\item[3]{} Store each element in its corresponding List. If the watched digit was 1, it should go in the  list 1.
 	\item[4]{} Convert the list of list into a single list, enqueing them.
-	\item[5]{} if $m$ is greater or equal to $n$, increase $n$ by 1 and step back to 2.
+	\item[5]{} If $m$ is greater or equal to $n$, increase $n$ by 1 and step back to 2.
 \end{itemize}
 
 In order to complete this objective, we had to face several problems :
@@ -142,10 +142,10 @@ Besides being fully working, all these functions should be efficient and without
 
 		\begin{minipage}{\linewidth}
 			\textit{BaseToInt}: \textit{char*} $\times$ \textit{integer} $\rightarrow$ \textit{integer}\\
-			Converts the value char* (in the given base) into integer.
+			Converts the value char* (in the given base) into integer.\\
 			\ov\\
 			n starts at 0.\\
-			For each digit, we sum n and the given digit multiplied by the base^(digit position) -- where digit position is the position of the digit in the number, starting to the left.
+			For each digit, we sum n and the given digit multiplied by the $base^{digit position}$ -- where digit position is the position of the digit in the number, starting to the left.
 			\label{algo:BNIL-BaseToInt}
 			\input{algorithms/BaseNIntegerList/BaseToInt}
 			\textit{GetValue(a)} returns the value represented by the character $a$
@@ -205,7 +205,11 @@ Besides being fully working, all these functions should be efficient and without
 
 		\begin{minipage}{\linewidth}
 			\textit{buildBucketList}: \textit{BaseNIntegerList} $\times$ \textit{Integer} $\rightarrow$ \textit{BaseNIntegerListOfList}\\
-			Builds a new BaseNIntegerListOfList according to the specified BaseNIntegerList and considering the specified digit position (rightmost).
+			Builds a new BaseNIntegerListOfList according to the specified BaseNIntegerList and considering the specified digit position (rightmost).\\
+			\ov\\
+			Considering the digit position n.\\
+			If the number as at least n digits, we use its $n^{th}$ digit to put it in the corresponding list.\\
+			Otherwise, it goes in the list 0.\\
 			\label{algo:BNIL-BuildBucketList}
 			\input{algorithms/BaseNIntegerListOfList/BuildBucketList}
 		\end{minipage}
@@ -213,7 +217,7 @@ Besides being fully working, all these functions should be efficient and without
 
 		\begin{minipage}{\linewidth}
 			\textit{buildIntegerList}: \textit{BaseNIntegerListOfList} $\rightarrow$ \textit{BaseNIntegerList}\\
-			Builds a new BaseNIntegerList from the specified BaseNIntegerListOfList (respecting the ascending order on the buckets).
+			Builds a new BaseNIntegerList from the specified BaseNIntegerListOfList (respecting the ascending order on the buckets).\\
 			\label{algo:BNIL-BuildIntegerList}
 			\input{algorithms/BaseNIntegerListOfList/BuildIntegerList}
 		\end{minipage}
@@ -237,7 +241,18 @@ Besides being fully working, all these functions should be efficient and without
 
 		\begin{minipage}{\linewidth}
 			\textit{radixsort}: \textit{BaseNIntegerListOfList} $\rightarrow \emptyset$\\
-			Sorts the specified BaseNIntegerList using the proposed radix sort approach.
+			Sorts the specified BaseNIntegerList using the proposed radix sort approach.\\
+			\ov\\
+			This function works as specified in \hyperref[chapter 1]{chapter:Objectives}.\\
+			Assuming the list is non-empty and that its base is b.
+			\begin{itemize}
+				\item[1]{} Scan all values, and let m be the number of digit of the longest value.
+				\item[2]{} Let $n$ equals 1, and make a ListOfList of b lists
+				\item[3]{} Traverse all the list, watching for the $n^{th}$ digit of each value, starting from the right.
+				\item[4]{} Store each element in its corresponding List. If the watched digit was 1, it should go in the  list 1.
+				\item[5]{} Convert the list of list into a single list, enqueing them.
+				\item[6]{} If $m$ is greater or equal to $n$, increase $n$ by 1 and step back to 2.
+			\end{itemize}
 			\label{algo:BNIL-RadixSort}
 			\input{algorithms/BaseNIntegerListOfList/RadixSort}
 		\end{minipage}
