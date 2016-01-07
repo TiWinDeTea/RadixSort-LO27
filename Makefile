@@ -28,6 +28,7 @@
 
 # User-set variables ; OBJDIR and SOURCEDIR should end with '/'
 # nb : DEBUGFLAG should contain the flag that tells the compiler to build in debug mode
+# DARGS and LCARGS are the flags/arguments used together with your debugger and leakchecker.
 
 EXESOURCENAME	= radixsortmain.c
 LIBSOURCENAME	= BaseNIntegerList.c
@@ -47,7 +48,7 @@ COMPILER	= gcc
 CFLAGS		= -Wall -Werror -Wextra -pedantic -fpic -fstack-protector-all -O3 -ansi
 DEBUGFLAG	= -g
 DEBUGGER	= gdb
-DARGS		= $(EXEDIR)$(EXECUTABLENAME)
+DARGS		= -se $(EXEDIR)$(EXECUTABLENAME)
 LEAKCHECKER	= valgrind
 LCARGS		= --leak-check=full --show-leak-kinds=all $(EXEDIR)$(EXECUTABLENAME)
 
